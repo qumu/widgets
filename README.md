@@ -1,29 +1,34 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+A Qumu Widget library that provides the following widgets:
 
-### What is this repository for? ###
+- **PresentationWidget**
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+## How to use the Widget ##
 
-### How do I get set up? ###
+```typescript
+  <div id="widget-container"></div>
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+  <script type="module">
+    import { PresentationWidget } from '@enghouse-qumu/widget';
 
-### Contribution guidelines ###
+    const presentationWidget = new PresentationWidget({
+      // CSS selector for the container element where the widget will be rendered
+      selector: '#widget-container',
 
-* Writing tests
-* Code review
-* Other guidelines
+      // Qumu instance host name
+      host: 'my-instance.qumu.com',
 
-### Who do I talk to? ###
+      // The presentation GUID to load. Can be a smart search or a single presentation
+      guid: 'AaBbCcDd123456',
 
-* Repo owner or admin
-* Other community or team contact
+      widgetOptions: {
+        // Check the docs for available options
+      },
+
+      playerOptions: {
+        // Check the docs for available options
+      }
+    });
+  </script>
+```

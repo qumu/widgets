@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Presentation Widget</title>
+  </head>
+  <body>
+    <section>
+      <div id="presentation-widget-container">
+        <i>Widget placeholder</i>
+      </div>
+    </section>
+
+    <style>
+      #presentation-widget-container {
+        width: 800px;
+        height: 600px;
+        border: 1px solid #ccc;
+      }
+    </style>
+
+    <script type="module">
+      import { PresentationWidget } from './src/index.ts';
+      import { PlayerSdk } from 'https://unpkg.com/@enghouse-qumu/player-sdk@3.2.0/dist/index.modern.mjs';
+
+      try {
+
+
+        const presentationWidget = new PresentationWidget({
+          // The CSS selector for the container element where the widget will be rendered
+          // We force this element to exist in the DOM
+          // selector: document.getElementById('presentation-widget-container'),
+          selector: '#presentation-widget-container',
+
+          host: 'mwitalinski1.qumu.dev',
+
+          // the presentation GUID to load. Can be a smart search or a single presentation
+          guid: 'ieNvSBjcytuZxOiX3X6BRe',
+
+          widgetOptions: {
+            // set to true to start loading the presentation as soon as the widget is initialized
+            // this loads the presentation but does not start playback
+            autoload: true,
+
+            // set to true to start playback as soon as the presentation is loaded
+            // when set to true, autoload is implied
+            autoplay: false,
+
+            // set playback mode, either 'inline' or 'modal'
+            // playbackMode: 'inline' | 'modal',
+
+            // the player configuration GUID to use for playback
+            // this should also impact the widget appearance
+            // playerConfigurationGuid: '',
+
+            // playIcon: {
+            //     url: '',
+            //     width: 64,
+            //     height: 64
+            // },
+
+            // in old widgets, you cannot use both left and right. We should allow for both in the new version.
+            // info: {
+            //   over: [],
+            //   top: [],
+            //   bottom: [],
+            //   left: [],
+            //   right: [],
+            // },
+          },
+          // playerOptions: {
+          //   playerParameters: {
+          //     captions: '',
+          //     debug: false,
+          //     loop: false,
+          //     pv: 'pipls' | 'pipss' | 'sbs',
+          //     quality: 'auto',
+          //     showControlPanel: true,
+          //     sidebar: true,
+          //     speech: '',
+          //     speechTerm: '',
+          //     start: 0,
+          //     volume: 1,
+          //     // enable or disable analytics reporting
+          //     reporting: true,
+          //     // the reporting ID to use for analytics
+          //     reportingId: '',
+          //   },
+          // }
+        });
+
+        presentationWidget.getIframe().then(async (iframe) => {
+          const sdk = new PlayerSdk(iframe);
+
+          sdk.addEventListener('timeupdate', (newTime) => {
+            console.log('timeupdate', newTime);
+          });
+
+          const duration = await sdk.getDuration();
+
+          console.log('duration', duration);
+        });
+      } catch (error) {
+        console.error('Error initializing PresentationWidget:', error);
+      }
+
+    </script>
+  </body>
+</html>
