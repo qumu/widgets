@@ -5,7 +5,7 @@ import { WidgetOptions } from '@/interfaces/widget-options';
 interface Props {
   presentation: Presentation;
   onIframeReady?: (iframe: HTMLIFrameElement) => void;
-  options?: Partial<WidgetOptions>;
+  options?: WidgetOptions;
 }
 
 export function PlayerComponent({ presentation, onIframeReady, options }: Readonly<Props>) {
@@ -36,8 +36,8 @@ export function PlayerComponent({ presentation, onIframeReady, options }: Readon
 
   const url = new URL(presentation.player!);
 
-  if (options?.autoplay) {
-    url.searchParams.set('autoplay', options.autoplay.toString());
+  if (options) {
+    url.searchParams.set('autoplay', options.autoplay!.toString());
   }
 
   const iframe = (

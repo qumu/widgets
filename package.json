@@ -1,36 +1,31 @@
 {
+  "private": true,
   "name": "@enghouse-qumu/widget",
   "version": "0.0.1",
-  "module": "dist/index.es.js",
-  "browser": "dist/index.umd.js",
-  "scripts": {
-    "build": "vite build",
-    "server": "vite",
-    "lint": "eslint",
-    "test": "vitest run",
-    "test:cov": "vitest run --coverage",
-    "test:watch": "vitest watch"
+  "description": "QumuCloud widget",
+  "engines": {
+    "node": ">=24"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "preact": "10.27.2"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qumu/qc-widget.git"
+  },
+  "bugs": {
+    "url": "https://github.com/qumu/qc-widget/issues"
+  },
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "dev:watch": "npm run dev:watch --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "server": "npm run server -w lib"
   },
   "devDependencies": {
     "@enghouse-qumu/eslint-config": "1.0.2",
-    "@preact/preset-vite": "2.10.2",
-    "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/preact": "3.2.4",
-    "@testing-library/user-event": "14.6.1",
-    "@types/node": "24.0.7",
-    "@vitest/coverage-istanbul": "4.0.7",
-    "jsdom": "27.1.0",
-    "typescript": "5.8.3",
-    "vite": "7.2.1",
-    "vitest": "4.0.7"
+    "typescript": "5.8.3"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "publishConfig": {
     "registry": "https://europe-npm.pkg.dev/qumu-cicd/qumu-npm/"
   },
