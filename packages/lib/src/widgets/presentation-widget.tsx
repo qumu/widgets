@@ -4,7 +4,10 @@ import { ConfigurationService } from '@/services/configuration.service';
 import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { Presentation } from '@/interfaces/presentation';
 import { Deferred } from '@/utils/deferred';
+import { WidgetOptions } from '@/interfaces/widget-options';
+import { DialogComponent } from '@/components/dialog';
 import { PlayerComponent } from '@/components/player';
+import './presentation-widget.scss';
 
 export class PresentationWidget {
   private readonly iframeDeferred = new Deferred<HTMLIFrameElement>();
@@ -28,7 +31,6 @@ export class PresentationWidget {
   private async init() {
     try {
       this.presentation = await this.presentationService.getPresentation(this.configuration.guid, this.configuration.host);
-
       this.mount();
     } catch (err: unknown) {
       this.iframeDeferred.reject(err);
@@ -45,13 +47,20 @@ export class PresentationWidget {
     container.innerHTML = '';
 
     render(
-      <div class="widget">
-        <h3>{this.presentation?.title}</h3>
-        <PlayerComponent
-          presentation={this.presentation!}
-          onIframeReady={this.iframeDeferred.resolve}
-          options={this.configuration.widgetOptions}
-        />
+      <div class="qc-widget" style={{ 'aspect-ratio': `${this.presentation?.mediaDisplayWidth} / ${this.presentation?.mediaDisplayHeight}` }}>
+        {this.configuration.widgetOptions?.playbackMode === 'modal' ? (
+          <DialogComponent
+              presentation={this.presentation!}
+              onIframeReady={this.iframeDeferred.resolve}
+              options={this.configuration.widgetOptions as WidgetOptions}
+          />
+        ) : (
+          <PlayerComponent
+            presentation={this.presentation!}
+            onIframeReady={this.iframeDeferred.resolve}
+            options={this.configuration.widgetOptions as WidgetOptions}
+          />
+        )}
       </div>,
       container
     );

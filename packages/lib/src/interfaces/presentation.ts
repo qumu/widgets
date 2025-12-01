@@ -5,6 +5,8 @@ export interface Presentation {
   duration?: number;
   guid?: string;
   metadata?: PresentationMetadata[];
+  mediaDisplayWidth?: number;
+  mediaDisplayHeight?: number;
   player?: string;
   public?: boolean;
   published?: Date;

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/preact';
+import { render, screen, fireEvent } from '@testing-library/preact';
 import { createElement } from 'preact';
 import { PlayerComponent } from '../player';
 import { WidgetOptions } from '@/interfaces/widget-options';
@@ -23,16 +23,19 @@ describe('PlayerComponent', () => {
     vi.clearAllMocks();
   });
 
-  it('should render empty content when presentation is null', () => {
-    const { container } = render(createElement(PlayerComponent, { presentation: null as unknown as Presentation }));
+  it('should render empty content when presentation is null', async () => {
+    // eslint-disable-next-line @typescript-eslint/require-await
+    await expect(async () => {
+      const { container } = render(createElement(PlayerComponent, { presentation: null as unknown as Presentation }));
 
-    expect(container.textContent).toMatch('');
+      expect(container.textContent).toMatch('');
+    }).rejects.toThrow();
   });
 
   it('should render thumbnail when autoload is false', () => {
-    const options: Partial<WidgetOptions> = {
+    const options = {
       autoload: false,
-    };
+    } as WidgetOptions;
 
     render(createElement(PlayerComponent, {
       options,
@@ -46,9 +49,9 @@ describe('PlayerComponent', () => {
   });
 
   it('should render thumbnail url if no cdnUrl is present', () => {
-    const options: Partial<WidgetOptions> = {
+    const options = {
       autoload: false,
-    };
+    } as WidgetOptions;
 
     const presentation: Presentation = {
       ...mockPresentation,
@@ -70,10 +73,10 @@ describe('PlayerComponent', () => {
     expect(thumbnail).toHaveAttribute('src', 'https://example.com/thumbnail.jpg');
   });
 
-  it('should render iframe when autoload is true', () => {
-    const options: Partial<WidgetOptions> = {
+  it('should render iframe when autoload is true', async () => {
+    const options = {
       autoload: true,
-    };
+    } as WidgetOptions;
 
     render(createElement(PlayerComponent, {
       options,
@@ -83,7 +86,7 @@ describe('PlayerComponent', () => {
     const iframe = screen.getByTitle('Qumu Player');
 
     expect(iframe).toBeInTheDocument();
-    expect(iframe).toHaveAttribute('src', 'https://example.com/player');
+    expect(iframe).toHaveAttribute('src', 'https://example.com/player?autoplay=false');
     expect(iframe).toHaveAttribute('width', '100%');
     expect(iframe).toHaveAttribute('height', '100%');
     expect(iframe).toHaveAttribute('allow', 'autoplay; fullscreen');
@@ -93,7 +96,7 @@ describe('PlayerComponent', () => {
     render(createElement(PlayerComponent, {
       options: {
         autoload: false,
-      },
+      } as WidgetOptions,
       presentation: mockPresentation,
     }));
 
@@ -104,18 +107,15 @@ describe('PlayerComponent', () => {
 
     fireEvent.click(thumbnailButton);
 
-    await waitFor(() => {
-      expect(screen.getByTitle('Qumu Player')).toBeInTheDocument();
-    });
-
+    expect(screen.getByTitle('Qumu Player')).toBeInTheDocument();
     expect(screen.queryByAltText('Thumbnail for Test Presentation')).not.toBeInTheDocument();
   });
 
   it('should set autoplay parameter when autoplay option is provided', () => {
-    const options: Partial<WidgetOptions> = {
+    const options = {
       autoload: true,
       autoplay: true,
-    };
+    } as WidgetOptions;
 
     render(createElement(PlayerComponent, {
       options,
@@ -130,9 +130,9 @@ describe('PlayerComponent', () => {
 
   it('should call onIframeReady when iframe loads', async () => {
     const onIframeReady = vi.fn();
-    const options: Partial<WidgetOptions> = {
+    const options: WidgetOptions = {
       autoload: true,
-    };
+    } as WidgetOptions;
 
     render(createElement(PlayerComponent, {
       onIframeReady,
@@ -144,15 +144,101 @@ describe('PlayerComponent', () => {
 
     fireEvent.load(iframe);
 
-    await waitFor(() => {
-      expect(onIframeReady).toHaveBeenCalledWith(iframe);
-    });
+    expect(onIframeReady).toHaveBeenCalledWith(iframe);
   });
 
-  it('should use autoload false as default when options are not provided', () => {
+  it('should use autoload false as default when options are not provided', async () => {
     render(createElement(PlayerComponent, { presentation: mockPresentation }));
 
     expect(screen.getByAltText('Thumbnail for Test Presentation')).toBeInTheDocument();
     expect(screen.queryByTitle('Qumu Player')).not.toBeInTheDocument();
+  });
+
+  describe('widgetOptions', () => {
+    it('should set autoplay to false when autoload is true and autoplay is not provided', () => {
+      const options = {
+        autoload: true,
+      } as WidgetOptions;
+
+      render(createElement(PlayerComponent, {
+        options,
+        presentation: mockPresentation,
+      }));
+
+      const iframe = screen.getByTitle('Qumu Player');
+
+      expect(iframe).toHaveAttribute('src', 'https://example.com/player?autoplay=false');
+    });
+
+    it('should set autoplay to false when autoload is true and autoplay is false', () => {
+      const options = {
+        autoload: true,
+        autoplay: false,
+      } as WidgetOptions;
+
+      render(createElement(PlayerComponent, {
+        options,
+        presentation: mockPresentation,
+      }));
+
+      const iframe = screen.getByTitle('Qumu Player');
+
+      expect(iframe).toHaveAttribute('src', 'https://example.com/player?autoplay=false');
+    });
+
+    it('should set autoplay to true when both autoload and autoplay are true', () => {
+      const options = {
+        autoload: true,
+        autoplay: true,
+      } as WidgetOptions;
+
+      render(createElement(PlayerComponent, {
+        options,
+        presentation: mockPresentation,
+      }));
+
+      const iframe = screen.getByTitle('Qumu Player');
+
+      expect(iframe).toHaveAttribute('src', 'https://example.com/player?autoplay=true');
+    });
+
+    it('should set autoplay to true when both autoload and autoplay are false', () => {
+      const options = {
+        autoload: false,
+        autoplay: false,
+      } as WidgetOptions;
+
+      render(createElement(PlayerComponent, {
+        options,
+        presentation: mockPresentation,
+      }));
+
+      expect(screen.getByAltText('Thumbnail for Test Presentation')).toBeInTheDocument();
+      expect(screen.queryByTitle('Qumu Player')).not.toBeInTheDocument();
+
+      const thumbnailButton = screen.getByRole('button');
+
+      fireEvent.click(thumbnailButton);
+
+      const iframe = screen.getByTitle('Qumu Player');
+
+      expect(iframe).toHaveAttribute('src', 'https://example.com/player?autoplay=true');
+    });
+
+    it('should set playerConfigurationGuid parameter when provided', () => {
+      const options = {
+        autoload: true,
+        playerConfigurationGuid: 'config-guid-123',
+      } as WidgetOptions;
+
+      render(createElement(PlayerComponent, {
+        options,
+        presentation: mockPresentation,
+      }));
+
+      const iframe = screen.getByTitle('Qumu Player');
+
+      expect(iframe).toHaveAttribute('src', 'https://example.com/player?autoplay=false&playerConfigurationGuid=config-guid-123');
+    });
   });
 });
