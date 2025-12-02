@@ -421,182 +421,11 @@ describe('ConfigurationService', () => {
       expect(() => configurationService.validateWidgetOptions({})).not.toThrow();
     });
 
-    describe('autoload validation', () => {
-      it('should accept valid boolean values for autoload', () => {
-        expect(() => configurationService.validateWidgetOptions({ autoload: true })).not.toThrow();
-        expect(() => configurationService.validateWidgetOptions({ autoload: false })).not.toThrow();
-      });
-
-      it('should allow undefined autoload', () => {
-        expect(() => configurationService.validateWidgetOptions({ autoload: undefined })).not.toThrow();
-      });
-    });
-
-    describe('autoplay validation', () => {
-      it('should accept valid boolean values for autoplay', () => {
-        expect(() => configurationService.validateWidgetOptions({ autoplay: true })).not.toThrow();
-        expect(() => configurationService.validateWidgetOptions({ autoplay: false })).not.toThrow();
-      });
-
-      it('should allow undefined autoplay', () => {
-        expect(() => configurationService.validateWidgetOptions({ autoplay: undefined })).not.toThrow();
-      });
-    });
-
-    describe('autoplay and autoload interaction', () => {
-      it('should allow autoplay true when autoload is true', () => {
-        expect(() => configurationService.validateWidgetOptions({
-          autoload: true,
-          autoplay: true,
-        })).not.toThrow();
-      });
-
-      it('should allow autoplay true when autoload is undefined', () => {
-        expect(() => configurationService.validateWidgetOptions({ autoplay: true })).not.toThrow();
-      });
-
-      it('should allow autoplay false regardless of autoload value', () => {
-        expect(() => configurationService.validateWidgetOptions({
-          autoload: true,
-          autoplay: false,
-        })).not.toThrow();
-        expect(() => configurationService.validateWidgetOptions({
-          autoload: false,
-          autoplay: false,
-        })).not.toThrow();
-        expect(() => configurationService.validateWidgetOptions({ autoplay: false })).not.toThrow();
-      });
-
-      it('should allow autoplay undefined regardless of autoload value', () => {
-        expect(() => configurationService.validateWidgetOptions({ autoload: true })).not.toThrow();
-        expect(() => configurationService.validateWidgetOptions({ autoload: false })).not.toThrow();
-      });
-
-      it('should throw error when autoplay is true but autoload is false', () => {
-        expect(() => configurationService.validateWidgetOptions({
-          autoload: false,
-          autoplay: true,
-        })).toThrow(
-          '`autoload` must be true when `autoplay` is true',
-        );
-      });
-    });
-
-    describe('info validation', () => {
-      it('should accept valid info object with supported keys', () => {
-        const validInfoObjects = [
-          { over: ['item1', 'item2'] } as unknown as Record<string, string[]>,
-          { top: [] } as unknown as Record<string, string[]>,
-          { bottom: ['single-item'] } as unknown as Record<string, string[]>,
-          { left: ['a', 'b', 'c'] } as unknown as Record<string, string[]>,
-          { right: ['test'] } as unknown as Record<string, string[]>,
-          {
-            bottom: ['bottom-item'],
-            left: ['left-item'],
-            over: ['over-item'],
-            right: ['right-item'],
-            top: ['top-item'],
-          } as unknown as Record<string, string[]>,
-        ];
-
-        validInfoObjects.forEach((info) => {
-          expect(() => configurationService.validateWidgetOptions({ info })).not.toThrow();
-        });
-      });
-
-      it('should allow undefined info', () => {
-        expect(() => configurationService.validateWidgetOptions({ info: undefined })).not.toThrow();
-      });
-
-      it('should throw error when info is not an object', () => {
-        const invalidValues = ['string', 123, true];
-
-        invalidValues.forEach((value) => {
-          expect(() => configurationService.validateWidgetOptions({
-            info: value as unknown as Record<string, string[]>,
-          })).toThrow(
-            '`widgetOptions.info` must be an object',
-          );
-        });
-      });
-
-      it('should throw error when info is an empty array', () => {
-        expect(() => configurationService.validateWidgetOptions({
-          info: [] as unknown as Record<string, string[]>,
-        })).not.toThrow();
-      });
-
-      it('should throw error when info is a non-empty array', () => {
-        expect(() => configurationService.validateWidgetOptions({
-          info: ['invalid'] as unknown as Record<string, string[]>,
-        })).toThrow(
-          '`widgetOptions.info` contains unsupported key `0`',
-        );
-      });
-
-      it('should throw error when info is null (Object.keys limitation)', () => {
-        expect(() => configurationService.validateWidgetOptions({
-          info: null as unknown as Record<string, string[]>,
-        })).toThrow(
-          'Cannot convert undefined or null to object',
-        );
-      });
-
-      it('should throw error for unsupported keys in info object', () => {
-        const unsupportedKeys = ['center', 'middle', 'invalid', 'unknown'];
-
-        unsupportedKeys.forEach((key) => {
-          const info = { [key]: ['test'] } as unknown as Record<string, string[]>;
-
-          expect(() => configurationService.validateWidgetOptions({ info })).toThrow(
-            `\`widgetOptions.info\` contains unsupported key \`${key}\``,
-          );
-        });
-      });
-
-      it('should throw error when info property values are not arrays', () => {
-        const invalidArrayValues = [
-          { over: 'not-array' } as unknown as Record<string, string[]>,
-          { top: 123 } as unknown as Record<string, string[]>,
-          { bottom: true } as unknown as Record<string, string[]>,
-          { left: {} } as unknown as Record<string, string[]>,
-          { right: null } as unknown as Record<string, string[]>,
-        ];
-
-        invalidArrayValues.forEach((info) => {
-          const key = Object.keys(info)[0];
-
-          expect(() => configurationService.validateWidgetOptions({ info })).toThrow(
-            `\`widgetOptions.info.${key}\` must be an array of strings`,
-          );
-        });
-      });
-
-      it('should accept empty arrays for info properties', () => {
-        const infoWithEmptyArrays = {
-          bottom: [],
-          left: [],
-          over: [],
-          right: [],
-          top: [],
-        } as unknown as Record<string, string[]>;
-
-        expect(() => configurationService.validateWidgetOptions({ info: infoWithEmptyArrays })).not.toThrow();
-      });
-
-      it('should accept arrays with string elements', () => {
-        const validInfo = {
-          over: ['string1', 'string2'],
-          top: ['another-string'],
-        } as unknown as Record<string, string[]>;
-
-        expect(() => configurationService.validateWidgetOptions({ info: validInfo })).not.toThrow();
-      });
-    });
-
     describe('playbackMode validation', () => {
       it('should accept valid playbackMode values', () => {
         expect(() => configurationService.validateWidgetOptions({ playbackMode: 'inline' })).not.toThrow();
+        expect(() => configurationService.validateWidgetOptions({ playbackMode: 'inline-autoload' })).not.toThrow();
+        expect(() => configurationService.validateWidgetOptions({ playbackMode: 'inline-autoplay' })).not.toThrow();
         expect(() => configurationService.validateWidgetOptions({ playbackMode: 'modal' })).not.toThrow();
       });
 
@@ -605,42 +434,13 @@ describe('ConfigurationService', () => {
 
         invalidValues.forEach((value) => {
           expect(() => configurationService.validateWidgetOptions({ playbackMode: value as unknown as WidgetOptions['playbackMode'] })).toThrow(
-            '`widgetOptions.playbackMode` must be either "inline" or "modal"',
+            '`widgetOptions.playbackMode` must be either "inline", "inline-autoload", "inline-autoplay" or "modal"',
           );
         });
       });
 
       it('should allow undefined playbackMode', () => {
         expect(() => configurationService.validateWidgetOptions({ playbackMode: undefined })).not.toThrow();
-      });
-    });
-
-    describe('complex combinations', () => {
-      it('should validate all properties together successfully', () => {
-        const validOptions = {
-          autoload: true,
-          autoplay: true,
-          info: {
-            bottom: ['bottom-info'],
-            over: ['overlay-item'],
-          } as unknown as Record<string, string[]>,
-        };
-
-        expect(() => configurationService.validateWidgetOptions(validOptions)).not.toThrow();
-      });
-
-      it('should validate autoplay/autoload combination with info present', () => {
-        const optionsWithConflict = {
-          autoload: false,
-          autoplay: true,
-          info: {
-            top: ['some-info'],
-          } as unknown as Record<string, string[]>,
-        };
-
-        expect(() => configurationService.validateWidgetOptions(optionsWithConflict)).toThrow(
-          '`autoload` must be true when `autoplay` is true',
-        );
       });
     });
   });
@@ -668,8 +468,6 @@ describe('ConfigurationService', () => {
       const result = configurationService.setDefaults(initialConfig);
 
       expect(result.widgetOptions).toEqual({
-        autoload: true,
-        autoplay: false,
         playbackMode: 'inline',
       });
     });
@@ -680,8 +478,6 @@ describe('ConfigurationService', () => {
         host: 'example.com',
         selector: '#widget',
         widgetOptions: {
-          autoload: false,
-          autoplay: true,
           playbackMode: 'modal',
         },
       };
@@ -689,8 +485,6 @@ describe('ConfigurationService', () => {
       const result = configurationService.setDefaults(initialConfig);
 
       expect(result.widgetOptions).toEqual({
-        autoload: false,
-        autoplay: true,
         playbackMode: 'modal',
       });
     });

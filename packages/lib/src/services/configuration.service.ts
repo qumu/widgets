@@ -2,7 +2,7 @@ import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { WidgetOptions } from '@/interfaces/widget-options';
 
 const supportedConfigFields = ['selector', 'host', 'guid', 'widgetOptions', 'playerOptions'];
-const supportedWidgetFields = ['autoload', 'autoplay', 'info', 'playbackMode', 'playerConfigurationGuid', 'playIcon'];
+const supportedWidgetFields = ['playbackMode', 'playerConfigurationGuid', 'playIcon'];
 
 export class ConfigurationService {
   validate(configuration: WidgetConfiguration): void {
@@ -55,41 +55,17 @@ export class ConfigurationService {
       }
     });
 
-    if (widgetOptions.autoplay === true && widgetOptions.autoload === false) {
-      throw new Error('`autoload` must be true when `autoplay` is true');
-    }
-
-    if (widgetOptions.info !== undefined) {
-      if (typeof widgetOptions.info !== 'object') {
-        throw new Error('`widgetOptions.info` must be an object');
-      }
-
-      Object.keys(widgetOptions.info).forEach((key) => {
-        if (!['over', 'top', 'bottom', 'left', 'right'].includes(key)) {
-          throw new Error(`\`widgetOptions.info\` contains unsupported key \`${key}\``);
-        }
-
-        const value = widgetOptions.info![key as keyof typeof widgetOptions.info];
-
-        if (!Array.isArray(value)) {
-          throw new Error(`\`widgetOptions.info.${key}\` must be an array of strings`);
-        }
-      });
-    }
-
     if (widgetOptions.playbackMode !== undefined) {
       const value = widgetOptions.playbackMode;
 
-      if (value !== 'inline' && value !== 'modal') {
-        throw new Error('`widgetOptions.playbackMode` must be either "inline" or "modal"');
+      if (['inline', 'inline-autoload', 'inline-autoplay', 'modal'].indexOf(value) === -1) {
+        throw new Error('`widgetOptions.playbackMode` must be either "inline", "inline-autoload", "inline-autoplay" or "modal"');
       }
     }
   }
 
   setDefaults(initialConfiguration: WidgetConfiguration): WidgetConfiguration {
     const widgetOptions = {
-      autoload: true,
-      autoplay: false,
       playbackMode: 'inline',
       ...initialConfiguration.widgetOptions || {},
     } as WidgetOptions;

@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function PlayerComponent({ presentation, onIframeReady, options }: Readonly<Props>) {
-  const [showIframe, setShowIframe] = useState(options?.autoload ?? false);
+  const [showIframe, setShowIframe] = useState(options?.playbackMode === 'inline-autoload' || options?.playbackMode === 'inline-autoplay' || options?.playbackMode === 'modal');
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -34,9 +34,7 @@ export function PlayerComponent({ presentation, onIframeReady, options }: Readon
   const url = new URL(presentation?.player || '');
 
   if (options) {
-    // If the autoload is false and autoplay is false, avoid the situation that the user will need double click
-    // to start the playback - first to load the video, second to start the playback.
-    const autoplay = options?.autoload === false || options.autoplay || false;
+    const autoplay = options?.playbackMode === 'inline-autoplay' || options?.playbackMode === 'modal';
 
     url.searchParams.set('autoplay', autoplay.toString());
 

@@ -32,12 +32,6 @@ export function DialogComponent({ presentation, onIframeReady, options }: Props)
     return '';
   }
 
-  const url = new URL(presentation.player!);
-
-  if (options?.autoplay !== null && options?.autoplay !== undefined) {
-    url.searchParams.set('autoplay', options.autoplay.toString());
-  }
-
   return (
     <div class="qc-dialog">
       <ThumbnailComponent
@@ -57,7 +51,6 @@ export function DialogComponent({ presentation, onIframeReady, options }: Props)
           onClose={() => setShowDialog(false)}
           style={{ 'aspect-ratio': `${presentation?.mediaDisplayWidth} / ${presentation?.mediaDisplayHeight}` }}
         >
-
           <PlayerComponent
               presentation={presentation}
               onIframeReady={onIframeReady}
