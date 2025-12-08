@@ -4,8 +4,6 @@
 @use '../components/thumbnail.scss';
 
 .qc-presentation-widget {
-  border-radius: var(--qc-presentation-widget-border-radius);
   height: var(--qc-presentation-widget-height);
-  overflow: hidden;
   width: var(--qc-presentation-widget-width);
 }

@@ -1,10 +1,12 @@
 .qc-widget {
   .qc-thumbnail {
+    border-radius: var(--qc-presentation-widget-border-radius);
     background: transparent;
     border: none;
     cursor: pointer;
     display: grid;
     height: 100%;
+    overflow: hidden;
     padding: 0;
     position: relative;
     width: 100%;
@@ -17,6 +19,7 @@
       position: absolute;
       top: 0;
       width: 100%;
+      z-index: -1;
     }
 
     &__play-button {
