@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { Presentation } from '@/interfaces/presentation';
 import { WidgetOptions } from '@/interfaces/widget-options';
+import { ThumbnailComponent } from './thumbnail';
 
 interface Props {
   presentation: Presentation;
   onIframeReady?: (iframe: HTMLIFrameElement) => void;
-  options?: WidgetOptions;
+  options: WidgetOptions;
 }
 
 export function PlayerComponent({ presentation, onIframeReady, options }: Readonly<Props>) {
-  const [showIframe, setShowIframe] = useState(options?.autoload ?? false);
+  const [showIframe, setShowIframe] = useState(['inline-autoload', 'inline-autoplay', 'modal'].includes(options.playbackMode));
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -30,14 +31,13 @@ export function PlayerComponent({ presentation, onIframeReady, options }: Readon
     };
   }, [showIframe]);
 
-  if (!presentation) {
-    return '';
-  }
+  const url = new URL(presentation.player || '');
+  const autoplay = options.playbackMode === 'inline-autoplay' || options.playbackMode === 'modal';
 
-  const url = new URL(presentation.player!);
+  url.searchParams.set('autoplay', autoplay.toString());
 
-  if (options) {
-    url.searchParams.set('autoplay', options.autoplay!.toString());
+  if (options.playerConfigurationGuid) {
+    url.searchParams.set('playerConfigurationGuid', options.playerConfigurationGuid);
   }
 
   const iframe = (
@@ -49,14 +49,16 @@ export function PlayerComponent({ presentation, onIframeReady, options }: Readon
       allow="autoplay; fullscreen"
       frameBorder="0"
       title="Qumu Player"
+      class="qc-player"
     />
   );
 
   const thumbnail = (
-    <button type="button" onClick={() => setShowIframe(true)}>
-      <img src={presentation.thumbnail?.cdnUrl || presentation.thumbnail?.url}
-           alt={`Thumbnail for ${presentation.title}`}/>
-    </button>
+    <ThumbnailComponent
+      presentation={presentation}
+      onClick={() => setShowIframe(true)}
+      options={options}
+    />
   )
 
   return showIframe ? iframe : thumbnail;

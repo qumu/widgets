@@ -1,0 +1,56 @@
+.qc-widget {
+  .qc-thumbnail {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: block;
+    height: 100%;
+    padding: 0;
+    position: relative;
+    width: 100%;
+
+    &__image {
+      display: block;
+      width: 100%;
+    }
+
+    &__play-button {
+      height: var(--qc-play-icon-height);
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: var(--qc-play-icon-width);
+
+      &--default {
+        box-sizing: border-box;
+        color: var(--qc-theme-color);
+        padding: 10px;
+
+        &::before {
+          background-color: var(--qc-theme-background);
+          border-radius: 100%;
+          content: '';
+          display: block;
+          height: 100%;
+          left: 0;
+          opacity: 0.6;
+          position: absolute;
+          top: 0;
+          width: 100%;
+        }
+
+        svg {
+          height: 100%;
+          position: relative;
+          width: 100%;
+          z-index: 1;
+        }
+      }
+    }
+
+    &:hover .qc-thumbnail__play-button--default::before {
+      opacity: 0.7;
+    }
+  }
+}

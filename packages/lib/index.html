@@ -13,9 +13,14 @@
 
     <style>
       #presentation-widget-container {
-        width: 800px;
-        height: 600px;
         border: 1px solid #ccc;
+      }
+
+      :root {
+        /* --qc-theme-background: #1a3300; */
+        /* --qc-theme-color: #14ff18; */
+        /* --qc-play-icon-width: 140px; */
+        /* --qc-play-icon-height: 140px; */
       }
     </style>
 
@@ -36,37 +41,22 @@
 
           // the presentation GUID to load. Can be a smart search or a single presentation
           guid: 'ieNvSBjcytuZxOiX3X6BRe',
+          // guid: 'Vm9bJzT92a77UZ4VlcO8NO', // Live not started
+          // guid: 'zc3qDciZeKETzgn4ycv3fL', // Vertical video
 
           widgetOptions: {
-            // set to true to start loading the presentation as soon as the widget is initialized
-            // this loads the presentation but does not start playback
-            autoload: true,
-
-            // set to true to start playback as soon as the presentation is loaded
-            // when set to true, autoload is implied
-            autoplay: false,
-
-            // set playback mode, either 'inline' or 'modal'
-            // playbackMode: 'inline' | 'modal',
+            // set playback mode for the widget of 'inline' | 'inline-autoload' | 'inline-autoplay' | 'modal'
+            playbackMode: 'modal',
 
             // the player configuration GUID to use for playback
             // this should also impact the widget appearance
-            // playerConfigurationGuid: '',
+            playerConfigurationGuid: "8b278a82-9782-4012-a6d6-215725f86dd9",
 
-            // playIcon: {
-            //     url: '',
-            //     width: 64,
-            //     height: 64
-            // },
-
-            // in old widgets, you cannot use both left and right. We should allow for both in the new version.
-            // info: {
-            //   over: [],
-            //   top: [],
-            //   bottom: [],
-            //   left: [],
-            //   right: [],
-            // },
+            playIcon: {
+              url: 'https://uxwing.com/wp-content/themes/uxwing/download/video-photography-multimedia/play-button-green-icon.png',
+              width: 128,
+              height: 128
+            },
           },
           // playerOptions: {
           //   playerParameters: {

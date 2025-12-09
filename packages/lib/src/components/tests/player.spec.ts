@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/preact';
+import { render, screen, fireEvent } from '@testing-library/preact';
 import { createElement } from 'preact';
 import { PlayerComponent } from '../player';
 import { WidgetOptions } from '@/interfaces/widget-options';
@@ -23,16 +23,22 @@ describe('PlayerComponent', () => {
     vi.clearAllMocks();
   });
 
-  it('should render empty content when presentation is null', () => {
-    const { container } = render(createElement(PlayerComponent, { presentation: null as unknown as Presentation }));
+  it('should render empty content when presentation is null', async () => {
+    // eslint-disable-next-line @typescript-eslint/require-await
+    await expect(async () => {
+      const { container } = render(createElement(PlayerComponent, {
+        options: {} as WidgetOptions,
+        presentation: null as unknown as Presentation,
+      }));
 
-    expect(container.textContent).toMatch('');
+      expect(container.textContent).toMatch('');
+    }).rejects.toThrow();
   });
 
-  it('should render thumbnail when autoload is false', () => {
-    const options: Partial<WidgetOptions> = {
-      autoload: false,
-    };
+  it('should render thumbnail when playbackMode isinline', () => {
+    const options = {
+      playbackMode: 'inline',
+    } as WidgetOptions;
 
     render(createElement(PlayerComponent, {
       options,
@@ -46,9 +52,9 @@ describe('PlayerComponent', () => {
   });
 
   it('should render thumbnail url if no cdnUrl is present', () => {
-    const options: Partial<WidgetOptions> = {
-      autoload: false,
-    };
+    const options = {
+      playbackMode: 'inline',
+    } as WidgetOptions;
 
     const presentation: Presentation = {
       ...mockPresentation,
@@ -70,10 +76,10 @@ describe('PlayerComponent', () => {
     expect(thumbnail).toHaveAttribute('src', 'https://example.com/thumbnail.jpg');
   });
 
-  it('should render iframe when autoload is true', () => {
-    const options: Partial<WidgetOptions> = {
-      autoload: true,
-    };
+  it('should render iframe when playbackMode is inline-autoload', () => {
+    const options = {
+      playbackMode: 'inline-autoload',
+    } as WidgetOptions;
 
     render(createElement(PlayerComponent, {
       options,
@@ -83,17 +89,17 @@ describe('PlayerComponent', () => {
     const iframe = screen.getByTitle('Qumu Player');
 
     expect(iframe).toBeInTheDocument();
-    expect(iframe).toHaveAttribute('src', 'https://example.com/player');
+    expect(iframe).toHaveAttribute('src', 'https://example.com/player?autoplay=false');
     expect(iframe).toHaveAttribute('width', '100%');
     expect(iframe).toHaveAttribute('height', '100%');
     expect(iframe).toHaveAttribute('allow', 'autoplay; fullscreen');
   });
 
-  it('should switch from thumbnail to iframe when thumbnail is clicked', async () => {
+  it('should switch from thumbnail to iframe when thumbnail is clicked', () => {
     render(createElement(PlayerComponent, {
       options: {
-        autoload: false,
-      },
+        playbackMode: 'inline',
+      } as WidgetOptions,
       presentation: mockPresentation,
     }));
 
@@ -104,35 +110,15 @@ describe('PlayerComponent', () => {
 
     fireEvent.click(thumbnailButton);
 
-    await waitFor(() => {
-      expect(screen.getByTitle('Qumu Player')).toBeInTheDocument();
-    });
-
+    expect(screen.getByTitle('Qumu Player')).toBeInTheDocument();
     expect(screen.queryByAltText('Thumbnail for Test Presentation')).not.toBeInTheDocument();
   });
 
-  it('should set autoplay parameter when autoplay option is provided', () => {
-    const options: Partial<WidgetOptions> = {
-      autoload: true,
-      autoplay: true,
-    };
-
-    render(createElement(PlayerComponent, {
-      options,
-      presentation: mockPresentation,
-    }));
-
-    const iframe = screen.getByTitle('Qumu Player');
-
-    expect(screen.getByTitle('Qumu Player')).toBeInTheDocument();
-    expect(iframe).toHaveAttribute('src', 'https://example.com/player?autoplay=true');
-  });
-
-  it('should call onIframeReady when iframe loads', async () => {
+  it('should call onIframeReady when iframe loads', () => {
     const onIframeReady = vi.fn();
-    const options: Partial<WidgetOptions> = {
-      autoload: true,
-    };
+    const options: WidgetOptions = {
+      playbackMode: 'inline-autoload',
+    } as WidgetOptions;
 
     render(createElement(PlayerComponent, {
       onIframeReady,
@@ -144,15 +130,44 @@ describe('PlayerComponent', () => {
 
     fireEvent.load(iframe);
 
-    await waitFor(() => {
-      expect(onIframeReady).toHaveBeenCalledWith(iframe);
-    });
+    expect(onIframeReady).toHaveBeenCalledWith(iframe);
   });
 
-  it('should use autoload false as default when options are not provided', () => {
-    render(createElement(PlayerComponent, { presentation: mockPresentation }));
+  it('should throw an error when no player parameter is provided in the presentation', async () => {
+    const options = {
+      playbackMode: 'inline-autoload',
+    } as WidgetOptions;
 
-    expect(screen.getByAltText('Thumbnail for Test Presentation')).toBeInTheDocument();
-    expect(screen.queryByTitle('Qumu Player')).not.toBeInTheDocument();
+    const presentation: Presentation = {
+      ...mockPresentation,
+      player: undefined,
+    };
+
+    await expect(async () => {
+      render(createElement(PlayerComponent, {
+        options,
+        presentation,
+      }));
+
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }).rejects.toThrow();
+  });
+
+  describe('widgetOptions', () => {
+    it('should set playerConfigurationGuid parameter when provided', () => {
+      const options = {
+        playbackMode: 'inline-autoload',
+        playerConfigurationGuid: 'config-guid-123',
+      } as WidgetOptions;
+
+      render(createElement(PlayerComponent, {
+        options,
+        presentation: mockPresentation,
+      }));
+
+      const iframe = screen.getByTitle('Qumu Player');
+
+      expect(iframe).toHaveAttribute('src', 'https://example.com/player?autoplay=false&playerConfigurationGuid=config-guid-123');
+    });
   });
 });

@@ -1,1 +1,1 @@
-export { PresentationWidget } from './components/presentation-widget';
+export { PresentationWidget } from '@/widgets/presentation-widget';

@@ -1,0 +1,67 @@
+.qc-widget {
+  .qc-dialog {
+    height: 100%;
+
+    iframe {
+      border: none;
+      display: block;
+      height: 100%;
+      width: 100%;
+    }
+
+    dialog {
+      background-color: var(--qc-theme-background);
+      border-radius: var(--qc-dialog-border-radius);
+      max-width: var(--qc-dialog-max-width);
+      overflow: visible;
+      padding: 0;
+      width: var(--qc-dialog-width);
+
+      &::backdrop {
+        background-color: var(--qc-dialog-backdrop);
+      }
+    }
+
+    &__close-button {
+      background: transparent;
+      border: none;
+      color: var(--qc-theme-color);
+      cursor: pointer;
+      height: var(--qc-dialog-close-icon-height);
+      padding: 6px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transform: translate(50%, -50%);
+      width: var(--qc-dialog-close-icon-width);
+      z-index: 1;
+
+      &::before {
+        background-color: var(--qc-theme-background);
+        border-radius: 100%;
+        box-shadow: 0 0 1px 1px #000000;
+        content: '';
+        display: block;
+        height: 100%;
+        left: 0;
+        opacity: 0.8;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+
+      &:hover {
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      svg {
+        height: 100%;
+        position: relative;
+        width: 100%;
+        z-index: 1;
+      }
+    }
+  }
+}
