@@ -63,7 +63,7 @@ export function DialogComponent({ presentation, onIframeReady, options, playerPa
               presentation={presentation}
               onIframeReady={onIframeReady}
               options={options}
-              playerParameters={ playerParameters }
+              playerParameters={playerParameters}
           />
         </dialog>
       )}
