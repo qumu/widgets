@@ -414,6 +414,81 @@ describe('ConfigurationService', () => {
     });
   });
 
+  describe('validatePlayerOptions', () => {
+    it('should end silently when playerOptions is undefined, null or empty', () => {
+      expect(() => configurationService.validatePlayerOptions(undefined)).not.toThrow();
+      expect(() => configurationService.validatePlayerOptions(null as unknown as undefined)).not.toThrow();
+      expect(() => configurationService.validatePlayerOptions({})).not.toThrow();
+    });
+
+    it('should warn for unsupported fields in playerParameters', () => {
+      const playerOptionsWithExtraField = {
+        playerParameters: {
+          extraField: 'not-supported',
+        },
+      } as unknown as Record<string, unknown>;
+
+      expect(() => configurationService.validatePlayerOptions(playerOptionsWithExtraField)).not.toThrow();
+      expect(consoleWarnSpy).toHaveBeenCalledWith('Unsupported field `playerOptions.playerParameters.extraField` in configuration');
+    });
+
+    it('should throw error when pv has an invalid value', () => {
+      const invalidPVs = ['invalid', 'PIPLS', '', 123, true, null, {}];
+
+      invalidPVs.forEach((pv) => {
+        const playerOptions = {
+          playerParameters: {
+            pv: pv as unknown as string,
+          },
+        } as unknown as Record<string, unknown>;
+
+        expect(() => configurationService.validatePlayerOptions(playerOptions)).toThrow(
+          '`playerOptions.playerParameters.pv` must be either "pipls", "pipss" or "sbs"',
+        );
+      });
+    });
+
+    it('should accept valid pv values', () => {
+      const validPVs = ['pipls', 'pipss', 'sbs'];
+
+      validPVs.forEach((pv) => {
+        const playerOptions = {
+          playerParameters: {
+            pv,
+          },
+        } as unknown as Record<string, unknown>;
+
+        expect(() => configurationService.validatePlayerOptions(playerOptions)).not.toThrow();
+      });
+    });
+
+    it('should throw no error when quality has invalid value', () => {
+      const playerOptions = {
+        playerParameters: {
+          quality: 'high',
+        },
+      };
+
+      expect(() => configurationService.validatePlayerOptions(playerOptions)).toThrow(
+        '`playerOptions.playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p" or "auto"',
+      );
+    });
+
+    it('should accept valid quality values', () => {
+      const validQualities = ['240p', '480p', '720p', '1080p', '1440p', 'auto'];
+
+      validQualities.forEach((quality) => {
+        const playerOptions = {
+          playerParameters: {
+            quality,
+          },
+        } as unknown as Record<string, unknown>;
+
+        expect(() => configurationService.validatePlayerOptions(playerOptions)).not.toThrow();
+      });
+    });
+  });
+
   describe('validateWidgetOptions', () => {
     it('should end silently when widgetOptions is undefined, null or empty', () => {
       expect(() => configurationService.validateWidgetOptions(undefined)).not.toThrow();

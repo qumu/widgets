@@ -1,11 +1,6 @@
-html {
+html:has(.qc-dialog dialog[open]) {
   scrollbar-gutter: stable;
-}
-
-body {
-  &:has(.qc-dialog dialog[open]) {
-    overflow: hidden;
-  }
+  overflow: hidden;
 }
 
 .qc-widget {

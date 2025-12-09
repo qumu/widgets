@@ -78,47 +78,47 @@
           // guid: 'Vm9bJzT92a77UZ4VlcO8NO', // Live not started
           // guid: 'zc3qDciZeKETzgn4ycv3fL', // Vertical video
 
-          guid: 'VfJcRjKdZypPhy8HqYbbxc', // blue
+          // guid: 'VfJcRjKdZypPhy8HqYbbxc', // blue
           // guid: 'sGcfmyj9Az7sogOV9LY8SO', // purple
           // guid: '3OY8MjrokUZjMpK9gO2B8n', // green
           // guid: 'Rsk8lVKAfFzV4RJahp9u7X', // default
+          guid: 'BnEuUskb6EfymnIPm1PAro', // slides and captions
 
 
           widgetOptions: {
             // set playback mode for the widget of 'inline' | 'inline-autoload' | 'inline-autoplay' | 'modal'
-            playbackMode: 'modal',
+            playbackMode: 'inline-autoload',
 
             // the player configuration GUID to use for playback
             // this should also impact the widget appearance
             // playerConfigurationGuid: "8b278a82-9782-4012-a6d6-215725f86dd9",
 
             // only for modal and inline
-            playIcon: {
-              // url: 'https://uxwing.com/wp-content/themes/uxwing/download/video-photography-multimedia/play-button-green-icon.png',
-              // width: 128,
-              // height: 128,
-              position: 'bottom-right',
-            },
+            // playIcon: {
+            //   url: 'https://uxwing.com/wp-content/themes/uxwing/download/video-photography-multimedia/play-button-green-icon.png',
+            //   width: 128,
+            //   height: 128,
+            //   position: 'bottom-right',
+            // },
           },
-          // playerOptions: {
-          //   playerParameters: {
-          //     captions: '',
-          //     debug: false,
-          //     loop: false,
-          //     pv: 'pipls' | 'pipss' | 'sbs',
-          //     quality: 'auto',
-          //     showControlPanel: true,
-          //     sidebar: true,
-          //     speech: '',
-          //     speechTerm: '',
-          //     start: 0,
-          //     volume: 1,
-          //     // enable or disable analytics reporting
-          //     reporting: true,
-          //     // the reporting ID to use for analytics
-          //     reportingId: '',
-          //   },
-          // }
+          playerOptions: {
+            playerParameters: {
+              badParam: 'ha ha ha',
+              captions: 'ja',
+              debug: true,
+              loop: false,
+              pv: 'pipss', // 'pipls' | 'pipss' | 'sbs',
+              quality: '720p',
+              showControlPanel: true,
+              sidebar: true,
+              speech: '',
+              speechTerm: '',
+              start: 33,
+              volume: 1, // * 100
+              reporting: true,
+              reportingId: 'my-reporting-id-12345',
+            },
+          }
         });
 
         presentationWidget.getIframe().then(async (iframe) => {

@@ -4,14 +4,16 @@ import { Presentation } from '@/interfaces/presentation';
 import { ThumbnailComponent } from './thumbnail';
 import { PlayerComponent } from './player';
 import closeIcon from '../../assets/close.svg?raw';
+import { PlayerParameters } from '@/interfaces/player-parameters';
 
 interface Props {
   presentation: Presentation;
   onIframeReady?: (iframe: HTMLIFrameElement) => void;
   options: WidgetOptions;
+  playerParameters: Partial<PlayerParameters>;
 }
 
-export function DialogComponent({ presentation, onIframeReady, options }: Props) {
+export function DialogComponent({ presentation, onIframeReady, options, playerParameters }: Props) {
   const [showDialog, setShowDialog] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -61,6 +63,7 @@ export function DialogComponent({ presentation, onIframeReady, options }: Props)
               presentation={presentation}
               onIframeReady={onIframeReady}
               options={options}
+              playerParameters={ playerParameters }
           />
         </dialog>
       )}

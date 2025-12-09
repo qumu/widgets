@@ -1,11 +1,15 @@
+import { PlayerOptions } from '@/interfaces/player-options';
 import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { WidgetOptions } from '@/interfaces/widget-options';
 
 const supportedConfigFields = ['selector', 'host', 'guid', 'widgetOptions', 'playerOptions'];
 const supportedWidgetFields = ['playbackMode', 'playerConfigurationGuid', 'playIcon'];
+const supportedPlayerParameterFields = ['captions', 'debug', 'loop', 'pv', 'quality', 'showControlPanel', 'sidebar', 'speech', 'speechTerm', 'start', 'volume', 'reporting', 'reportingId'];
 
 export class ConfigurationService {
-  validate(configuration: WidgetConfiguration): void {
+  validate(initialConfiguration: WidgetConfiguration): WidgetConfiguration {
+    const configuration = structuredClone(initialConfiguration);
+
     if (!configuration || typeof configuration !== 'object') {
       throw new Error('Configuration must be a valid object');
     }
@@ -40,10 +44,35 @@ export class ConfigurationService {
       throw new Error('`host` must be a valid domain name');
     }
 
+    this.validatePlayerOptions(configuration.playerOptions);
     this.validateWidgetOptions(configuration.widgetOptions);
+
+    return configuration;
   }
 
-  validateWidgetOptions(widgetOptions: WidgetConfiguration['widgetOptions']): void {
+  validatePlayerOptions(playerOptions: Partial<PlayerOptions> | undefined): void {
+    if (!playerOptions || !playerOptions.playerParameters) {
+      return;
+    }
+
+    Object.keys(playerOptions.playerParameters).forEach((field) => {
+      if (!supportedPlayerParameterFields.includes(field)) {
+        console.warn(`Unsupported field \`playerOptions.playerParameters.${field}\` in configuration`);
+        delete playerOptions.playerParameters![field as keyof typeof playerOptions.playerParameters];
+      }
+    });
+
+
+    if (playerOptions.playerParameters.pv !== undefined && !['pipls', 'pipss', 'sbs'].includes(playerOptions.playerParameters.pv)) {
+      throw new Error('`playerOptions.playerParameters.pv` must be either "pipls", "pipss" or "sbs"');
+    }
+
+    if (playerOptions.playerParameters.quality !== undefined && !['240p', '480p', '720p', '1080p', '1440p', 'auto'].includes(playerOptions.playerParameters.quality)) {
+      throw new Error('`playerOptions.playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p" or "auto"');
+    }
+  }
+
+  validateWidgetOptions(widgetOptions: Partial<WidgetOptions> | undefined): void {
     if (!widgetOptions) {
       return;
     }

@@ -17,10 +17,10 @@ export class PresentationWidget {
   private presentation: Presentation | null = null;
 
   constructor(
-    configuration: WidgetConfiguration,
+    initialConfiguration: WidgetConfiguration,
   ) {
-    this.configurationService.validate(configuration);
-    this.configuration = this.configurationService.setDefaults(configuration);
+    this.configuration = this.configurationService.validate(initialConfiguration);
+    this.configuration = this.configurationService.setDefaults(this.configuration);
     this.init();
   }
 
@@ -53,12 +53,14 @@ export class PresentationWidget {
               presentation={this.presentation!}
               onIframeReady={this.iframeDeferred.resolve}
               options={this.configuration.widgetOptions as WidgetOptions}
+              playerParameters={this.configuration.playerOptions?.playerParameters || {}}
           />
         ) : (
           <PlayerComponent
             presentation={this.presentation!}
             onIframeReady={this.iframeDeferred.resolve}
             options={this.configuration.widgetOptions as WidgetOptions}
+            playerParameters={this.configuration.playerOptions?.playerParameters || {}}
           />
         )}
       </div>,

@@ -4,6 +4,7 @@ import { createElement } from 'preact';
 import { PlayerComponent } from '../player';
 import { WidgetOptions } from '@/interfaces/widget-options';
 import { Presentation } from '@/interfaces/presentation';
+import { PlayerParameters } from '@/interfaces/player-parameters';
 
 describe('PlayerComponent', () => {
   const mockPresentation: Presentation = {
@@ -28,6 +29,7 @@ describe('PlayerComponent', () => {
     await expect(async () => {
       const { container } = render(createElement(PlayerComponent, {
         options: {} as WidgetOptions,
+        playerParameters: {} as PlayerParameters,
         presentation: null as unknown as Presentation,
       }));
 
@@ -42,6 +44,7 @@ describe('PlayerComponent', () => {
 
     render(createElement(PlayerComponent, {
       options,
+      playerParameters: {} as PlayerParameters,
       presentation: mockPresentation,
     }));
 
@@ -67,6 +70,7 @@ describe('PlayerComponent', () => {
 
     render(createElement(PlayerComponent, {
       options,
+      playerParameters: {} as PlayerParameters,
       presentation,
     }));
 
@@ -83,6 +87,7 @@ describe('PlayerComponent', () => {
 
     render(createElement(PlayerComponent, {
       options,
+      playerParameters: {} as PlayerParameters,
       presentation: mockPresentation,
     }));
 
@@ -100,6 +105,7 @@ describe('PlayerComponent', () => {
       options: {
         playbackMode: 'inline',
       } as WidgetOptions,
+      playerParameters: {} as PlayerParameters,
       presentation: mockPresentation,
     }));
 
@@ -123,6 +129,7 @@ describe('PlayerComponent', () => {
     render(createElement(PlayerComponent, {
       onIframeReady,
       options,
+      playerParameters: {} as PlayerParameters,
       presentation: mockPresentation,
     }));
 
@@ -146,11 +153,49 @@ describe('PlayerComponent', () => {
     await expect(async () => {
       render(createElement(PlayerComponent, {
         options,
+        playerParameters: {} as PlayerParameters,
         presentation,
       }));
 
       await new Promise((resolve) => setTimeout(resolve, 0));
     }).rejects.toThrow();
+  });
+
+  describe('playerParameters', () => {
+    it('should set player parameters in iframe src', () => {
+      const options = {
+        playbackMode: 'inline-autoload',
+      } as WidgetOptions;
+
+      const playerParameters: Partial<PlayerParameters> = {
+        captions: 'en',
+        debug: true,
+        loop: true,
+        pv: 'sbs',
+        quality: '720p',
+        reporting: true,
+        reportingId: 'my-reporting-id-12345',
+        showControlPanel: true,
+        sidebar: true,
+        speech: '',
+        speechTerm: '',
+        start: 45,
+        volume: 0.5,
+      };
+
+      render(createElement(PlayerComponent, {
+        options,
+        playerParameters,
+        presentation: mockPresentation,
+      }));
+
+      const iframe = screen.getByTitle('Qumu Player');
+
+      expect(iframe).toHaveAttribute(
+        'src',
+        'https://example.com/player?autoplay=false&captions=en&debug=true&loop=true&pv=sbs&quality=720p&reporting=true&reportingId=my-reporting-id-12345&showControlPanel=true&sidebar=true&speech=&speechTerm=&start=45&volume=50',
+      );
+    });
   });
 
   describe('widgetOptions', () => {
@@ -162,6 +207,7 @@ describe('PlayerComponent', () => {
 
       render(createElement(PlayerComponent, {
         options,
+        playerParameters: {} as PlayerParameters,
         presentation: mockPresentation,
       }));
 
