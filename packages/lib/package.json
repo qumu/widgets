@@ -1,7 +1,16 @@
 {
   "name": "lib",
-  "source": "src/index.ts",
   "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./presentation-widget.js": "./dist/presentation-widget.js",
+    "./presentation-widget.css": "./dist/presentation-widget.css"
+  },
   "files": [
     "dist/"
   ],

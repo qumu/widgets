@@ -12,6 +12,8 @@
       <div id="presentation-widget-container">
         <i>Widget placeholder</i>
       </div>
+
+      <button id="destroy">Destroy</button>
       <p>Bonbon wafer chocolate caramels muffin. Caramels soufflé danish liquorice chocolate bar pie. Donut marshmallow cookie marzipan candy croissant. Gummies icing bear claw candy canes powder wafer donut pastry candy canes. Sugar plum lemon drops donut brownie gummies toffee carrot cake chupa chups apple pie. Sugar plum chupa chups pie wafer dessert chocolate bar shortbread cupcake tart. Chupa chups marshmallow sweet roll candy danish lemon drops. Caramels marshmallow chocolate halvah donut liquorice marzipan toffee chocolate cake. Chocolate cake tootsie roll powder halvah cupcake muffin cheesecake sugar plum. Fruitcake marzipan sweet bear claw gummies. Liquorice tiramisu cake chocolate bar chocolate bar cotton candy. Soufflé halvah marshmallow jelly-o sesame snaps. Powder cotton candy gummies marzipan candy gingerbread.</p>
       <p>Topping macaroon wafer cookie sweet roll jelly-o gummies. Sugar plum topping jujubes sweet cake. Candy canes marzipan sweet roll donut croissant ice cream gingerbread bear claw lollipop. Croissant jelly beans oat cake caramels tart. Donut jelly shortbread bonbon marzipan cake lollipop tart. Pudding caramels candy canes donut cookie sugar plum. Chocolate bar halvah cake sesame snaps jelly lollipop jelly. Gummi bears jelly-o fruitcake lemon drops chupa chups dragée. Pie ice cream lemon drops cheesecake cookie fruitcake. Cheesecake donut gummi bears pastry marshmallow muffin sesame snaps chocolate bar liquorice. Gummi bears gummi bears dessert carrot cake macaroon tart tootsie roll caramels. Danish carrot cake brownie chocolate icing jelly-o pie. Tiramisu candy canes jelly shortbread marshmallow powder. Oat cake ice cream gummi bears icing cake toffee candy tart.</p>
     </section>
@@ -24,7 +26,7 @@
 
       :root {
         /* Theme colors */
-        --qc-theme-background: #00abfa;
+        --qc-theme-background-color: #00abfa;
         --qc-theme-color: #013b55;
 
         /* Dialog style */
@@ -34,7 +36,7 @@
         /* --qc-dialog-border-radius: 8px; */
         /* --qc-dialog-border-style: solid; */
         /* --qc-dialog-border-width: 3px; */
-        /* --qc-dialog-close-button-background-color: var(--qc-theme-background); */
+        /* --qc-dialog-close-button-background-color: var(--qc-theme-background-color); */
         /* --qc-dialog-close-button-background-opacity-hover: 1; */
         /* --qc-dialog-close-button-background-opacity: 0.8; */
         /* --qc-dialog-close-button-color: var(--qc-theme-color); */
@@ -63,8 +65,6 @@
       import { PlayerSdk } from 'https://unpkg.com/@enghouse-qumu/player-sdk@3.2.0/dist/index.modern.mjs';
 
       try {
-
-
         const presentationWidget = new PresentationWidget({
           // The CSS selector for the container element where the widget will be rendered
           // We force this element to exist in the DOM
@@ -83,8 +83,6 @@
           // guid: '3OY8MjrokUZjMpK9gO2B8n', // green
           // guid: 'Rsk8lVKAfFzV4RJahp9u7X', // default
           guid: 'BnEuUskb6EfymnIPm1PAro', // slides and captions
-
-
           widgetOptions: {
             // set playback mode for the widget of 'inline' | 'inline-autoload' | 'inline-autoplay' | 'modal'
             playbackMode: 'inline',
@@ -123,17 +121,20 @@
           },
         });
 
-        presentationWidget.getIframe().then(async (iframe) => {
-          const sdk = new PlayerSdk(iframe);
-
-          sdk.addEventListener('timeupdate', (newTime) => {
-            console.log('timeupdate', newTime);
-          });
-
-          const duration = await sdk.getDuration();
-
-          console.log('duration', duration);
-        });
+        document.querySelector('#destroy').addEventListener('click', () => {
+          presentationWidget.destroy();
+        })
+        // presentationWidget.getIframe().then(async (iframe) => {
+        //   const sdk = new PlayerSdk(iframe);
+        //
+        //   sdk.addEventListener('timeupdate', (newTime) => {
+        //     console.log('timeupdate', newTime);
+        //   });
+        //
+        //   const duration = await sdk.getDuration();
+        //
+        //   console.log('duration', duration);
+        // });
       } catch (error) {
         console.error('Error initializing PresentationWidget:', error);
       }

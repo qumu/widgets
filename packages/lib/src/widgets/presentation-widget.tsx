@@ -15,6 +15,8 @@ export class PresentationWidget {
   private readonly configuration: WidgetConfiguration;
   private readonly presentationService = new PresentationService();
   private presentation: Presentation | null = null;
+  private container: Element | null = null;
+  private destroyed = false;
 
   constructor(
     initialConfiguration: WidgetConfiguration,
@@ -22,6 +24,24 @@ export class PresentationWidget {
     this.configuration = this.configurationService.validateAndSanitize(initialConfiguration);
     this.configuration = this.configurationService.setDefaults(this.configuration);
     this.init();
+  }
+
+  destroy() {
+    if (this.destroyed) {
+      return;
+    } // Make idempotent
+
+    if (this.container) {
+      // Unmount the widget properly
+      render(null, this.container);
+
+      // Clear container HTML
+      this.container.innerHTML = '';
+    }
+
+    // Prevent future usage
+    this.presentation = null;
+    this.destroyed = true;
   }
 
   getIframe(): Promise<HTMLIFrameElement> {
@@ -46,16 +66,18 @@ export class PresentationWidget {
       throw new Error(`Element for selector "${this.configuration.selector}" not found`);
     }
 
+    this.container = container;
     container.innerHTML = '';
 
     render(
-      <div class="qc-widget qc-presentation-widget" style={{ 'aspect-ratio': `${this.presentation?.mediaDisplayWidth} / ${this.presentation?.mediaDisplayHeight}` }}>
+      <div class="qc-widget qc-presentation-widget"
+           style={{ 'aspect-ratio': `${this.presentation?.mediaDisplayWidth} / ${this.presentation?.mediaDisplayHeight}` }}>
         {this.configuration.widgetOptions?.playbackMode === 'modal' ? (
           <DialogComponent
-              presentation={this.presentation!}
-              onIframeReady={this.iframeDeferred.resolve}
-              playerParameters={this.configuration.playerParameters!}
-              widgetOptions={this.configuration.widgetOptions as WidgetOptions}
+            presentation={this.presentation!}
+            onIframeReady={this.iframeDeferred.resolve}
+            playerParameters={this.configuration.playerParameters!}
+            widgetOptions={this.configuration.widgetOptions as WidgetOptions}
           />
         ) : (
           <PlayerComponent

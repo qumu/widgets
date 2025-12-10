@@ -7,27 +7,14 @@ export default defineConfig({
     cssCodeSplit: true,
     lib: {
       entry: {
+        'index': path.resolve(__dirname, './src/index.ts'),
         'presentation-widget': path.resolve(__dirname, './src/widgets/presentation-widget.tsx'),
       },
-      fileName: (format, name) => `${name}.js`,
+      fileName: (_, name) => `${name}.js`,
       formats: ['es'],
       name: 'Qumu Widget',
     },
     minify: 'terser',
-    rollupOptions: {
-      output: {
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
-            // Extract the entry point name from the CSS file
-            const cssName = assetInfo.name.replace('.css', '');
-
-            return `${cssName}.css`;
-          }
-
-          return assetInfo.name || 'asset';
-        },
-      },
-    },
   },
   plugins: [
     dts({

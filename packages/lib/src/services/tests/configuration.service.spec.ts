@@ -485,7 +485,7 @@ describe('ConfigurationService', () => {
         quality: 'high',
       };
 
-      expect(() => configurationService.validatePlayerParameters(playerParameters)).toThrow(
+      expect(() => configurationService.validatePlayerParameters(playerParameters as any)).toThrow(
         '`playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p" or "auto"',
       );
     });

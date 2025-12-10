@@ -2,7 +2,7 @@
   "private": true,
   "name": "@enghouse-qumu/widget",
   "version": "0.0.1",
-  "description": "QumuCloud widget",
+  "description": "Qumu Cloud widget library",
   "engines": {
     "node": ">=24"
   },
@@ -18,10 +18,6 @@
     "dev:watch": "npm run dev:watch --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "server": "npm run server -w lib"
-  },
-  "devDependencies": {
-    "@enghouse-qumu/eslint-config": "1.0.2",
-    "typescript": "5.8.3"
   },
   "workspaces": [
     "packages/*"
