@@ -1,13 +1,13 @@
-import { PlayerOptions } from '@/interfaces/player-options';
+import { PlayerParameters } from '@/interfaces/player-parameters';
 import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { WidgetOptions } from '@/interfaces/widget-options';
 
-const supportedConfigFields = ['selector', 'host', 'guid', 'widgetOptions', 'playerOptions'];
-const supportedWidgetFields = ['playbackMode', 'playerConfigurationGuid', 'playIcon'];
-const supportedPlayerParameterFields = ['captions', 'debug', 'loop', 'pv', 'quality', 'showControlPanel', 'sidebar', 'speech', 'speechTerm', 'start', 'volume', 'reporting', 'reportingId'];
+const supportedConfigFields = new Set(['selector', 'host', 'guid', 'widgetOptions', 'playerParameters']);
+const supportedWidgetFields = new Set(['playbackMode', 'playerConfigurationGuid', 'playIcon']);
+const supportedPlayerParameterFields = new Set(['captions', 'debug', 'loop', 'pv', 'quality', 'showControlPanel', 'sidebar', 'speech', 'speechTerm', 'start', 'volume', 'reporting', 'reportingId']);
 
 export class ConfigurationService {
-  validate(initialConfiguration: WidgetConfiguration): WidgetConfiguration {
+  validateAndSanitize(initialConfiguration: WidgetConfiguration): WidgetConfiguration {
     const configuration = structuredClone(initialConfiguration);
 
     if (!configuration || typeof configuration !== 'object') {
@@ -15,7 +15,7 @@ export class ConfigurationService {
     }
 
     Object.keys(configuration).forEach((field) => {
-      if (!supportedConfigFields.includes(field)) {
+      if (!supportedConfigFields.has(field)) {
         console.warn(`Unsupported field \`${field}\` in configuration`);
         delete configuration[field as keyof WidgetConfiguration];
       }
@@ -29,7 +29,7 @@ export class ConfigurationService {
       }
 
       if (typeof value !== 'string') {
-        throw new Error(`\`${field}\` must be a string`);
+        throw new TypeError(`\`${field}\` must be a string`);
       }
 
       if (value.trim() === '') {
@@ -44,31 +44,31 @@ export class ConfigurationService {
       throw new Error('`host` must be a valid domain name');
     }
 
-    this.validatePlayerOptions(configuration.playerOptions);
+    this.validatePlayerParameters(configuration.playerParameters);
     this.validateWidgetOptions(configuration.widgetOptions);
 
     return configuration;
   }
 
-  validatePlayerOptions(playerOptions: Partial<PlayerOptions> | undefined): void {
-    if (!playerOptions || !playerOptions.playerParameters) {
+  validatePlayerParameters(playerParameters: Partial<PlayerParameters> | undefined): void {
+    if (!playerParameters) {
       return;
     }
 
-    Object.keys(playerOptions.playerParameters).forEach((field) => {
-      if (!supportedPlayerParameterFields.includes(field)) {
-        console.warn(`Unsupported field \`playerOptions.playerParameters.${field}\` in configuration`);
-        delete playerOptions.playerParameters![field as keyof typeof playerOptions.playerParameters];
+    Object.keys(playerParameters).forEach((field) => {
+      if (!supportedPlayerParameterFields.has(field)) {
+        console.warn(`Unsupported field \`playerParameters.${field}\` in configuration`);
+        delete playerParameters[field as keyof typeof playerParameters];
       }
     });
 
 
-    if (playerOptions.playerParameters.pv !== undefined && !['pipls', 'pipss', 'sbs'].includes(playerOptions.playerParameters.pv)) {
-      throw new Error('`playerOptions.playerParameters.pv` must be either "pipls", "pipss" or "sbs"');
+    if (playerParameters.pv !== undefined && !['pipls', 'pipss', 'sbs'].includes(playerParameters.pv)) {
+      throw new Error('`playerParameters.pv` must be either "pipls", "pipss" or "sbs"');
     }
 
-    if (playerOptions.playerParameters.quality !== undefined && !['240p', '480p', '720p', '1080p', '1440p', 'auto'].includes(playerOptions.playerParameters.quality)) {
-      throw new Error('`playerOptions.playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p" or "auto"');
+    if (playerParameters.quality !== undefined && !['240p', '480p', '720p', '1080p', '1440p', 'auto'].includes(playerParameters.quality)) {
+      throw new Error('`playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p" or "auto"');
     }
   }
 
@@ -78,7 +78,7 @@ export class ConfigurationService {
     }
 
     Object.keys(widgetOptions).forEach((field) => {
-      if (!supportedWidgetFields.includes(field)) {
+      if (!supportedWidgetFields.has(field)) {
         console.warn(`Unsupported field \`widgetOptions.${field}\` in configuration`);
         delete widgetOptions[field as keyof typeof widgetOptions];
       }
@@ -87,7 +87,7 @@ export class ConfigurationService {
     if (widgetOptions.playbackMode !== undefined) {
       const value = widgetOptions.playbackMode;
 
-      if (['inline', 'inline-autoload', 'inline-autoplay', 'modal'].indexOf(value) === -1) {
+      if (!['inline', 'inline-autoload', 'inline-autoplay', 'modal'].includes(value)) {
         throw new Error('`widgetOptions.playbackMode` must be either "inline", "inline-autoload", "inline-autoplay" or "modal"');
       }
     }
@@ -96,7 +96,7 @@ export class ConfigurationService {
       if (widgetOptions.playIcon.position !== undefined) {
         const validPositions = ['top-left', 'top', 'top-right', 'left', 'center', 'right', 'bottom-left', 'bottom', 'bottom-right'];
 
-        if (validPositions.indexOf(widgetOptions.playIcon.position) === -1) {
+        if (!validPositions.includes(widgetOptions.playIcon.position)) {
           throw new Error('`widgetOptions.playIcon.position` must be a valid position value');
         }
       }
@@ -110,17 +110,17 @@ export class ConfigurationService {
   setDefaults(initialConfiguration: WidgetConfiguration): WidgetConfiguration {
     const widgetOptions = {
       playbackMode: 'inline',
-      ...initialConfiguration.widgetOptions || {},
+      ...initialConfiguration.widgetOptions,
     } as WidgetOptions;
 
-    const playerOptions = {
-      ...initialConfiguration.playerOptions || {},
+    const playerParameters = {
+      ...initialConfiguration.playerParameters,
     };
 
     const configuration: WidgetConfiguration = {
       ...initialConfiguration,
       host: initialConfiguration.host.replace('https://', '').replace(/\/.*$/, ''),
-      playerOptions,
+      playerParameters,
       widgetOptions,
     };
 

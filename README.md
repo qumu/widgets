@@ -28,7 +28,7 @@ A Qumu Widget library that provides the following widgets:
         // Check the docs for available options
       },
 
-      playerOptions: {
+      playerParameters: {
         // Check the docs for available options
       }
     });

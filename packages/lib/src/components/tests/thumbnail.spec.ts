@@ -39,8 +39,8 @@ describe('ThumbnailComponent', () => {
     it('should render thumbnail button with image', () => {
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options: {} as WidgetOptions,
         presentation: mockPresentation,
+        widgetOptions: {} as WidgetOptions,
       }));
 
       const button = screen.getByRole('button');
@@ -64,8 +64,8 @@ describe('ThumbnailComponent', () => {
 
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options: {} as WidgetOptions,
         presentation: presentationWithoutCdn,
+        widgetOptions: {} as WidgetOptions,
       }));
 
       const image = screen.getByAltText('Thumbnail for Test Presentation');
@@ -78,8 +78,8 @@ describe('ThumbnailComponent', () => {
     it('should render default play icon when no custom play icon is provided', () => {
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options: {} as WidgetOptions,
         presentation: mockPresentation,
+        widgetOptions: {} as WidgetOptions,
       }));
 
       const playIcon = screen.getByRole('button').querySelector('.qc-thumbnail__play-button--default');
@@ -90,7 +90,7 @@ describe('ThumbnailComponent', () => {
     });
 
     it('should render custom play icon image when provided in options', () => {
-      const options = {
+      const widgetOptions = {
         playIcon: {
           height: 50,
           url: 'https://example.com/custom-play-icon.png',
@@ -100,8 +100,8 @@ describe('ThumbnailComponent', () => {
 
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options,
         presentation: mockPresentation,
+        widgetOptions,
       }));
 
       const playIconImage = screen.getByAltText('Play');
@@ -116,7 +116,7 @@ describe('ThumbnailComponent', () => {
     });
 
     it('should apply width style when provided in play icon options', () => {
-      const options = {
+      const widgetOptions = {
         playIcon: {
           height: 40,
           url: '',
@@ -126,8 +126,8 @@ describe('ThumbnailComponent', () => {
 
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options,
         presentation: mockPresentation,
+        widgetOptions,
       }));
 
       const playIcon = screen.getByRole('button').querySelector('.qc-thumbnail__play-button');
@@ -139,7 +139,7 @@ describe('ThumbnailComponent', () => {
     });
 
     it('should apply height style when provided in play icon options', () => {
-      const options = {
+      const widgetOptions = {
         playIcon: {
           height: 75,
           url: '',
@@ -149,8 +149,8 @@ describe('ThumbnailComponent', () => {
 
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options,
         presentation: mockPresentation,
+        widgetOptions,
       }));
 
       const playIcon = screen.getByRole('button').querySelector('.qc-thumbnail__play-button--default');
@@ -164,12 +164,12 @@ describe('ThumbnailComponent', () => {
     it('should not apply size styles when not provided in options', () => {
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options: {
+        presentation: mockPresentation,
+        widgetOptions: {
           playIcon: {
             url: 'https://example.com/custom-play-icon.png',
           },
         } as WidgetOptions,
-        presentation: mockPresentation,
       }));
 
       const playIcon = screen.getByRole('button').querySelector('.qc-thumbnail__play-button');
@@ -190,7 +190,7 @@ describe('ThumbnailComponent', () => {
         'top-right': ['start', 'end'],
       };
 
-      const options = {
+      const widgetOptions = {
         playIcon: {
           height: 50,
           url: 'https://example.com/custom-play-icon.png',
@@ -200,12 +200,12 @@ describe('ThumbnailComponent', () => {
 
       Object.entries(positionMap).forEach(([position, [placeY, placeX]]) => {
         document.body.innerHTML = '';
-        options.playIcon.position = position as PlayIconPosition;
+        widgetOptions.playIcon.position = position as PlayIconPosition;
 
         render(createElement(ThumbnailComponent, {
           onClick: mockOnClick,
-          options,
           presentation: mockPresentation,
+          widgetOptions,
         }));
 
         const button = screen.getByRole('button');
@@ -221,8 +221,8 @@ describe('ThumbnailComponent', () => {
     it('should call onClick handler when thumbnail is clicked', () => {
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options: {} as WidgetOptions,
         presentation: mockPresentation,
+        widgetOptions: {} as WidgetOptions,
       }));
 
       const button = screen.getByRole('button');
@@ -235,8 +235,8 @@ describe('ThumbnailComponent', () => {
     it('should call onClick handler multiple times when clicked multiple times', () => {
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options: {} as WidgetOptions,
         presentation: mockPresentation,
+        widgetOptions: {} as WidgetOptions,
       }));
 
       const button = screen.getByRole('button');
@@ -251,7 +251,7 @@ describe('ThumbnailComponent', () => {
 
   describe('Edge Cases', () => {
     it('should handle partial play icon options', () => {
-      const options = {
+      const widgetOptions = {
         playIcon: {
           width: 40,
         },
@@ -259,8 +259,8 @@ describe('ThumbnailComponent', () => {
 
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options,
         presentation: mockPresentation,
+        widgetOptions,
       }));
 
       const playIcon = screen.getByRole('button').querySelector('.qc-thumbnail__play-button--default');
@@ -271,7 +271,7 @@ describe('ThumbnailComponent', () => {
     });
 
     it('should handle empty play icon url', () => {
-      const options = {
+      const widgetOptions = {
         playIcon: {
           height: 50,
           url: '',
@@ -281,8 +281,8 @@ describe('ThumbnailComponent', () => {
 
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options,
         presentation: mockPresentation,
+        widgetOptions,
       }));
 
       const playIcon = screen.getByRole('button').querySelector('.qc-thumbnail__play-button--default');
@@ -296,8 +296,8 @@ describe('ThumbnailComponent', () => {
     it('should have proper button type attribute', () => {
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options: {} as WidgetOptions,
         presentation: mockPresentation,
+        widgetOptions: {} as WidgetOptions,
       }));
 
       const button = screen.getByRole('button');
@@ -308,8 +308,8 @@ describe('ThumbnailComponent', () => {
     it('should have descriptive alt text for thumbnail image', () => {
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options: {} as WidgetOptions,
         presentation: mockPresentation,
+        widgetOptions: {} as WidgetOptions,
       }));
 
       const image = screen.getByAltText('Thumbnail for Test Presentation');
@@ -318,7 +318,7 @@ describe('ThumbnailComponent', () => {
     });
 
     it('should have alt text for custom play icon', () => {
-      const options = {
+      const widgetOptions = {
         playIcon: {
           height: 50,
           url: 'https://example.com/custom-play-icon.png',
@@ -328,8 +328,8 @@ describe('ThumbnailComponent', () => {
 
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
-        options,
         presentation: mockPresentation,
+        widgetOptions,
       }));
 
       const playIcon = screen.getByAltText('Play');

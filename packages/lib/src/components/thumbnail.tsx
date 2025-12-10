@@ -4,22 +4,22 @@ import playIcon from '../../assets/play-icon.svg?raw';
 
 interface Props {
   onClick: () => void;
-  options: WidgetOptions;
   presentation: Presentation;
+  widgetOptions: WidgetOptions;
 }
 
-export function ThumbnailComponent({ presentation, onClick, options }: Readonly<Props>) {
+export function ThumbnailComponent({ presentation, onClick, widgetOptions }: Readonly<Props>) {
   const playIconStyle: Record<string, string> = {};
 
-  if (options.playIcon?.width) {
-    playIconStyle['width'] = `${options.playIcon.width}px`;
+  if (widgetOptions.playIcon?.width) {
+    playIconStyle['width'] = `${widgetOptions.playIcon.width}px`;
   }
 
-  if (options.playIcon?.height) {
-    playIconStyle['height'] = `${options.playIcon.height}px`;
+  if (widgetOptions.playIcon?.height) {
+    playIconStyle['height'] = `${widgetOptions.playIcon.height}px`;
   }
 
-  const position = options.playIcon?.position || 'center';
+  const position = widgetOptions.playIcon?.position || 'center';
   const placeX = position.includes('left') ? 'start' : (position.includes('right') ? 'end' : 'center');
   const placeY = position.includes('top') ? 'start' : (position.includes('bottom') ? 'end' : 'center');
 
@@ -30,17 +30,17 @@ export function ThumbnailComponent({ presentation, onClick, options }: Readonly<
         src={presentation.thumbnail?.cdnUrl || presentation.thumbnail?.url}
         alt={`Thumbnail for ${presentation.title}`}
       />
-      {options.playIcon?.url ? (
+      {widgetOptions.playIcon?.url ? (
         <img
             alt="Play"
             class="qc-thumbnail__play-button"
-            src={options.playIcon?.url}
+            src={widgetOptions.playIcon?.url}
             style={playIconStyle}
         />
       ) : (
         <div
             class="qc-thumbnail__play-button qc-thumbnail__play-button--default"
-            dangerouslySetInnerHTML={{ __html: options.playIcon?.url || playIcon }}
+            dangerouslySetInnerHTML={{ __html: widgetOptions.playIcon?.url || playIcon }}
             style={playIconStyle}
         />
       )}

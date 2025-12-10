@@ -74,8 +74,9 @@ describe('DialogComponent', () => {
   it('should render empty string when presentation is null', () => {
     const { container } = render(createElement(DialogComponent, {
       onIframeReady: mockOnIframeReady,
-      options: mockOptions,
+      playerParameters: {},
       presentation: null as unknown as Presentation,
+      widgetOptions: mockOptions,
     }));
 
     expect(container.textContent).toBe('');
@@ -84,8 +85,9 @@ describe('DialogComponent', () => {
   it('should render thumbnail component when presentation is provided', async () => {
     render(createElement(DialogComponent, {
       onIframeReady: mockOnIframeReady,
-      options: mockOptions,
+      playerParameters: {},
       presentation: mockPresentation,
+      widgetOptions: mockOptions,
     }));
 
     const thumbnail = await screen.findByTestId('thumbnail-component');
@@ -97,8 +99,9 @@ describe('DialogComponent', () => {
   it('should show dialog when thumbnail is clicked', async () => {
     render(createElement(DialogComponent, {
       onIframeReady: mockOnIframeReady,
-      options: mockOptions,
+      playerParameters: {},
       presentation: mockPresentation,
+      widgetOptions: mockOptions,
     }));
 
     const thumbnail = await screen.findByTestId('thumbnail-component');
@@ -115,8 +118,9 @@ describe('DialogComponent', () => {
   it('should render PlayerComponent in dialog', async () => {
     render(createElement(DialogComponent, {
       onIframeReady: mockOnIframeReady,
-      options: mockOptions,
+      playerParameters: {},
       presentation: mockPresentation,
+      widgetOptions: mockOptions,
     }));
 
     const thumbnail = await screen.findByTestId('thumbnail-component');
@@ -136,8 +140,9 @@ describe('DialogComponent', () => {
 
     render(createElement(DialogComponent, {
       onIframeReady: mockOnIframeReady,
-      options: mockOptions,
+      playerParameters: {},
       presentation: mockPresentation,
+      widgetOptions: mockOptions,
     }));
 
     const thumbnail = await screen.findByTestId('thumbnail-component');
@@ -168,8 +173,9 @@ describe('DialogComponent', () => {
 
     render(createElement(DialogComponent, {
       onIframeReady: mockOnIframeReady,
-      options: mockOptions,
+      playerParameters: {},
       presentation: mockPresentation,
+      widgetOptions: mockOptions,
     }));
 
     const thumbnail = await screen.findByTestId('thumbnail-component');
@@ -196,8 +202,9 @@ describe('DialogComponent', () => {
 
     render(createElement(DialogComponent, {
       onIframeReady: mockOnIframeReady,
-      options: mockOptions,
+      playerParameters: {},
       presentation: mockPresentation,
+      widgetOptions: mockOptions,
     }));
 
     const thumbnail = await screen.findByTestId('thumbnail-component');
@@ -226,8 +233,9 @@ describe('DialogComponent', () => {
   it('should handle dialog onClose event', async () => {
     render(createElement(DialogComponent, {
       onIframeReady: mockOnIframeReady,
-      options: mockOptions,
+      playerParameters: {},
       presentation: mockPresentation,
+      widgetOptions: mockOptions,
     }));
 
     const thumbnail = await screen.findByTestId('thumbnail-component');
@@ -259,8 +267,9 @@ describe('DialogComponent', () => {
 
     render(createElement(DialogComponent, {
       onIframeReady: mockOnIframeReady,
-      options: optionsWithAutoplay,
+      playerParameters: {},
       presentation: mockPresentation,
+      widgetOptions: optionsWithAutoplay,
     }));
 
     const thumbnail = await screen.findByTestId('thumbnail-component');
@@ -282,8 +291,9 @@ describe('DialogComponent', () => {
 
     render(createElement(DialogComponent, {
       onIframeReady: mockOnIframeReady,
-      options: optionsWithAutoplayFalse,
+      playerParameters: {},
       presentation: mockPresentation,
+      widgetOptions: optionsWithAutoplayFalse,
     }));
 
     const thumbnail = await screen.findByTestId('thumbnail-component');
@@ -305,8 +315,9 @@ describe('DialogComponent', () => {
 
     render(createElement(DialogComponent, {
       onIframeReady: mockOnIframeReady,
-      options: optionsWithAutoplayNull,
+      playerParameters: {},
       presentation: mockPresentation,
+      widgetOptions: optionsWithAutoplayNull,
     }));
 
     const thumbnail = await screen.findByTestId('thumbnail-component');

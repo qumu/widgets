@@ -9,11 +9,11 @@ import { PlayerParameters } from '@/interfaces/player-parameters';
 interface Props {
   presentation: Presentation;
   onIframeReady?: (iframe: HTMLIFrameElement) => void;
-  options: WidgetOptions;
   playerParameters: Partial<PlayerParameters>;
+  widgetOptions: WidgetOptions;
 }
 
-export function DialogComponent({ presentation, onIframeReady, options, playerParameters }: Props) {
+export function DialogComponent({ presentation, onIframeReady, widgetOptions, playerParameters }: Readonly<Props>) {
   const [showDialog, setShowDialog] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -37,9 +37,9 @@ export function DialogComponent({ presentation, onIframeReady, options, playerPa
   return (
     <div class="qc-dialog">
       <ThumbnailComponent
-        presentation={presentation}
         onClick={() => setShowDialog(true)}
-        options={options}
+        presentation={presentation}
+        widgetOptions={widgetOptions}
       />
 
       {showDialog && (
@@ -62,8 +62,8 @@ export function DialogComponent({ presentation, onIframeReady, options, playerPa
           <PlayerComponent
               presentation={presentation}
               onIframeReady={onIframeReady}
-              options={options}
               playerParameters={playerParameters}
+              widgetOptions={widgetOptions}
           />
         </dialog>
       )}

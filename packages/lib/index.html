@@ -87,7 +87,7 @@
 
           widgetOptions: {
             // set playback mode for the widget of 'inline' | 'inline-autoload' | 'inline-autoplay' | 'modal'
-            playbackMode: 'inline-autoload',
+            playbackMode: 'modal',
 
             // the player configuration GUID to use for playback
             // this should also impact the widget appearance
@@ -101,24 +101,22 @@
             //   position: 'bottom-right',
             // },
           },
-          playerOptions: {
-            playerParameters: {
-              badParam: 'ha ha ha',
-              captions: 'ja',
-              debug: false,
-              loop: false,
-              pv: 'pipss', // 'pipls' | 'pipss' | 'sbs',
-              quality: '720p',
-              showControlPanel: true,
-              sidebar: true,
-              speech: '',
-              speechTerm: '',
-              start: 33,
-              volume: 'qwd', // * 100
-              reporting: true,
-              reportingId: 'my-reporting-id-12345',
-            },
-          }
+          playerParameters: {
+            badParam: 'ha ha ha',
+            captions: 'ja',
+            debug: false,
+            loop: false,
+            pv: 'pipss', // 'pipls' | 'pipss' | 'sbs',
+            quality: '720p',
+            showControlPanel: true,
+            sidebar: true,
+            speech: '',
+            speechTerm: '',
+            start: 33,
+            volume: 75,
+            reporting: true,
+            reportingId: 'my-reporting-id-12345',
+          },
         });
 
         presentationWidget.getIframe().then(async (iframe) => {

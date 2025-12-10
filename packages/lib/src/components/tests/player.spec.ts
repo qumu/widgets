@@ -28,9 +28,9 @@ describe('PlayerComponent', () => {
     // eslint-disable-next-line @typescript-eslint/require-await
     await expect(async () => {
       const { container } = render(createElement(PlayerComponent, {
-        options: {} as WidgetOptions,
         playerParameters: {} as PlayerParameters,
         presentation: null as unknown as Presentation,
+        widgetOptions: {} as WidgetOptions,
       }));
 
       expect(container.textContent).toMatch('');
@@ -38,14 +38,14 @@ describe('PlayerComponent', () => {
   });
 
   it('should render thumbnail when playbackMode is inline', () => {
-    const options = {
+    const widgetOptions = {
       playbackMode: 'inline',
     } as WidgetOptions;
 
     render(createElement(PlayerComponent, {
-      options,
       playerParameters: {} as PlayerParameters,
       presentation: mockPresentation,
+      widgetOptions,
     }));
 
     const thumbnail = screen.getByAltText('Thumbnail for Test Presentation');
@@ -55,7 +55,7 @@ describe('PlayerComponent', () => {
   });
 
   it('should render thumbnail url if no cdnUrl is present', () => {
-    const options = {
+    const widgetOptions = {
       playbackMode: 'inline',
     } as WidgetOptions;
 
@@ -69,9 +69,9 @@ describe('PlayerComponent', () => {
     delete presentation.thumbnail!.cdnUrl;
 
     render(createElement(PlayerComponent, {
-      options,
       playerParameters: {} as PlayerParameters,
       presentation,
+      widgetOptions,
     }));
 
     const thumbnail = screen.getByAltText('Thumbnail for Test Presentation');
@@ -81,14 +81,14 @@ describe('PlayerComponent', () => {
   });
 
   it('should render iframe when playbackMode is inline-autoload', () => {
-    const options = {
+    const widgetOptions = {
       playbackMode: 'inline-autoload',
     } as WidgetOptions;
 
     render(createElement(PlayerComponent, {
-      options,
       playerParameters: {} as PlayerParameters,
       presentation: mockPresentation,
+      widgetOptions,
     }));
 
     const iframe = screen.getByTitle('Qumu Player');
@@ -102,11 +102,11 @@ describe('PlayerComponent', () => {
 
   it('should switch from thumbnail to iframe when thumbnail is clicked', () => {
     render(createElement(PlayerComponent, {
-      options: {
-        playbackMode: 'inline',
-      } as WidgetOptions,
       playerParameters: {} as PlayerParameters,
       presentation: mockPresentation,
+      widgetOptions: {
+        playbackMode: 'inline',
+      } as WidgetOptions,
     }));
 
     expect(screen.getByAltText('Thumbnail for Test Presentation')).toBeInTheDocument();
@@ -122,15 +122,15 @@ describe('PlayerComponent', () => {
 
   it('should call onIframeReady when iframe loads', () => {
     const onIframeReady = vi.fn();
-    const options: WidgetOptions = {
+    const widgetOptions: WidgetOptions = {
       playbackMode: 'inline-autoload',
     } as WidgetOptions;
 
     render(createElement(PlayerComponent, {
       onIframeReady,
-      options,
       playerParameters: {} as PlayerParameters,
       presentation: mockPresentation,
+      widgetOptions,
     }));
 
     const iframe = screen.getByTitle('Qumu Player');
@@ -141,7 +141,7 @@ describe('PlayerComponent', () => {
   });
 
   it('should throw an error when no player parameter is provided in the presentation', async () => {
-    const options = {
+    const widgetOptions = {
       playbackMode: 'inline-autoload',
     } as WidgetOptions;
 
@@ -152,9 +152,9 @@ describe('PlayerComponent', () => {
 
     await expect(async () => {
       render(createElement(PlayerComponent, {
-        options,
         playerParameters: {} as PlayerParameters,
         presentation,
+        widgetOptions,
       }));
 
       await new Promise((resolve) => setTimeout(resolve, 0));
@@ -163,7 +163,7 @@ describe('PlayerComponent', () => {
 
   describe('playerParameters', () => {
     it('should set player parameters in iframe src', () => {
-      const options = {
+      const widgetOptions = {
         playbackMode: 'inline-autoload',
       } as WidgetOptions;
 
@@ -184,9 +184,9 @@ describe('PlayerComponent', () => {
       };
 
       render(createElement(PlayerComponent, {
-        options,
         playerParameters,
         presentation: mockPresentation,
+        widgetOptions,
       }));
 
       const iframe = screen.getByTitle('Qumu Player');
@@ -200,15 +200,15 @@ describe('PlayerComponent', () => {
 
   describe('widgetOptions', () => {
     it('should set playerConfigurationGuid parameter when provided', () => {
-      const options = {
+      const widgetOptions = {
         playbackMode: 'inline-autoload',
         playerConfigurationGuid: 'config-guid-123',
       } as WidgetOptions;
 
       render(createElement(PlayerComponent, {
-        options,
         playerParameters: {} as PlayerParameters,
         presentation: mockPresentation,
+        widgetOptions,
       }));
 
       const iframe = screen.getByTitle('Qumu Player');

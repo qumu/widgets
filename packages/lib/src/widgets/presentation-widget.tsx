@@ -19,7 +19,7 @@ export class PresentationWidget {
   constructor(
     initialConfiguration: WidgetConfiguration,
   ) {
-    this.configuration = this.configurationService.validate(initialConfiguration);
+    this.configuration = this.configurationService.validateAndSanitize(initialConfiguration);
     this.configuration = this.configurationService.setDefaults(this.configuration);
     this.init();
   }
@@ -52,15 +52,15 @@ export class PresentationWidget {
           <DialogComponent
               presentation={this.presentation!}
               onIframeReady={this.iframeDeferred.resolve}
-              options={this.configuration.widgetOptions as WidgetOptions}
-              playerParameters={this.configuration.playerOptions?.playerParameters || {}}
+              playerParameters={this.configuration.playerParameters || {}}
+              widgetOptions={this.configuration.widgetOptions as WidgetOptions}
           />
         ) : (
           <PlayerComponent
             presentation={this.presentation!}
             onIframeReady={this.iframeDeferred.resolve}
-            options={this.configuration.widgetOptions as WidgetOptions}
-            playerParameters={this.configuration.playerOptions?.playerParameters || {}}
+            playerParameters={this.configuration.playerParameters || {}}
+            widgetOptions={this.configuration.widgetOptions as WidgetOptions}
           />
         )}
       </div>,

@@ -16,7 +16,7 @@ describe('ConfigurationService', () => {
     consoleWarnSpy.mockRestore();
   });
 
-  describe('validate', () => {
+  describe('validateAndSanitize', () => {
     const validConfiguration: WidgetConfiguration = {
       guid: 'test-guid-123',
       host: 'example.com',
@@ -24,19 +24,19 @@ describe('ConfigurationService', () => {
     };
 
     it('should end silently when no errors occur', () => {
-      expect(() => configurationService.validate(validConfiguration)).not.toThrow();
+      expect(() => configurationService.validateAndSanitize(validConfiguration)).not.toThrow();
     });
 
     it('should throw error when configuration is not an object', () => {
-      expect(() => configurationService.validate(null as unknown as WidgetConfiguration)).toThrow(
+      expect(() => configurationService.validateAndSanitize(null as unknown as WidgetConfiguration)).toThrow(
         'Configuration must be a valid object',
       );
 
-      expect(() => configurationService.validate(42 as unknown as WidgetConfiguration)).toThrow(
+      expect(() => configurationService.validateAndSanitize(42 as unknown as WidgetConfiguration)).toThrow(
         'Configuration must be a valid object',
       );
 
-      expect(() => configurationService.validate('invalid' as unknown as WidgetConfiguration)).toThrow(
+      expect(() => configurationService.validateAndSanitize('invalid' as unknown as WidgetConfiguration)).toThrow(
         'Configuration must be a valid object',
       );
     });
@@ -47,7 +47,7 @@ describe('ConfigurationService', () => {
         extraField: 'not-supported',
       } as unknown as WidgetConfiguration;
 
-      expect(() => configurationService.validate(configWithExtraField)).not.toThrow();
+      expect(() => configurationService.validateAndSanitize(configWithExtraField)).not.toThrow();
       expect(consoleWarnSpy).toHaveBeenCalledWith('Unsupported field `extraField` in configuration');
     });
 
@@ -59,7 +59,7 @@ describe('ConfigurationService', () => {
         },
       } as unknown as WidgetConfiguration;
 
-      expect(() => configurationService.validate(configWithExtraField)).not.toThrow();
+      expect(() => configurationService.validateAndSanitize(configWithExtraField)).not.toThrow();
       expect(consoleWarnSpy).toHaveBeenCalledWith('Unsupported field `widgetOptions.extraField` in configuration');
     });
 
@@ -69,7 +69,7 @@ describe('ConfigurationService', () => {
 
         delete (config as Record<string, unknown>).selector;
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`selector` is not defined in the configuration',
         );
       });
@@ -80,7 +80,7 @@ describe('ConfigurationService', () => {
           selector: null as unknown as string,
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`selector` is not defined in the configuration',
         );
       });
@@ -91,7 +91,7 @@ describe('ConfigurationService', () => {
           selector: 123 as unknown as string,
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`selector` must be a string',
         );
       });
@@ -102,7 +102,7 @@ describe('ConfigurationService', () => {
           selector: '',
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`selector` cannot be an empty string',
         );
       });
@@ -113,7 +113,7 @@ describe('ConfigurationService', () => {
           selector: '   ',
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`selector` cannot be an empty string',
         );
       });
@@ -125,7 +125,7 @@ describe('ConfigurationService', () => {
 
         delete (config as Record<string, unknown>).host;
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`host` is not defined in the configuration',
         );
       });
@@ -136,7 +136,7 @@ describe('ConfigurationService', () => {
           host: null as unknown as string,
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`host` is not defined in the configuration',
         );
       });
@@ -147,7 +147,7 @@ describe('ConfigurationService', () => {
           host: 42 as unknown as string,
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`host` must be a string',
         );
       });
@@ -158,7 +158,7 @@ describe('ConfigurationService', () => {
           host: '',
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`host` cannot be an empty string',
         );
       });
@@ -169,7 +169,7 @@ describe('ConfigurationService', () => {
           host: '   ',
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`host` cannot be an empty string',
         );
       });
@@ -188,7 +188,7 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validate(config)).not.toThrow();
+          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
         });
       });
 
@@ -198,7 +198,7 @@ describe('ConfigurationService', () => {
           host: 'https://example.com',
         };
 
-        expect(() => configurationService.validate(config)).not.toThrow();
+        expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
       });
 
       it('should throw error for invalid domain names', () => {
@@ -215,7 +215,7 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validate(config)).toThrow(
+          expect(() => configurationService.validateAndSanitize(config)).toThrow(
             '`host` must be a valid domain name',
           );
         });
@@ -234,7 +234,7 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validate(config)).toThrow(
+          expect(() => configurationService.validateAndSanitize(config)).toThrow(
             '`host` cannot be an empty string',
           );
         });
@@ -257,7 +257,7 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validate(config)).not.toThrow();
+          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
         });
       });
     });
@@ -268,7 +268,7 @@ describe('ConfigurationService', () => {
 
         delete (config as Record<string, unknown>).guid;
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`guid` is not defined in the configuration',
         );
       });
@@ -279,7 +279,7 @@ describe('ConfigurationService', () => {
           guid: null as unknown as string,
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`guid` is not defined in the configuration',
         );
       });
@@ -290,7 +290,7 @@ describe('ConfigurationService', () => {
           guid: true as unknown as string,
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`guid` must be a string',
         );
       });
@@ -301,7 +301,7 @@ describe('ConfigurationService', () => {
           guid: '',
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`guid` cannot be an empty string',
         );
       });
@@ -312,7 +312,7 @@ describe('ConfigurationService', () => {
           guid: '   ',
         };
 
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`guid` cannot be an empty string',
         );
       });
@@ -333,7 +333,7 @@ describe('ConfigurationService', () => {
             guid,
           };
 
-          expect(() => configurationService.validate(config)).not.toThrow();
+          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
         });
       });
     });
@@ -347,7 +347,7 @@ describe('ConfigurationService', () => {
         };
 
         // Should throw because host validation fails with spaces
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`host` must be a valid domain name',
         );
       });
@@ -359,7 +359,7 @@ describe('ConfigurationService', () => {
           selector: '#my-widget',
         };
 
-        expect(() => configurationService.validate(config)).not.toThrow();
+        expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
       });
 
       it('should validate all required fields in sequence', () => {
@@ -370,7 +370,7 @@ describe('ConfigurationService', () => {
         } as unknown as WidgetConfiguration;
 
         // Should throw for the first field it encounters (selector)
-        expect(() => configurationService.validate(config)).toThrow(
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
           '`selector` is not defined in the configuration',
         );
       });
@@ -390,7 +390,7 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validate(config)).not.toThrow();
+          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
         });
       });
 
@@ -408,42 +408,38 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validate(config)).not.toThrow();
+          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
         });
       });
     });
   });
 
-  describe('validatePlayerOptions', () => {
-    it('should end silently when playerOptions is undefined, null or empty', () => {
-      expect(() => configurationService.validatePlayerOptions(undefined)).not.toThrow();
-      expect(() => configurationService.validatePlayerOptions(null as unknown as undefined)).not.toThrow();
-      expect(() => configurationService.validatePlayerOptions({})).not.toThrow();
+  describe('validatePlayerParameters', () => {
+    it('should end silently when playerParameters is undefined, null or empty', () => {
+      expect(() => configurationService.validatePlayerParameters(undefined)).not.toThrow();
+      expect(() => configurationService.validatePlayerParameters(null as unknown as undefined)).not.toThrow();
+      expect(() => configurationService.validatePlayerParameters({})).not.toThrow();
     });
 
     it('should warn for unsupported fields in playerParameters', () => {
-      const playerOptionsWithExtraField = {
-        playerParameters: {
-          extraField: 'not-supported',
-        },
+      const playerParametersWithExtraField = {
+        extraField: 'not-supported',
       } as unknown as Record<string, unknown>;
 
-      expect(() => configurationService.validatePlayerOptions(playerOptionsWithExtraField)).not.toThrow();
-      expect(consoleWarnSpy).toHaveBeenCalledWith('Unsupported field `playerOptions.playerParameters.extraField` in configuration');
+      expect(() => configurationService.validatePlayerParameters(playerParametersWithExtraField)).not.toThrow();
+      expect(consoleWarnSpy).toHaveBeenCalledWith('Unsupported field `playerParameters.extraField` in configuration');
     });
 
     it('should throw error when pv has an invalid value', () => {
       const invalidPVs = ['invalid', 'PIPLS', '', 123, true, null, {}];
 
       invalidPVs.forEach((pv) => {
-        const playerOptions = {
-          playerParameters: {
-            pv: pv as unknown as string,
-          },
+        const playerParameters = {
+          pv: pv as unknown as string,
         } as unknown as Record<string, unknown>;
 
-        expect(() => configurationService.validatePlayerOptions(playerOptions)).toThrow(
-          '`playerOptions.playerParameters.pv` must be either "pipls", "pipss" or "sbs"',
+        expect(() => configurationService.validatePlayerParameters(playerParameters)).toThrow(
+          '`playerParameters.pv` must be either "pipls", "pipss" or "sbs"',
         );
       });
     });
@@ -452,25 +448,21 @@ describe('ConfigurationService', () => {
       const validPVs = ['pipls', 'pipss', 'sbs'];
 
       validPVs.forEach((pv) => {
-        const playerOptions = {
-          playerParameters: {
-            pv,
-          },
+        const playerParameters = {
+          pv,
         } as unknown as Record<string, unknown>;
 
-        expect(() => configurationService.validatePlayerOptions(playerOptions)).not.toThrow();
+        expect(() => configurationService.validatePlayerParameters(playerParameters)).not.toThrow();
       });
     });
 
     it('should throw no error when quality has invalid value', () => {
-      const playerOptions = {
-        playerParameters: {
-          quality: 'high',
-        },
+      const playerParameters = {
+        quality: 'high',
       };
 
-      expect(() => configurationService.validatePlayerOptions(playerOptions)).toThrow(
-        '`playerOptions.playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p" or "auto"',
+      expect(() => configurationService.validatePlayerParameters(playerParameters)).toThrow(
+        '`playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p" or "auto"',
       );
     });
 
@@ -478,13 +470,11 @@ describe('ConfigurationService', () => {
       const validQualities = ['240p', '480p', '720p', '1080p', '1440p', 'auto'];
 
       validQualities.forEach((quality) => {
-        const playerOptions = {
-          playerParameters: {
-            quality,
-          },
+        const playerParameters = {
+          quality,
         } as unknown as Record<string, unknown>;
 
-        expect(() => configurationService.validatePlayerOptions(playerOptions)).not.toThrow();
+        expect(() => configurationService.validatePlayerParameters(playerParameters)).not.toThrow();
       });
     });
   });
@@ -581,7 +571,7 @@ describe('ConfigurationService', () => {
   });
 
   describe('setDefaults', () => {
-    it('should set default playerOptions when they are undefined', () => {
+    it('should set default playerParameters when they are undefined', () => {
       const initialConfig: WidgetConfiguration = {
         guid: 'test-guid',
         host: 'example.com',
@@ -590,7 +580,7 @@ describe('ConfigurationService', () => {
 
       const result = configurationService.setDefaults(initialConfig);
 
-      expect(result.playerOptions).toEqual({});
+      expect(result.playerParameters).toEqual({});
     });
 
     it('should set default widgetOptions when they are undefined', () => {
