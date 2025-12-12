@@ -1,0 +1,1 @@
+{"v":5,"entries":{"widgets-presentation-widget--basic-example":{"type":"story","subtype":"story","id":"widgets-presentation-widget--basic-example","name":"Basic Example","title":"Widgets/Presentation Widget","importPath":"./src/stories/presentation-widget.stories.ts","tags":["dev","test"],"exportName":"BasicExample"}}}
