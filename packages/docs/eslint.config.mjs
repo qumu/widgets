@@ -3,6 +3,9 @@ import { javascript, typescript } from '@enghouse-qumu/eslint-config';
 
 export default defineConfig([
   {
+    ignores: ['storybook-static/**/*'],
+  },
+  {
     extends: [javascript],
     files: ['**/*.js'],
   },

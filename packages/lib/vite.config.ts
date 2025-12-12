@@ -17,8 +17,8 @@ export default defineConfig({
     minify: 'terser',
   },
   plugins: [
+    // @ts-expect-error fake positive
     dts({
-      insertTypesEntry: true,
       rollupTypes: true,
     }),
   ],
