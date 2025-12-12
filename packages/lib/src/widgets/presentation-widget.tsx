@@ -70,8 +70,10 @@ export class PresentationWidget {
     container.innerHTML = '';
 
     render(
-      <div class="qc-widget qc-presentation-widget"
-           style={{ 'aspect-ratio': `${this.presentation?.mediaDisplayWidth} / ${this.presentation?.mediaDisplayHeight}` }}>
+      <div
+        class="qc-widget qc-presentation-widget"
+        style={{ 'aspect-ratio': `${this.presentation?.mediaDisplayWidth} / ${this.presentation?.mediaDisplayHeight}` }}
+      >
         {this.configuration.widgetOptions?.playbackMode === 'modal' ? (
           <DialogComponent
             presentation={this.presentation!}
