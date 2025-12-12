@@ -226,9 +226,14 @@ describe('ThumbnailComponent', () => {
 
     it('should call onThumbnailClick from widgetOptions if provided', () => {
       const mockOnThumbnailClick = vi.fn();
-      const widgetOptions = {
+      const widgetOptions: Partial<WidgetOptions> = {
         onThumbnailClick: mockOnThumbnailClick,
-      } as unknown as WidgetOptions;
+        playIcon: {
+          height: 44,
+          position: 'center',
+          width: 44,
+        },
+      };
 
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,

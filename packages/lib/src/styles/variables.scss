@@ -1,4 +1,11 @@
 :root {
+  /**
+   * /!\ IMPORTANT /!\
+   *
+   * update package/docs/stories/presentation-widget.stories.ts
+   * if you change the value of a variable or if you add/remove a variable
+   */
+
   // Theme colors
   --qc-theme-background-color: #09091a;
   --qc-theme-color: #f5f8fa;
@@ -14,7 +21,7 @@
   // Play Icon
   --qc-thumbnail-play-button-margin: 16px;
   --qc-thumbnail-play-button-padding: 8px;
-  --qc-thumbnail-play-button-background-color: var(--qc-theme-background);
+  --qc-thumbnail-play-button-background-color: var(--qc-theme-background-color);
   --qc-thumbnail-play-button-background-opacity: 0.8;
   --qc-thumbnail-play-button-background-opacity-hover: 1;
 

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vitest, Mock, afterEach } from 'vites
 import { ConfigurationService } from '../configuration.service';
 import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { WidgetOptions } from '@/interfaces/widget-options';
+import { PlayerParameters } from '@/interfaces/player-parameters';
 
 describe('ConfigurationService', () => {
   const configurationService: ConfigurationService = new ConfigurationService();
@@ -485,8 +486,7 @@ describe('ConfigurationService', () => {
         quality: 'high',
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
-      expect(() => configurationService.validatePlayerParameters(playerParameters as any)).toThrow(
+      expect(() => configurationService.validatePlayerParameters(playerParameters as unknown as PlayerParameters)).toThrow(
         '`playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p" or "auto"',
       );
     });

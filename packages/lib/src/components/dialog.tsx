@@ -11,7 +11,7 @@ interface Props {
   presentation: Presentation;
   onIframeReady?: (iframe: HTMLIFrameElement) => void;
   playerParameters: Partial<PlayerParameters>;
-  widgetOptions: WidgetOptions;
+  widgetOptions: Partial<WidgetOptions>;
 }
 
 export function DialogComponent({ presentation, onIframeReady, widgetOptions, playerParameters }: Readonly<Props>) {

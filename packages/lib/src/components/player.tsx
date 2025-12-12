@@ -8,11 +8,11 @@ interface Props {
   presentation: Presentation;
   onIframeReady?: (iframe: HTMLIFrameElement) => void;
   playerParameters: Partial<PlayerParameters>;
-  widgetOptions: WidgetOptions;
+  widgetOptions: Partial<WidgetOptions>;
 }
 
 export function PlayerComponent({ presentation, onIframeReady, widgetOptions, playerParameters }: Readonly<Props>) {
-  const [showIframe, setShowIframe] = useState(['inline-autoload', 'inline-autoplay', 'modal'].includes(widgetOptions.playbackMode));
+  const [showIframe, setShowIframe] = useState(['inline-autoload', 'inline-autoplay', 'modal'].includes(widgetOptions.playbackMode!));
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export function PlayerComponent({ presentation, onIframeReady, widgetOptions, pl
   }, [showIframe]);
 
   const url = new URL(presentation.player || '');
-  const autoplay = ['inline-autoplay', 'inline', 'modal'].includes(widgetOptions.playbackMode);
+  const autoplay = ['inline-autoplay', 'inline', 'modal'].includes(widgetOptions.playbackMode!);
 
   url.searchParams.set('autoplay', autoplay.toString());
 

@@ -6,15 +6,10 @@ import playIcon from '../../assets/play-icon.svg?raw';
 interface Props {
   onClick: () => void;
   presentation: Presentation;
-  widgetOptions: WidgetOptions;
+  widgetOptions: Partial<WidgetOptions>;
 }
 
 export function ThumbnailComponent({ presentation, onClick, widgetOptions }: Readonly<Props>) {
-  const playIconStyle: Record<string, string> = {};
-
-  playIconStyle['width'] = `${widgetOptions.playIcon.width}px`;
-  playIconStyle['height'] = `${widgetOptions.playIcon.height}px`;
-
   const position = widgetOptions.playIcon?.position || 'center';
   const placeX = position.includes('left') ? 'start' : (position.includes('right') ? 'end' : 'center');
   const placeY = position.includes('top') ? 'start' : (position.includes('bottom') ? 'end' : 'center');
@@ -24,7 +19,7 @@ export function ThumbnailComponent({ presentation, onClick, widgetOptions }: Rea
   };
 
   return (
-    <button type="button" class="qc-thumbnail" onClick={clickHandler} style={{ 'place-items': `${placeY} ${placeX}`}}>
+    <button type="button" class="qc-thumbnail" onClick={clickHandler} style={{ 'place-items': `${placeY} ${placeX}` }}>
       <img
         class="qc-thumbnail__image"
         src={presentation.thumbnail?.cdnUrl || presentation.thumbnail?.url}
@@ -32,13 +27,21 @@ export function ThumbnailComponent({ presentation, onClick, widgetOptions }: Rea
       />
       {widgetOptions.playIcon?.url ? (
         <img
-            alt="Play"
-            class="qc-thumbnail__play-button"
-            src={widgetOptions.playIcon?.url}
-            style={playIconStyle}
+          alt="Play"
+          class="qc-thumbnail__play-button"
+          src={widgetOptions.playIcon?.url}
+          style={{
+            width: `${widgetOptions.playIcon!.width}px`,
+            height: `${widgetOptions.playIcon!.height}px`
+          }}
         />
       ) : (
-        <IconComponent class="qc-thumbnail__play-button qc-thumbnail__play-button--default" svg={playIcon} width={widgetOptions.playIcon.width} height={widgetOptions.playIcon.height} />
+        <IconComponent
+          class="qc-thumbnail__play-button qc-thumbnail__play-button--default"
+          svg={playIcon}
+          width={widgetOptions.playIcon!.width}
+          height={widgetOptions.playIcon!.height}
+        />
       )}
     </button>
   );

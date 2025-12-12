@@ -5,41 +5,36 @@ import { PresentationWidgetComponent } from '../components/presentation-widget.t
 
 // taken from packages/lib/src/styles/variables.css
 const DEFAULT_CSS_VARIABLES = `--qc-theme-background-color: #09091a;
---qc-theme-color: #f5f8fa;
+  --qc-theme-color: #f5f8fa;
 
-// Presentation widget style
---qc-presentation-widget-border-radius: 0;
---qc-presentation-widget-height: 100%;
---qc-presentation-widget-width: 100%;
+  --qc-presentation-widget-border-radius: 0;
+  --qc-presentation-widget-height: 100%;
+  --qc-presentation-widget-width: 100%;
 
-// Thumbnail style
---qc-thumbnail-image-fit: cover;
+  --qc-thumbnail-image-fit: cover;
 
-// Play Icon
---qc-thumbnail-play-button-height: var(--qc-thumbnail-play-button-width);
---qc-thumbnail-play-button-margin: calc(var(--qc-thumbnail-play-button-width) / 2);
---qc-thumbnail-play-button-width: 64px;
---qc-thumbnail-play-button-background-color: var(--qc-theme-background-color);
---qc-thumbnail-play-button-background-opacity: 0.8;
---qc-thumbnail-play-button-background-opacity-hover: 1;
+  --qc-thumbnail-play-button-margin: 16px;
+  --qc-thumbnail-play-button-padding: 8px;
+  --qc-thumbnail-play-button-background-color: var(--qc-theme-background-color);
+  --qc-thumbnail-play-button-background-opacity: 0.8;
+  --qc-thumbnail-play-button-background-opacity-hover: 1;
 
-// Dialog style
---qc-dialog-backdrop: rgb(0 0 0 / 0.5);
---qc-dialog-background-color: #000;
---qc-dialog-border-color: #000;
---qc-dialog-border-radius: 0;
---qc-dialog-border-style: solid;
---qc-dialog-border-width: 3px;
---qc-dialog-close-button-background-color: var(--qc-theme-background-color);
---qc-dialog-close-button-background-opacity: 0.8;
---qc-dialog-close-button-background-opacity-hover: 1;
---qc-dialog-close-button-color: var(--qc-theme-color);
---qc-dialog-close-button-padding: 6px;
---qc-dialog-close-button-shadow: 0 0 1px 1px #000000;
---qc-dialog-close-icon-size: 20px;
---qc-dialog-padding: 0;
---qc-dialog-width-max: 1100px;
---qc-dialog-width: 90vw;`;
+  --qc-dialog-backdrop: rgb(0 0 0 / 0.5);
+  --qc-dialog-background-color: #000;
+  --qc-dialog-border-color: #000;
+  --qc-dialog-border-radius: 0;
+  --qc-dialog-border-style: solid;
+  --qc-dialog-border-width: 3px;
+  --qc-dialog-close-button-background-color: var(--qc-theme-background-color);
+  --qc-dialog-close-button-background-opacity: 0.8;
+  --qc-dialog-close-button-background-opacity-hover: 1;
+  --qc-dialog-close-button-color: var(--qc-theme-color);
+  --qc-dialog-close-button-padding: 6px;
+  --qc-dialog-close-button-shadow: 0 0 1px 1px #000000;
+  --qc-dialog-close-icon-size: 20px;
+  --qc-dialog-padding: 0;
+  --qc-dialog-width-max: 1100px;
+  --qc-dialog-width: 90vw;`;
 
 const defaultVariablesMap = DEFAULT_CSS_VARIABLES
   .split('\n')
@@ -153,13 +148,19 @@ function getConfiguration(args: Partial<Args>): Omit<WidgetConfiguration, 'selec
   }
 
   /* eslint-disable sort-keys */
-  return {
+
+  const configuration: Omit<WidgetConfiguration, 'selector'> = {
     host: args.host!,
     guid: args.guid!,
     widgetOptions,
-    playerParameters,
   };
+
   /* eslint-enable sort-keys */
+  if (Object.keys(playerParameters).length) {
+    configuration.playerParameters = playerParameters;
+  }
+
+  return configuration;
 }
 
 /**
@@ -220,7 +221,6 @@ export default {
       ],
       table: {
         category: 'Play Icon',
-        defaultValue: { summary: 'center' },
       },
     },
     playIconWidth: {
@@ -228,7 +228,6 @@ export default {
       name: 'Width',
       table: {
         category: 'Play Icon',
-        defaultValue: { summary: 44 },
       },
     },
     // eslint-disable-next-line sort-keys
@@ -237,7 +236,6 @@ export default {
       name: 'Height',
       table: {
         category: 'Play Icon',
-        defaultValue: { summary: 44 },
       },
     },
     playIconUrl: {
@@ -260,7 +258,6 @@ export default {
       name: 'Enable Debug Mode',
       table: {
         category: 'Player Parameters',
-        defaultValue: { summary: 'false' },
       },
     },
     playerLoop: {
@@ -268,7 +265,6 @@ export default {
       name: 'Loop',
       table: {
         category: 'Player Parameters',
-        defaultValue: { summary: 'false' },
       },
     },
     playerView: {
@@ -281,7 +277,6 @@ export default {
       ],
       table: {
         category: 'Player Parameters',
-        defaultValue: { summary: 'pipls' },
       },
     },
     // eslint-disable-next-line sort-keys
@@ -299,7 +294,6 @@ export default {
       ],
       table: {
         category: 'Player Parameters',
-        defaultValue: { summary: 'auto' },
       },
     },
     playerShowControlPanel: {
@@ -307,7 +301,6 @@ export default {
       name: 'Show the Control Panel',
       table: {
         category: 'Player Parameters',
-        defaultValue: { summary: 'true' },
       },
     },
     playerSidebar: {
@@ -315,7 +308,6 @@ export default {
       name: 'Show the Sidebar',
       table: {
         category: 'Player Parameters',
-        defaultValue: { summary: 'true' },
       },
     },
     playerStart: {
@@ -323,7 +315,6 @@ export default {
       name: 'Start at',
       table: {
         category: 'Player Parameters',
-        defaultValue: { summary: '0' },
       },
     },
     playerVolume: {
@@ -333,7 +324,6 @@ export default {
       name: 'Volume',
       table: {
         category: 'Player Parameters',
-        defaultValue: { summary: 100 },
       },
     },
     // eslint-disable-next-line sort-keys
@@ -342,7 +332,6 @@ export default {
       name: 'Enable Playback Analytics',
       table: {
         category: 'Player Parameters',
-        defaultValue: { summary: 'true' },
       },
     },
     playerReportingId: {

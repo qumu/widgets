@@ -110,7 +110,7 @@ describe('PresentationWidget', () => {
 
       expect(querySelectorSpy).toHaveBeenCalledWith('.widget-container');
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><div class="qc-thumbnail__play-button qc-thumbnail__play-button--default"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></div></button></div>"`);
+        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><i class="qc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></i></button></div>"`);
     });
 
     it('throws error when container element is not found', async () => {
@@ -141,7 +141,7 @@ describe('PresentationWidget', () => {
 
       await Promise.resolve();
 
-      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><div class="qc-thumbnail__play-button qc-thumbnail__play-button--default"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></div></button></div>"`);
+      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><i class="qc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></i></button></div>"`);
     });
 
     it('uses HTMLElement from selector if provided', async () => {
@@ -158,7 +158,7 @@ describe('PresentationWidget', () => {
       await Promise.resolve();
 
       expect(querySelectorSpy).not.toHaveBeenCalled();
-      expect(element.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><div class="qc-thumbnail__play-button qc-thumbnail__play-button--default"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></div></button></div>"`);
+      expect(element.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><i class="qc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></i></button></div>"`);
     });
 
     it('clears container innerHTML before mounting', async () => {
@@ -170,7 +170,7 @@ describe('PresentationWidget', () => {
       // Wait for async init to complete
       await Promise.resolve();
 
-      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><div class="qc-thumbnail__play-button qc-thumbnail__play-button--default"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></div></button></div>"`);
+      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><i class="qc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></i></button></div>"`);
     });
 
     it('should render DialogComponent when playbackMode is modal', async () => {
@@ -233,7 +233,7 @@ describe('PresentationWidget', () => {
 
       await Promise.resolve();
 
-      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><div class="qc-thumbnail__play-button qc-thumbnail__play-button--default"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></div></button></div>"`);
+      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><i class="qc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></i></button></div>"`);
 
       widget.destroy();
 
