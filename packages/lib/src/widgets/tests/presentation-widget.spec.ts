@@ -5,11 +5,6 @@ import { PresentationService } from '@/services/presentation.service';
 import { Presentation } from '@/interfaces/presentation';
 
 vi.mock('@/services/presentation.service');
-vi.mock('preact', () => ({
-  render: vi.fn(),
-}));
-
-const mockRender = vi.mocked((await import('preact')).render);
 
 describe('PresentationWidget', () => {
   const mockConfiguration: WidgetConfiguration = {
@@ -34,24 +29,24 @@ describe('PresentationWidget', () => {
     title: 'Test Presentation',
   };
 
-  let mockContainer: HTMLElement;
+  let container: HTMLElement;
   let getPresentationMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     vi.clearAllMocks();
 
-    mockContainer = {
-      innerHTML: '',
-    } as HTMLElement;
-
-    document.querySelector = vi.fn().mockReturnValue(mockContainer);
+    container = document.createElement('div');
+    container.classList.add('widget-container');
+    document.body.appendChild(container);
 
     getPresentationMock = vi.fn().mockResolvedValue(mockPresentation);
 
-    vi.spyOn(PresentationService.prototype, 'getPresentation').mockImplementation(getPresentationMock as () => Promise<Presentation>);
+    vi.spyOn(PresentationService.prototype, 'getPresentation')
+      .mockImplementation(getPresentationMock as () => Promise<Presentation>);
   });
 
   afterEach(() => {
+    document.body.removeChild(container);
     vi.restoreAllMocks();
   });
 
@@ -79,7 +74,7 @@ describe('PresentationWidget', () => {
 
       expect(iframePromise).toBeInstanceOf(Promise);
 
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
 
       expect(getPresentationMock).toHaveBeenCalledWith(
         'test-guid',
@@ -101,25 +96,29 @@ describe('PresentationWidget', () => {
 
   describe('init', () => {
     it('should fetch presentation and mount component', async () => {
+      const querySelectorSpy = vi.spyOn(document, 'querySelector');
+
       // eslint-disable-next-line no-new
       new PresentationWidget(mockConfiguration);
 
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
 
       expect(getPresentationMock).toHaveBeenCalledWith(
         'test-guid',
         'example.com',
       );
 
-      expect(document.querySelector).toHaveBeenCalledWith('.widget-container');
-      expect(mockContainer.innerHTML).toBe('');
-      expect(mockRender).toHaveBeenCalled();
+      expect(querySelectorSpy).toHaveBeenCalledWith('.widget-container');
+      expect(container.innerHTML)
+        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><div class="qc-thumbnail__play-button qc-thumbnail__play-button--default"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></div></button></div>"`);
     });
 
     it('throws error when container element is not found', async () => {
-      document.querySelector = vi.fn().mockReturnValue(null);
+      vi.spyOn(document, 'querySelector').mockReturnValue(null);
 
       const widget = new PresentationWidget(mockConfiguration);
+
+      await Promise.resolve();
 
       await expect(widget.getIframe()).rejects.toThrow('Element for selector ".widget-container" not found');
     });
@@ -140,20 +139,13 @@ describe('PresentationWidget', () => {
       // eslint-disable-next-line no-new
       new PresentationWidget(mockConfiguration);
 
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
 
-      expect(mockRender).toHaveBeenCalledTimes(1);
-
-      const renderCall = mockRender.mock.calls[0];
-
-      expect(renderCall[1]).toBe(mockContainer);
-
-      const renderedElement = renderCall[0];
-
-      expect(renderedElement).toBeDefined();
+      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><div class="qc-thumbnail__play-button qc-thumbnail__play-button--default"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></div></button></div>"`);
     });
 
     it('uses HTMLElement from selector if provided', async () => {
+      const querySelectorSpy = vi.spyOn(document, 'querySelector');
       const element = document.createElement('div');
       const configWithHTMLElement: WidgetConfiguration = {
         ...mockConfiguration,
@@ -163,25 +155,22 @@ describe('PresentationWidget', () => {
       // eslint-disable-next-line no-new
       new PresentationWidget(configWithHTMLElement);
 
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
 
-      expect(mockRender).toHaveBeenCalledTimes(1);
-
-      const renderCall = mockRender.mock.calls[0];
-
-      expect(renderCall[1]).toBe(element);
+      expect(querySelectorSpy).not.toHaveBeenCalled();
+      expect(element.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><div class="qc-thumbnail__play-button qc-thumbnail__play-button--default"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></div></button></div>"`);
     });
 
     it('clears container innerHTML before mounting', async () => {
-      mockContainer.innerHTML = '<div>existing content</div>';
+      container.innerHTML = '<div>existing content</div>';
 
       // eslint-disable-next-line no-new
       new PresentationWidget(mockConfiguration);
 
       // Wait for async init to complete
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
 
-      expect(mockContainer.innerHTML).toBe('');
+      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><div class="qc-thumbnail__play-button qc-thumbnail__play-button--default"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></div></button></div>"`);
     });
 
     it('should render DialogComponent when playbackMode is modal', async () => {
@@ -196,17 +185,9 @@ describe('PresentationWidget', () => {
       // eslint-disable-next-line no-new
       new PresentationWidget(modalConfiguration);
 
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
 
-      expect(mockRender).toHaveBeenCalledTimes(1);
-
-      // The render should have been called with JSX containing the conditional modal logic
-      const renderCall = mockRender.mock.calls[0];
-      const renderedElement = renderCall[0];
-
-      expect(renderedElement).toBeDefined();
-      // Since we're testing the conditional rendering logic, we verify the render was called
-      // The actual JSX structure testing would require more complex mocking
+      expect(container.querySelector('.qc-dialog')).not.toBeNull();
     });
 
     it('should render PlayerComponent when playbackMode is not modal', async () => {
@@ -221,15 +202,10 @@ describe('PresentationWidget', () => {
       // eslint-disable-next-line no-new
       new PresentationWidget(nonModalConfiguration);
 
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
 
-      expect(mockRender).toHaveBeenCalledTimes(1);
-
-      // The render should have been called with JSX containing the PlayerComponent
-      const renderCall = mockRender.mock.calls[0];
-      const renderedElement = renderCall[0];
-
-      expect(renderedElement).toBeDefined();
+      expect(container.querySelector('.qc-dialog')).toBeNull();
+      expect(container.querySelector('.qc-thumbnail')).not.toBeNull();
     });
 
     it('should render PlayerComponent when playbackMode is undefined', async () => {
@@ -244,15 +220,26 @@ describe('PresentationWidget', () => {
       // eslint-disable-next-line no-new
       new PresentationWidget(configWithoutPlaybackMode);
 
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
 
-      expect(mockRender).toHaveBeenCalledTimes(1);
-
-      // The render should have been called with JSX containing the PlayerComponent (default case)
-      const renderCall = mockRender.mock.calls[0];
-      const renderedElement = renderCall[0];
-
-      expect(renderedElement).toBeDefined();
+      expect(container.querySelector('.qc-dialog')).toBeNull();
+      expect(container.querySelector('.qc-thumbnail')).not.toBeNull();
     });
   });
+
+  describe('destroy', () => {
+    it('destroy the widget and clean up the DOM', async () => {
+      const widget = new PresentationWidget(mockConfiguration);
+
+      await Promise.resolve();
+
+      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><div class="qc-thumbnail__play-button qc-thumbnail__play-button--default"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></div></button></div>"`);
+
+      widget.destroy();
+
+      await Promise.resolve();
+
+      expect(container.innerHTML).toMatchInlineSnapshot(`""`);
+    });
+  })
 });
