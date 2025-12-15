@@ -5,40 +5,40 @@ import { PresentationWidgetComponent } from '../components/presentation-widget.t
 
 // taken from packages/lib/src/styles/variables.css
 const DEFAULT_CSS_VARIABLES = `--qc-theme-background-color: #09091a;
-  --qc-theme-color: #f5f8fa;
+--qc-theme-color: #f5f8fa;
 
-  --qc-presentation-widget-border-radius: 0;
-  --qc-presentation-widget-height: 100%;
-  --qc-presentation-widget-width: 100%;
+--qc-presentation-widget-border-radius: 0;
+--qc-presentation-widget-height: 100%;
+--qc-presentation-widget-width: 100%;
 
-  --qc-thumbnail-image-fit: cover;
+--qc-thumbnail-image-fit: cover;
 
-  --qc-thumbnail-play-button-margin: 16px;
-  --qc-thumbnail-play-button-padding: 8px;
-  --qc-thumbnail-play-button-background-color: var(--qc-theme-background-color);
-  --qc-thumbnail-play-button-background-opacity: 0.8;
-  --qc-thumbnail-play-button-background-opacity-hover: 1;
+--qc-thumbnail-play-button-margin: 16px;
+--qc-thumbnail-play-button-padding: 8px;
+--qc-thumbnail-play-button-background-color: var(--qc-theme-background-color);
+--qc-thumbnail-play-button-background-opacity: 0.8;
+--qc-thumbnail-play-button-background-opacity-hover: 1;
 
-  --qc-dialog-backdrop: rgb(0 0 0 / 0.5);
-  --qc-dialog-background-color: #000;
-  --qc-dialog-border-color: #000;
-  --qc-dialog-border-radius: 0;
-  --qc-dialog-border-style: solid;
-  --qc-dialog-border-width: 3px;
-  --qc-dialog-close-button-background-color: var(--qc-theme-background-color);
-  --qc-dialog-close-button-background-opacity: 0.8;
-  --qc-dialog-close-button-background-opacity-hover: 1;
-  --qc-dialog-close-button-color: var(--qc-theme-color);
-  --qc-dialog-close-button-padding: 6px;
-  --qc-dialog-close-button-shadow: 0 0 1px 1px #000000;
-  --qc-dialog-close-icon-size: 20px;
-  --qc-dialog-padding: 0;
-  --qc-dialog-width-max: 1100px;
-  --qc-dialog-width: 90vw;`;
+--qc-dialog-backdrop: rgb(0 0 0 / 0.5);
+--qc-dialog-background-color: #000;
+--qc-dialog-border-color: #000;
+--qc-dialog-border-radius: 0;
+--qc-dialog-border-style: solid;
+--qc-dialog-border-width: 3px;
+--qc-dialog-close-button-background-color: var(--qc-theme-background-color);
+--qc-dialog-close-button-background-opacity: 0.8;
+--qc-dialog-close-button-background-opacity-hover: 1;
+--qc-dialog-close-button-color: var(--qc-theme-color);
+--qc-dialog-close-button-padding: 6px;
+--qc-dialog-close-button-shadow: 0 0 1px 1px #000000;
+--qc-dialog-close-icon-size: 20px;
+--qc-dialog-padding: 0;
+--qc-dialog-width-max: 1100px;
+--qc-dialog-width: 90vw;`;
 
 const defaultVariablesMap = DEFAULT_CSS_VARIABLES
   .split('\n')
-  .filter((line) => line.startsWith('--qc-'))
+  .filter((line) => line.trim().startsWith('--qc-'))
   .reduce((map, line) => {
     const [key, value] = line.split(':').map((s) => s?.trim());
 
@@ -170,13 +170,14 @@ function getConfiguration(args: Partial<Args>): Omit<WidgetConfiguration, 'selec
  */
 function getOverridenCssVariables(cssVars: string): string {
   return cssVars.split('\n')
-    .filter((line) => line.startsWith('--qc-'))
+    .filter((line) => line.trim().startsWith('--qc-'))
     .reduce((arr, line) => {
       // eslint-disable-next-line prefer-const
       let [key, value] = line.split(':').map((s) => s?.trim());
 
       // remove the trailing semicolon
       value = value?.replace(';', '');
+
 
       if (defaultVariablesMap.has(key) && defaultVariablesMap.get(key) !== value) {
         arr.push(`${key}: ${value};`);

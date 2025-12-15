@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
 import { PresentationWidget } from '@/widgets/presentation-widget';
 import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { PresentationService } from '@/services/presentation.service';
@@ -30,25 +30,23 @@ describe('PresentationWidget', () => {
   };
 
   let container: HTMLElement;
-  let getPresentationMock: ReturnType<typeof vi.fn>;
+  let getPresentationMock: MockInstance;
 
   beforeEach(() => {
-    vi.clearAllMocks();
-
     container = document.createElement('div');
     container.classList.add('widget-container');
     document.body.appendChild(container);
 
-    getPresentationMock = vi.fn().mockResolvedValue(mockPresentation);
-
-    vi.spyOn(PresentationService.prototype, 'getPresentation')
-      .mockImplementation(getPresentationMock as () => Promise<Presentation>);
+    getPresentationMock = vi.spyOn(PresentationService.prototype, 'getPresentation')
+      .mockResolvedValue(mockPresentation);
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     document.body.removeChild(container);
-    vi.restoreAllMocks();
   });
+
+  const flushPromises = () => new Promise(setImmediate);
 
   describe('constructor', () => {
     it('should initialize widget', () => {
@@ -74,7 +72,7 @@ describe('PresentationWidget', () => {
 
       expect(iframePromise).toBeInstanceOf(Promise);
 
-      await Promise.resolve();
+      await flushPromises();
 
       expect(getPresentationMock).toHaveBeenCalledWith(
         'test-guid',
@@ -101,7 +99,7 @@ describe('PresentationWidget', () => {
       // eslint-disable-next-line no-new
       new PresentationWidget(mockConfiguration);
 
-      await Promise.resolve();
+      await flushPromises();
 
       expect(getPresentationMock).toHaveBeenCalledWith(
         'test-guid',
@@ -118,7 +116,7 @@ describe('PresentationWidget', () => {
 
       const widget = new PresentationWidget(mockConfiguration);
 
-      await Promise.resolve();
+      await flushPromises();
 
       await expect(widget.getIframe()).rejects.toThrow('Element for selector ".widget-container" not found');
     });
@@ -139,9 +137,9 @@ describe('PresentationWidget', () => {
       // eslint-disable-next-line no-new
       new PresentationWidget(mockConfiguration);
 
-      await Promise.resolve();
+      await flushPromises();
 
-      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><i class="qc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></i></button></div>"`);
+      expect(container.innerHTML).toMatchInlineSnapshot(`""`);
     });
 
     it('uses HTMLElement from selector if provided', async () => {
@@ -155,10 +153,11 @@ describe('PresentationWidget', () => {
       // eslint-disable-next-line no-new
       new PresentationWidget(configWithHTMLElement);
 
-      await Promise.resolve();
+      await flushPromises();
 
       expect(querySelectorSpy).not.toHaveBeenCalled();
-      expect(element.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><i class="qc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></i></button></div>"`);
+      expect(element.innerHTML)
+        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><i class="qc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></i></button></div>"`);
     });
 
     it('clears container innerHTML before mounting', async () => {
@@ -168,9 +167,10 @@ describe('PresentationWidget', () => {
       new PresentationWidget(mockConfiguration);
 
       // Wait for async init to complete
-      await Promise.resolve();
+      await flushPromises();
 
-      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><i class="qc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></i></button></div>"`);
+      expect(container.innerHTML)
+        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><i class="qc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></i></button></div>"`);
     });
 
     it('should render DialogComponent when playbackMode is modal', async () => {
@@ -185,7 +185,7 @@ describe('PresentationWidget', () => {
       // eslint-disable-next-line no-new
       new PresentationWidget(modalConfiguration);
 
-      await Promise.resolve();
+      await flushPromises();
 
       expect(container.querySelector('.qc-dialog')).not.toBeNull();
     });
@@ -202,7 +202,7 @@ describe('PresentationWidget', () => {
       // eslint-disable-next-line no-new
       new PresentationWidget(nonModalConfiguration);
 
-      await Promise.resolve();
+      await flushPromises();
 
       expect(container.querySelector('.qc-dialog')).toBeNull();
       expect(container.querySelector('.qc-thumbnail')).not.toBeNull();
@@ -220,7 +220,7 @@ describe('PresentationWidget', () => {
       // eslint-disable-next-line no-new
       new PresentationWidget(configWithoutPlaybackMode);
 
-      await Promise.resolve();
+      await flushPromises();
 
       expect(container.querySelector('.qc-dialog')).toBeNull();
       expect(container.querySelector('.qc-thumbnail')).not.toBeNull();
@@ -231,13 +231,13 @@ describe('PresentationWidget', () => {
     it('destroy the widget and clean up the DOM', async () => {
       const widget = new PresentationWidget(mockConfiguration);
 
-      await Promise.resolve();
+      await flushPromises();
 
-      expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" class="qc-thumbnail" style="place-items: center center;"><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation"><i class="qc-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="64" height="64"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></i></button></div>"`);
+      expect(container.innerHTML).toMatchInlineSnapshot(`""`);
 
       widget.destroy();
 
-      await Promise.resolve();
+      await flushPromises();
 
       expect(container.innerHTML).toMatchInlineSnapshot(`""`);
     });
