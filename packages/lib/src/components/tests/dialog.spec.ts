@@ -12,10 +12,6 @@ vi.mock('../player', () => ({
   }, `Player for ${presentation.title}`),
 }));
 
-vi.mock('../../../assets/close.svg?raw', () => ({
-  default: '<svg><path d="M6 18L18 6M6 6l12 12"/></svg>',
-}));
-
 vi.mock('@/components/thumbnail', () => ({
   ThumbnailComponent: ({ onClick, presentation }: {
     presentation: { title: string };
@@ -42,7 +38,7 @@ describe('DialogComponent', () => {
     title: 'Test Presentation',
   };
 
-  const mockOptions = {
+  const mockOptions: Partial<WidgetOptions> = {
     playbackMode: 'modal' as const,
     playerConfigurationGuid: 'test-config',
     playIcon: {
@@ -250,7 +246,7 @@ describe('DialogComponent', () => {
   });
 
   it('should execute autoplay URL modification when playbackMode is inline-autoplay', async () => {
-    const optionsWithAutoplay: WidgetOptions = {
+    const optionsWithAutoplay: Partial<WidgetOptions> = {
       ...mockOptions,
       playbackMode: 'inline-autoplay',
     };
@@ -273,7 +269,7 @@ describe('DialogComponent', () => {
   });
 
   it('should execute autoplay URL modification when playbackMode is inline', async () => {
-    const optionsWithAutoplayFalse: WidgetOptions = {
+    const optionsWithAutoplayFalse: Partial<WidgetOptions> = {
       ...mockOptions,
       playbackMode: 'inline',
     };
@@ -296,7 +292,7 @@ describe('DialogComponent', () => {
   });
 
   it('should skip autoplay URL modification when playbackMode is inline-autoload', async () => {
-    const optionsWithAutoplayNull: WidgetOptions = {
+    const optionsWithAutoplayNull: Partial<WidgetOptions> = {
       ...mockOptions,
       playbackMode: 'inline-autoload',
     };

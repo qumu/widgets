@@ -7,11 +7,11 @@ import { PlayerParameters } from '@/interfaces/player-parameters';
 interface Props {
   presentation: Presentation;
   playerParameters: Partial<PlayerParameters>;
-  widgetOptions: WidgetOptions;
+  widgetOptions: Partial<WidgetOptions>;
 }
 
 export function PlayerComponent({ presentation, widgetOptions, playerParameters }: Readonly<Props>) {
-  const [showIframe, setShowIframe] = useState(['inline-autoload', 'inline-autoplay', 'modal'].includes(widgetOptions.playbackMode));
+  const [showIframe, setShowIframe] = useState(['inline-autoload', 'inline-autoplay', 'modal'].includes(widgetOptions.playbackMode!));
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export function PlayerComponent({ presentation, widgetOptions, playerParameters 
   }, [showIframe]);
 
   const url = new URL(presentation.player || '');
-  const autoplay = ['inline-autoplay', 'inline', 'modal'].includes(widgetOptions.playbackMode);
+  const autoplay = ['inline-autoplay', 'inline', 'modal'].includes(widgetOptions.playbackMode!);
 
   url.searchParams.set('autoplay', autoplay.toString());
 

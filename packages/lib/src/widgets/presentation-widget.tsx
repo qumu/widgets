@@ -13,6 +13,8 @@ export class PresentationWidget {
   private readonly configuration: WidgetConfiguration;
   private readonly presentationService = new PresentationService();
   private presentation: Presentation | null = null;
+  private container: Element | null = null;
+  private destroyed = false;
 
   static async create(
     configuration: WidgetConfiguration,
@@ -27,6 +29,24 @@ export class PresentationWidget {
   ) {
     this.configuration = this.configurationService.validateAndSanitize(initialConfiguration);
     this.configuration = this.configurationService.setDefaults(this.configuration);
+  }
+
+  destroy() {
+    if (this.destroyed) {
+      return;
+    }
+
+    if (this.container) {
+      // Unmount the widget properly
+      render(null, this.container);
+
+      // Clear container HTML
+      this.container.innerHTML = '';
+    }
+
+    // Prevent future usage
+    this.presentation = null;
+    this.destroyed = true;
   }
 
   async init(): Promise<PresentationWidget> {
@@ -45,10 +65,14 @@ export class PresentationWidget {
       throw new Error(`Element for selector "${this.configuration.selector}" not found`);
     }
 
+    this.container = container;
     container.innerHTML = '';
 
     render(
-      <div class="qc-widget qc-presentation-widget" style={{ 'aspect-ratio': `${this.presentation?.mediaDisplayWidth} / ${this.presentation?.mediaDisplayHeight}` }}>
+      <div
+        class="qc-widget qc-presentation-widget"
+        style={{ 'aspect-ratio': `${this.presentation?.mediaDisplayWidth} / ${this.presentation?.mediaDisplayHeight}` }}
+      >
         {this.configuration.widgetOptions?.playbackMode === 'modal' ? (
           <DialogComponent
               presentation={this.presentation!}

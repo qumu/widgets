@@ -1,7 +1,29 @@
 :root {
+  /**
+   * /!\ IMPORTANT /!\
+   *
+   * update package/docs/stories/presentation-widget.stories.ts
+   * if you change the value of a variable or if you add/remove a variable
+   */
+
   // Theme colors
-  --qc-theme-background: #09091a;
+  --qc-theme-background-color: #09091a;
   --qc-theme-color: #f5f8fa;
+
+  // Presentation widget style
+  --qc-presentation-widget-border-radius: 0;
+  --qc-presentation-widget-height: 100%;
+  --qc-presentation-widget-width: 100%;
+
+  // Thumbnail style
+  --qc-thumbnail-image-fit: cover;
+
+  // Play Icon
+  --qc-thumbnail-play-button-margin: 16px;
+  --qc-thumbnail-play-button-padding: 8px;
+  --qc-thumbnail-play-button-background-color: var(--qc-theme-background-color);
+  --qc-thumbnail-play-button-background-opacity: 0.8;
+  --qc-thumbnail-play-button-background-opacity-hover: 1;
 
   // Dialog style
   --qc-dialog-backdrop: rgb(0 0 0 / 0.5);
@@ -10,7 +32,7 @@
   --qc-dialog-border-radius: 0;
   --qc-dialog-border-style: solid;
   --qc-dialog-border-width: 3px;
-  --qc-dialog-close-button-background-color: var(--qc-theme-background);
+  --qc-dialog-close-button-background-color: var(--qc-theme-background-color);
   --qc-dialog-close-button-background-opacity: 0.8;
   --qc-dialog-close-button-background-opacity-hover: 1;
   --qc-dialog-close-button-color: var(--qc-theme-color);
@@ -20,17 +42,4 @@
   --qc-dialog-padding: 0;
   --qc-dialog-width-max: 1100px;
   --qc-dialog-width: 90vw;
-
-  // Thumbnail style
-  --qc-thumbnail-play-button-margin: 16px;
-  --qc-thumbnail-play-button-padding: 8px;
-  --qc-thumbnail-play-button-background-color: var(--qc-theme-background);
-  --qc-thumbnail-play-button-background-opacity: 0.8;
-  --qc-thumbnail-play-button-background-opacity-hover: 1;
-  --qc-thumbnail-image-fit: cover;
-
-  // Presentation widget style
-  --qc-presentation-widget-border-radius: 8px;
-  --qc-presentation-widget-height: 100%;
-  --qc-presentation-widget-width: 100%;
 }

@@ -1,7 +1,17 @@
 {
   "name": "lib",
-  "source": "src/index.ts",
+  "private": true,
   "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./presentation-widget.js": "./dist/presentation-widget.js",
+    "./presentation-widget.css": "./dist/presentation-widget.css"
+  },
   "files": [
     "dist/"
   ],
@@ -28,8 +38,9 @@
     "sass": "1.94.2",
     "terser": "5.44.1",
     "typescript": "5.8.3",
-    "vite": "7.2.1",
+    "vite": "7.2.7",
     "vite-plugin-dts": "4.5.4",
+    "vite-plugin-svgr": "4.5.0",
     "vitest": "4.0.7"
   },
   "volta": {

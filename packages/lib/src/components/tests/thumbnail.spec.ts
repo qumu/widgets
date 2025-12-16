@@ -7,10 +7,6 @@ import { Presentation } from '@/interfaces/presentation';
 import { ConfigurationService } from '@/services/configuration.service';
 import type { PlayIcon, PlayIconPosition } from '@/interfaces/play-icon';
 
-vi.mock('../../../assets/play-icon.svg?raw', () => ({
-  default: '<svg><circle cx="50" cy="50" r="40"/></svg>',
-}));
-
 describe('ThumbnailComponent', () => {
   const mockPresentation: Presentation = {
     guid: 'test-guid',
@@ -146,7 +142,7 @@ describe('ThumbnailComponent', () => {
         widgetOptions,
       }));
 
-      const playIcon = screen.getByRole('button').querySelector('.qc-thumbnail__play-button svg');
+      const playIcon = screen.getByRole('button').querySelector('.qc-thumbnail__play-button');
 
       expect(playIcon!.getAttribute('width')).toBe('60');
       expect(playIcon!.getAttribute('height')).toBe('40');
@@ -226,10 +222,10 @@ describe('ThumbnailComponent', () => {
 
     it('should call onThumbnailClick from widgetOptions if provided', () => {
       const mockOnThumbnailClick = vi.fn();
-      const widgetOptions = {
+      const widgetOptions: Partial<WidgetOptions> = {
         ...mockConfiguration.widgetOptions as WidgetOptions,
         onThumbnailClick: mockOnThumbnailClick,
-      } as unknown as WidgetOptions;
+      };
 
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,

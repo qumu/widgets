@@ -15,7 +15,7 @@ export class ConfigurationService {
     ['selector', 'host', 'guid'].forEach((field) => {
       const value = initialConfiguration[field as keyof WidgetConfiguration];
 
-      if (Object.hasOwn(initialConfiguration, field) === false) {
+      if (!Object.hasOwn(initialConfiguration, field)) {
         throw new Error(`\`${field}\` is not defined in the configuration`);
       }
 
@@ -83,7 +83,7 @@ export class ConfigurationService {
       throw new Error('`playerParameters.pv` must be either "pipls", "pipss" or "sbs"');
     }
 
-    if (playerParameters.quality !== undefined && !['240p', '480p', '720p', '1080p', '1440p', 'auto'].includes(playerParameters.quality)) {
+    if (playerParameters.quality !== undefined && !['240p', '480p', '720p', '1080p', '1440p', 'auto', 'best'].includes(playerParameters.quality)) {
       throw new Error('`playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p" or "auto"');
     }
   }
@@ -129,7 +129,7 @@ export class ConfigurationService {
     }
 
     if (widgetOptions.onThumbnailClick !== undefined) {
-      if ([undefined, 'inline'].includes(widgetOptions.playbackMode) === false) {
+      if (![undefined, 'inline'].includes(widgetOptions.playbackMode)) {
         console.warn('`widgetOptions.onThumbnailClick` is only applicable when `widgetOptions.playbackMode` is "inline"');
         delete widgetOptions.onThumbnailClick;
       } else if (typeof widgetOptions.onThumbnailClick !== 'function') {
@@ -154,13 +154,11 @@ export class ConfigurationService {
       ...initialConfiguration.playerParameters,
     };
 
-    const configuration: WidgetConfiguration = {
+    return {
       ...initialConfiguration,
       host: initialConfiguration.host.replace('https://', '').replace(/\/.*$/, ''),
       playerParameters,
       widgetOptions,
     };
-
-    return configuration;
   }
 }
