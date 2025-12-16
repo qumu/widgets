@@ -42,6 +42,9 @@ describe('PresentationWidget', () => {
 
     getPresentationMock = vi.spyOn(PresentationService.prototype, 'getPresentation')
       .mockResolvedValue(mockPresentation);
+
+    // hide console.error from the widget
+    console.error = vi.fn();
   });
 
   afterEach(() => {
@@ -74,8 +77,7 @@ describe('PresentationWidget', () => {
     it('should fetch presentation and mount component', async () => {
       const querySelectorSpy = vi.spyOn(document, 'querySelector');
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const widget = await PresentationWidget.create(mockConfiguration);
+      await PresentationWidget.create(mockConfiguration);
 
       await flushPromises();
 
@@ -94,14 +96,6 @@ describe('PresentationWidget', () => {
 
       await expect(async () => await PresentationWidget.create(mockConfiguration)).rejects.toThrow('Element for selector ".widget-container" not found');
     });
-
-    it('handles presentation service errors', async () => {
-      const error = new Error('Network error');
-
-      getPresentationMock.mockRejectedValue(error);
-
-      await expect(async () => await PresentationWidget.create(mockConfiguration)).rejects.toThrow('Network error');
-    });
   });
 
   describe('mount', () => {
@@ -112,6 +106,17 @@ describe('PresentationWidget', () => {
 
       expect(container.innerHTML)
         .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget"><button type="button" style="place-items: center center;" class="qc-thumbnail"><img src="https://example.com/thumbnail.jpg" alt="Thumbnail for Test Presentation" class="qc-thumbnail__image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="44" height="44" aria-hidden="true" class="qc-icon qc-thumbnail__play-button qc-thumbnail__play-button--default"><path d="M22.643 17.734a1 1 0 000-1.696L12.417 9.647a1 1 0 00-1.53.848v12.783a1 1 0 001.53.848l10.226-6.392zm-9.166 8.088a3 3 0 01-4.59-2.544V10.495a3 3 0 014.59-2.544l10.226 6.391a3 3 0 010 5.088l-10.226 6.392z"></path></svg></button></div>"`);
+    });
+
+    it('renders widget with not found message', async () => {
+      getPresentationMock.mockRejectedValue(new Error('Presentation not found'));
+
+      await PresentationWidget.create(mockConfiguration);
+
+      await flushPromises();
+
+      expect(container.innerHTML)
+        .toMatchInlineSnapshot(`"<div style="aspect-ratio: 16 / 9;" class="qc-widget qc-presentation-widget"><div class="qc-not-found"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" width="48" height="48" class="qc-icon"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16h64a8,8,0,0,0,7.59-5.47l14.83-44.48L163,151.43a8.07,8.07,0,0,0,4.46-4.46l14.62-36.55,44.48-14.83A8,8,0,0,0,232,88V56A16,16,0,0,0,216,40ZM112.41,157.47,98.23,200H40V172l52-52,30.42,30.42L117,152.57A8,8,0,0,0,112.41,157.47ZM216,82.23,173.47,96.41a8,8,0,0,0-4.9,4.62l-14.72,36.82L138.58,144l-35.27-35.27a16,16,0,0,0-22.62,0L40,149.37V56H216Zm12.68,33a8,8,0,0,0-7.21-1.1l-23.8,7.94a8,8,0,0,0-4.9,4.61l-14.31,35.77-35.77,14.31a8,8,0,0,0-4.61,4.9l-7.94,23.8A8,8,0,0,0,137.73,216H216a16,16,0,0,0,16-16V121.73A8,8,0,0,0,228.68,115.24ZM216,200H148.83l3.25-9.75,35.51-14.2a8.07,8.07,0,0,0,4.46-4.46l14.2-35.51,9.75-3.25Z"></path></svg><div>Presentation not found</div></div></div>"`);
     });
 
     it('uses HTMLElement from selector if provided', async () => {

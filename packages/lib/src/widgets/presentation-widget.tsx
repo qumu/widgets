@@ -7,6 +7,7 @@ import { WidgetOptions } from '@/interfaces/widget-options';
 import { DialogComponent } from '@/components/dialog';
 import { PlayerComponent } from '@/components/player';
 import './presentation-widget.scss';
+import { NotFoundComponent } from '@/components/not-found';
 
 export class PresentationWidget {
   private readonly configurationService = new ConfigurationService();
@@ -21,7 +22,9 @@ export class PresentationWidget {
   ): Promise<PresentationWidget> {
     const widget = new PresentationWidget(configuration);
 
-    return widget.init();
+    await widget.init();
+
+    return widget;
   }
 
   constructor(
@@ -49,11 +52,14 @@ export class PresentationWidget {
     this.destroyed = true;
   }
 
-  async init(): Promise<PresentationWidget> {
-    this.presentation = await this.presentationService.getPresentation(this.configuration.guid, this.configuration.host);
-    this.mount();
-
-    return this;
+  async init(): Promise<void> {
+    try {
+      this.presentation = await this.presentationService.getPresentation(this.configuration.guid, this.configuration.host);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      this.mount();
+    }
   }
 
   private mount() {
@@ -68,23 +74,31 @@ export class PresentationWidget {
     this.container = container;
     container.innerHTML = '';
 
+    const aspectRatio = this.presentation
+      ? `${this.presentation.mediaDisplayWidth} / ${this.presentation.mediaDisplayHeight}`
+      : '16 / 9';
+
     render(
       <div
         class="qc-widget qc-presentation-widget"
-        style={{ 'aspect-ratio': `${this.presentation?.mediaDisplayWidth} / ${this.presentation?.mediaDisplayHeight}` }}
+        style={{ 'aspect-ratio': aspectRatio }}
       >
-        {this.configuration.widgetOptions?.playbackMode === 'modal' ? (
-          <DialogComponent
-              presentation={this.presentation!}
+        {this.presentation ? (
+          this.configuration.widgetOptions?.playbackMode === 'modal' ? (
+            <DialogComponent
+              presentation={this.presentation}
               playerParameters={this.configuration.playerParameters!}
               widgetOptions={this.configuration.widgetOptions as WidgetOptions}
-          />
+            />
+          ) : (
+            <PlayerComponent
+              presentation={this.presentation}
+              playerParameters={this.configuration.playerParameters!}
+              widgetOptions={this.configuration.widgetOptions as WidgetOptions}
+            />
+          )
         ) : (
-          <PlayerComponent
-              presentation={this.presentation!}
-              playerParameters={this.configuration.playerParameters!}
-              widgetOptions={this.configuration.widgetOptions as WidgetOptions}
-          />
+          <NotFoundComponent/>
         )}
       </div>,
       container

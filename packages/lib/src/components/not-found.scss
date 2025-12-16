@@ -1,0 +1,15 @@
+.qc-not-found {
+  border: var(--qc-not-found-border-width) var(--qc-not-found-border-style) var(--qc-not-found-border-color);
+  border-radius: inherit;
+  color: var(--qc-not-found-color);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  place-content: center;
+  place-items: center;
+
+  .qc-icon {
+    color: var(--qc-not-found-icon-color)
+  }
+}

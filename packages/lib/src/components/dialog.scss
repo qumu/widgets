@@ -5,7 +5,9 @@ html:has(.qc-dialog dialog[open]) {
 
 .qc-widget {
   .qc-dialog {
+    border-radius: inherit;
     height: 100%;
+    width: 100%;
 
     iframe.qc-player {
       border: none;

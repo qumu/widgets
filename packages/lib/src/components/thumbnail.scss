@@ -1,6 +1,6 @@
 .qc-widget {
   .qc-thumbnail {
-    border-radius: var(--qc-presentation-widget-border-radius);
+    border-radius: inherit;
     background: transparent;
     border: none;
     cursor: pointer;

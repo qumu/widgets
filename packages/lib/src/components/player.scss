@@ -1,7 +1,7 @@
 .qc-widget {
   iframe.qc-player {
     border: none;
-    border-radius: var(--qc-presentation-widget-border-radius);
+    border-radius: inherit;
     display: block;
     height: 100%;
     width: 100%;
