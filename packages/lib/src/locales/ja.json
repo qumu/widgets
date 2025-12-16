@@ -1,5 +1,6 @@
 {
-  "common": {
-    "PLAY_PRESENTATION": "プレゼンテーションを再生: {{title}}"
-  }
+    "common": {
+        "PLAY_PRESENTATION": "プレゼンテーションを再生: {{title}}",
+        "Presentation not found": "プレゼンテーションが見つかりません"
+    }
 }

@@ -1,5 +1,6 @@
 {
-  "common": {
-    "PLAY_PRESENTATION": "Play Presentation: {{title}}"
-  }
+    "common": {
+        "PLAY_PRESENTATION": "Play Presentation: {{title}}",
+        "Presentation not found": "Presentation not found"
+    }
 }
