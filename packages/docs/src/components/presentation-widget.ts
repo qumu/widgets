@@ -5,36 +5,38 @@ import 'lib/presentation-widget.css';
 
 @customElement('presentation-widget')
 export class PresentationWidgetComponent extends LitElement {
-  @property({ type: Object }) configuration!: Omit<WidgetConfiguration, 'selector'>;
+  @property({ type: Object })
+  configuration!: Omit<WidgetConfiguration, 'selector'>;
 
   private widget: PresentationWidget | null = null;
 
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-
-    if (this.widget) {
-      this.widget.destroy();
-      this.widget = null;
-    }
-  }
-
   /**
-   * Create a web component with a light DOM.
+   * Light DOM so widget CSS works
    */
   createRenderRoot() {
     return this;
   }
 
-  firstUpdated() {
-    const container = this.renderRoot.querySelector<HTMLDivElement>('#container');
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.destroyWidget();
+  }
 
-    if (!container) {
+  updated(changed: Map<string, unknown>) {
+    if (!changed.has('configuration')) {
       return;
     }
+
+    // First render OR configuration changed
+    this.recreateWidget();
+  }
+
+  private recreateWidget() {
+    const container = this.querySelector<HTMLDivElement>('#container');
+
+    if (!container) return;
+
+    this.destroyWidget();
 
     PresentationWidget.create({
       selector: container,
@@ -43,11 +45,17 @@ export class PresentationWidgetComponent extends LitElement {
       .then((widget) => {
         this.widget = widget;
       })
-      .catch((e) => console.error(e));
+      .catch(console.error);
+  }
+
+  private destroyWidget() {
+    if (this.widget) {
+      this.widget.destroy();
+      this.widget = null;
+    }
   }
 
   render() {
-    return html`
-      <div id="container"></div>`;
+    return html`<div id="container"></div>`;
   }
 }

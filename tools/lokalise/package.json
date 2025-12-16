@@ -1,0 +1,13 @@
+{
+  "name": "lokalise",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "gcp:login": "npx google-artifactregistry-auth",
+    "start": "node extract.js"
+  },
+  "devDependencies": {
+    "@qumu/lokalise-extractor": "2.0.2",
+    "dotenv": "16.4.5"
+  }
+}

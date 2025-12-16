@@ -7,6 +7,12 @@ import { Presentation } from '@/interfaces/presentation';
 import { ConfigurationService } from '@/services/configuration.service';
 import type { PlayIcon, PlayIconPosition } from '@/interfaces/play-icon';
 
+vi.mock('@/i18n', () => ({
+  useI18n: vi.fn().mockReturnValue({
+    t: vi.fn((key: string) => key),
+  }),
+}));
+
 describe('ThumbnailComponent', () => {
   const mockPresentation: Presentation = {
     guid: 'test-guid',
@@ -41,19 +47,18 @@ describe('ThumbnailComponent', () => {
 
   describe('Rendering', () => {
     it('should render thumbnail button with image', () => {
-      render(createElement(ThumbnailComponent, {
+      const { container } = render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
         presentation: mockPresentation,
         widgetOptions: mockConfiguration.widgetOptions as WidgetOptions,
       }));
 
-      const button = screen.getByRole('button');
-      const image = screen.getByAltText('Thumbnail for Test Presentation');
+      const button = container.querySelector('button');
 
-      expect(button).toBeInTheDocument();
       expect(button).toHaveClass('qc-thumbnail');
-      expect(image).toBeInTheDocument();
-      expect(image).toHaveClass('qc-thumbnail__image');
+
+      const image = container.querySelector('.qc-thumbnail__image');
+
       expect(image).toHaveAttribute('src', 'https://cdn.example.com/thumbnail.jpg');
     });
 
@@ -66,13 +71,13 @@ describe('ThumbnailComponent', () => {
         },
       };
 
-      render(createElement(ThumbnailComponent, {
+      const { container } = render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
         presentation: presentationWithoutCdn,
         widgetOptions: mockConfiguration.widgetOptions as WidgetOptions,
       }));
 
-      const image = screen.getByAltText('Thumbnail for Test Presentation');
+      const image = container.querySelector('.qc-thumbnail__image');
 
       expect(image).toHaveAttribute('src', 'https://example.com/thumbnail.jpg');
     });
@@ -80,7 +85,7 @@ describe('ThumbnailComponent', () => {
 
   describe('Play Icon', () => {
     it('should render default play icon when no custom play icon is provided', () => {
-      render(createElement(ThumbnailComponent, {
+      const { container } = render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
         presentation: mockPresentation,
         widgetOptions: {
@@ -92,11 +97,9 @@ describe('ThumbnailComponent', () => {
         },
       }));
 
-      const playIcon = screen.getByRole('button').querySelector('.qc-thumbnail__play-button--default');
+      const playIcon = container.querySelector('.qc-thumbnail__play-button--default');
 
-      expect(playIcon).toBeInTheDocument();
       expect(playIcon).toHaveClass('qc-thumbnail__play-button');
-      expect(playIcon).toHaveClass('qc-thumbnail__play-button--default');
     });
 
     it('should render custom play icon image when provided in options', () => {
@@ -109,16 +112,14 @@ describe('ThumbnailComponent', () => {
         },
       } as WidgetOptions;
 
-      render(createElement(ThumbnailComponent, {
+      const { container } = render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
         presentation: mockPresentation,
         widgetOptions,
       }));
 
-      const playIconImage = screen.getByAltText('Play');
+      const playIconImage = container.querySelector('.qc-thumbnail__play-button');
 
-      expect(playIconImage).toBeInTheDocument();
-      expect(playIconImage).toHaveClass('qc-thumbnail__play-button');
       expect(playIconImage).toHaveAttribute('src', 'https://example.com/custom-play-icon.png');
       expect(playIconImage).toHaveStyle({
         height: '50px',
@@ -136,13 +137,13 @@ describe('ThumbnailComponent', () => {
         },
       } as WidgetOptions;
 
-      render(createElement(ThumbnailComponent, {
+      const { container } = render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
         presentation: mockPresentation,
         widgetOptions,
       }));
 
-      const playIcon = screen.getByRole('button').querySelector('.qc-thumbnail__play-button');
+      const playIcon = container.querySelector('.qc-thumbnail__play-button');
 
       expect(playIcon!.getAttribute('width')).toBe('60');
       expect(playIcon!.getAttribute('height')).toBe('40');
@@ -263,6 +264,25 @@ describe('ThumbnailComponent', () => {
       expect(button).toHaveAttribute('type', 'button');
     });
 
+    it('should have descriptive alt text for the button', () => {
+      const { container } = render(createElement(ThumbnailComponent, {
+        onClick: mockOnClick,
+        presentation: mockPresentation,
+        widgetOptions: {
+          ...mockConfiguration.widgetOptions as WidgetOptions,
+          playIcon: {
+            height: 100,
+            position: 'bottom-left',
+            width: 100,
+          },
+        } as WidgetOptions,
+      }));
+
+      const span = container.querySelector('span')!;
+
+      expect(span.innerHTML).toEqual('common.PLAY_PRESENTATION');
+    });
+
     it('should have descriptive alt text for thumbnail image', () => {
       render(createElement(ThumbnailComponent, {
         onClick: mockOnClick,
@@ -277,9 +297,9 @@ describe('ThumbnailComponent', () => {
         } as WidgetOptions,
       }));
 
-      const image = screen.getByAltText('Thumbnail for Test Presentation');
+      const image = screen.getAllByRole('img')[0];
 
-      expect(image).toHaveAttribute('alt', 'Thumbnail for Test Presentation');
+      expect(image).toHaveAttribute('alt', '');
     });
 
     it('should have alt text for custom play icon', () => {
@@ -298,9 +318,9 @@ describe('ThumbnailComponent', () => {
         widgetOptions,
       }));
 
-      const playIcon = screen.getByAltText('Play');
+      const playIcon = screen.getAllByRole('img')[1];
 
-      expect(playIcon).toHaveAttribute('alt', 'Play');
+      expect(playIcon).toHaveAttribute('alt', '');
     });
   });
 });

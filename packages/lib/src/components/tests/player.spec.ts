@@ -7,6 +7,12 @@ import { Presentation } from '@/interfaces/presentation';
 import { PlayerParameters } from '@/interfaces/player-parameters';
 import { ConfigurationService } from '@/services/configuration.service';
 
+vi.mock('@/i18n', () => ({
+  useI18n: vi.fn().mockReturnValue({
+    t: vi.fn((key: string) => key),
+  }),
+}));
+
 describe('PlayerComponent', () => {
   const mockPresentation: Presentation = {
     guid: 'test-guid',
@@ -51,13 +57,13 @@ describe('PlayerComponent', () => {
       playbackMode: 'inline',
     } as WidgetOptions;
 
-    render(createElement(PlayerComponent, {
+    const { container } = render(createElement(PlayerComponent, {
       playerParameters: {} as PlayerParameters,
       presentation: mockPresentation,
       widgetOptions,
     }));
 
-    const thumbnail = screen.getByAltText('Thumbnail for Test Presentation');
+    const thumbnail = container.querySelector('.qc-thumbnail__image');
 
     expect(thumbnail).toBeInTheDocument();
     expect(thumbnail).toHaveAttribute('src', 'https://cdn.example.com/thumbnail.jpg');
@@ -78,13 +84,13 @@ describe('PlayerComponent', () => {
 
     delete presentation.thumbnail!.cdnUrl;
 
-    render(createElement(PlayerComponent, {
+    const { container } = render(createElement(PlayerComponent, {
       playerParameters: {} as PlayerParameters,
       presentation,
       widgetOptions,
     }));
 
-    const thumbnail = screen.getByAltText('Thumbnail for Test Presentation');
+    const thumbnail = container.querySelector('.qc-thumbnail__image');
 
     expect(thumbnail).toBeInTheDocument();
     expect(thumbnail).toHaveAttribute('src', 'https://example.com/thumbnail.jpg');
@@ -102,7 +108,7 @@ describe('PlayerComponent', () => {
       widgetOptions,
     }));
 
-    const iframe = screen.getByTitle('Qumu Player');
+    const iframe = screen.getByTitle('Test Presentation');
 
     expect(iframe).toBeInTheDocument();
     expect(iframe).toHaveAttribute('src', 'https://example.com/player?autoplay=false');
@@ -112,7 +118,7 @@ describe('PlayerComponent', () => {
   });
 
   it('should switch from thumbnail to iframe when thumbnail is clicked', () => {
-    render(createElement(PlayerComponent, {
+    const { container } = render(createElement(PlayerComponent, {
       playerParameters: {} as PlayerParameters,
       presentation: mockPresentation,
       widgetOptions: {
@@ -121,15 +127,15 @@ describe('PlayerComponent', () => {
       } as WidgetOptions,
     }));
 
-    expect(screen.getByAltText('Thumbnail for Test Presentation')).toBeInTheDocument();
-    expect(screen.queryByTitle('Qumu Player')).not.toBeInTheDocument();
+    expect(container.querySelector('.qc-thumbnail__image')).toBeInTheDocument();
+    expect(container.querySelector('iframe')).not.toBeInTheDocument();
 
     const thumbnailButton = screen.getByRole('button');
 
     fireEvent.click(thumbnailButton);
 
-    expect(screen.getByTitle('Qumu Player')).toBeInTheDocument();
-    expect(screen.queryByAltText('Thumbnail for Test Presentation')).not.toBeInTheDocument();
+    expect(container.querySelector('.qc-thumbnail__image')).not.toBeInTheDocument();
+    expect(container.querySelector('iframe')).toBeInTheDocument();
   });
 
   it('should call onIframeLoaded when iframe loads', () => {
@@ -146,7 +152,7 @@ describe('PlayerComponent', () => {
       widgetOptions,
     }));
 
-    const iframe = screen.getByTitle('Qumu Player');
+    const iframe = screen.getByTitle('Test Presentation');
 
     fireEvent.load(iframe);
 
@@ -204,7 +210,7 @@ describe('PlayerComponent', () => {
         widgetOptions,
       }));
 
-      const iframe = screen.getByTitle('Qumu Player');
+      const iframe = screen.getByTitle('Test Presentation');
 
       expect(iframe).toHaveAttribute(
         'src',
@@ -227,9 +233,10 @@ describe('PlayerComponent', () => {
         widgetOptions,
       }));
 
-      const iframe = screen.getByTitle('Qumu Player');
+      const iframe = screen.getByTitle('Test Presentation');
 
-      expect(iframe).toHaveAttribute('src', 'https://example.com/player?autoplay=false&playerConfigurationGuid=config-guid-123');
+      expect(iframe)
+        .toHaveAttribute('src', 'https://example.com/player?autoplay=false&playerConfigurationGuid=config-guid-123');
     });
   });
 });

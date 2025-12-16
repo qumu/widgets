@@ -1,7 +1,9 @@
-import '../components/presentation-widget.js';
+import type { StoryObj } from '@storybook/web-components-vite';
 import type { StoryContext } from 'storybook/internal/types';
+import { html } from 'lit';
 import type { PlayerParameters, WidgetConfiguration, WidgetOptions } from 'lib';
-import { PresentationWidgetComponent } from '../components/presentation-widget.ts';
+import '../components/presentation-widget.js';
+import type { PresentationWidgetComponent } from '../components/presentation-widget.ts';
 
 // taken from packages/lib/src/styles/variables.css
 const DEFAULT_CSS_VARIABLES = `--qc-theme-background-color: #09091a;
@@ -48,6 +50,7 @@ const defaultVariablesMap = DEFAULT_CSS_VARIABLES
     return map;
   }, new Map<string, string>());
 
+type Story = StoryObj;
 
 export interface Args {
   host: WidgetConfiguration['host'];
@@ -70,6 +73,67 @@ export interface Args {
   playerReportingId: PlayerParameters['reportingId'];
   cssVars: string;
 }
+
+export default {
+  component: 'presentation-widget',
+};
+
+export const Localisation: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Presentation Widget</title>
+    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widget@<version>/presentation-widget.css">
+  </head>
+  <body>
+    <p>The widget below uses the lang attribute from the html tag</p>
+    <div id="widget1"></div>
+    
+    <p>The widget below is forced to French thanks to lang="fr"</p>
+    <div id="widget2" lang="fr"></div>
+
+    <script type="module">
+      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widget@<version>/presentation-widget.js';
+      
+      PresentationWidget.create({
+        host:'demo.qumucloud.com',
+        guid: 'JN6JHrg17xpwF8klXSIfFj',
+        selector: '#widget1',
+      }).catch((err) => console.log(err));
+      
+      PresentationWidget.create({
+        host: 'demo.qumucloud.com',
+        guid: 'JN6JHrg17xpwF8klXSIfFj',
+        selector: '#widget2',
+      }).catch((err) => console.log(err));
+    </script>
+  </body>
+</html>`,
+      },
+    },
+  },
+  render: () => {
+    console.log('foo');
+
+    return html`
+    <p>The widget below uses the lang attribute from the html tag</p>
+    <presentation-widget .configuration=${{
+      guid: 'JN6JHrg17xpwF8klXSIfFj',
+      host: 'demo.qumucloud.com',
+    }}></presentation-widget>
+
+    <p>The widget below is forced to French thanks to lang="fr"</p>
+    <presentation-widget lang="fr" .configuration=${{
+      guid: 'JN6JHrg17xpwF8klXSIfFj',
+      host: 'demo.qumucloud.com',
+    }}></presentation-widget>
+  `;
+  },
+};
 
 /**
  * Get the configuration object from the story context.
@@ -188,7 +252,16 @@ function getOverridenCssVariables(cssVars: string): string {
     .join('\n');
 }
 
-export default {
+export const Playground: Story = {
+  args: {
+    /* eslint-disable sort-keys */
+    host: 'demo.qumucloud.com',
+    guid: 'JN6JHrg17xpwF8klXSIfFj',
+    playbackMode: 'inline',
+    playIconPosition: 'center',
+    cssVars: DEFAULT_CSS_VARIABLES,
+    /* eslint-enable sort-keys */
+  },
   argTypes: {
     host: { control: 'text' },
     // eslint-disable-next-line sort-keys
@@ -390,13 +463,13 @@ export default {
     <script type="module">
       import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widget@<version>/presentation-widget.js';
       
-      const widget = new PresentationWidget(${
+      PresentationWidget.create(${
         JSON.stringify(configuration, null, 2)
           .split('\n')
           // add 6 spaces (indent level inside <script>)
           .map((line, i) => (i === 0 ? line : `      ${line}`))
           .join('\n')
-      });
+      }).catch((err) => console.log(err));
     </script>
   </body>
 </html>
@@ -405,37 +478,23 @@ export default {
       },
     },
   },
-  title: 'Widgets/Presentation Widget',
+  render: (args: Partial<Args>) => {
+    const el = document.createElement('presentation-widget') as PresentationWidgetComponent;
+
+    el.configuration = getConfiguration(args);
+
+    args.cssVars?.split('\n').forEach((line: string) => {
+      if (!line.startsWith('--qc-')) {
+        return;
+      }
+
+      const [key, value] = line.split(':').map((s) => s?.trim());
+
+      if (key && value) {
+        el.style.setProperty(key, value.replace(';', ''));
+      }
+    });
+
+    return el;
+  },
 };
-
-const Template = (args: Partial<Args>) => {
-  const el = document.createElement('presentation-widget') as PresentationWidgetComponent;
-
-  el.configuration = getConfiguration(args);
-
-  args.cssVars?.split('\n').forEach((line: string) => {
-    if (!line.startsWith('--qc-')) {
-      return;
-    }
-
-    const [key, value] = line.split(':').map((s) => s?.trim());
-
-    if (key && value) {
-      el.style.setProperty(key, value.replace(';', ''));
-    }
-  });
-
-  return el;
-};
-
-export const BasicExample = Template.bind({});
-// disable eslint for the arguments as the order matters for the controls panel
-/* eslint-disable sort-keys */
-BasicExample.args = {
-  host: 'demo.qumucloud.com',
-  guid: 'JN6JHrg17xpwF8klXSIfFj',
-  playbackMode: 'inline',
-  playIconPosition: 'center',
-  cssVars: DEFAULT_CSS_VARIABLES,
-};
-/* eslint-enable sort-keys */

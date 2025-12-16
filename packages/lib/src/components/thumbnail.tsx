@@ -1,6 +1,7 @@
 import { Presentation } from '@/interfaces/presentation';
 import { WidgetOptions } from '@/interfaces/widget-options';
 import PlayIcon from '@/icons/play.svg?react';
+import { useI18n } from '@/i18n';
 
 interface Props {
   onClick: () => void;
@@ -19,14 +20,15 @@ export function ThumbnailComponent({ presentation, onClick, widgetOptions }: Rea
 
   return (
     <button type="button" class="qc-thumbnail" onClick={clickHandler} style={{ 'place-items': `${placeY} ${placeX}` }}>
+      <span class="qc-sr-only">{useI18n().t('common.PLAY_PRESENTATION', { title: presentation.title! })}</span>
       <img
         class="qc-thumbnail__image"
         src={presentation.thumbnail?.cdnUrl || presentation.thumbnail?.url}
-        alt={`Thumbnail for ${presentation.title}`}
+        alt=""
       />
       {widgetOptions.playIcon?.url ? (
         <img
-          alt="Play"
+          alt=""
           class="qc-thumbnail__play-button"
           src={widgetOptions.playIcon?.url}
           style={{

@@ -8,6 +8,7 @@ import { DialogComponent } from '@/components/dialog';
 import { PlayerComponent } from '@/components/player';
 import './presentation-widget.scss';
 import { NotFoundComponent } from '@/components/not-found';
+import { createI18n } from '@/i18n';
 
 export class PresentationWidget {
   private readonly configurationService = new ConfigurationService();
@@ -65,11 +66,13 @@ export class PresentationWidget {
   private mount() {
     const container = this.configuration.selector instanceof HTMLElement
       ? this.configuration.selector
-      : document.querySelector(this.configuration.selector);
+      : document.querySelector<HTMLElement>(this.configuration.selector);
 
     if (!container) {
       throw new Error(`Element for selector "${this.configuration.selector}" not found`);
     }
+
+    createI18n(container);
 
     this.container = container;
     container.innerHTML = '';
