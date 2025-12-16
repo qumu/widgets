@@ -1,4 +1,4 @@
-import ImageBrokenIcon from '../../assets/image-broken.svg?react';
+import ImageBrokenIcon from '@/icons/image-broken.svg?react';
 
 // TODO translate me!
 export function NotFoundComponent() {

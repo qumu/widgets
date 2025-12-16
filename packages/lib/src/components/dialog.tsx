@@ -4,7 +4,7 @@ import { Presentation } from '@/interfaces/presentation';
 import { ThumbnailComponent } from './thumbnail';
 import { PlayerComponent } from './player';
 import { PlayerParameters } from '@/interfaces/player-parameters';
-import CloseIcon from '../../assets/close.svg?react';
+import CloseIcon from '@/icons/close.svg?react';
 
 interface Props {
   presentation: Presentation;

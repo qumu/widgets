@@ -1,6 +1,6 @@
 import { Presentation } from '@/interfaces/presentation';
 import { WidgetOptions } from '@/interfaces/widget-options';
-import PlayIcon from '../../assets/play-icon.svg?react';
+import PlayIcon from '@/icons/play.svg?react';
 
 interface Props {
   onClick: () => void;
