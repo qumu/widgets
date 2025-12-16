@@ -18,11 +18,11 @@ describe('ConfigurationService', () => {
   });
 
   describe('validateAndSanitize', () => {
-    const validConfiguration: WidgetConfiguration = {
+    const validConfiguration = {
       guid: 'test-guid-123',
       host: 'example.com',
       selector: '#my-widget',
-    };
+    } as unknown as WidgetConfiguration;
 
     it('should end silently when no errors occur', () => {
       expect(() => configurationService.validateAndSanitize(validConfiguration)).not.toThrow();
@@ -363,13 +363,78 @@ describe('ConfigurationService', () => {
       });
     });
 
+    describe('sortOrder validation', () => {
+      it('should throw error when sortOrder has invalid value', () => {
+        const invalidSortOrders = ['UP', 'DOWN', 'ascending', 'descending', 'asc', 'desc', '', 123, true, null, {}];
+
+        invalidSortOrders.forEach((sortOrder) => {
+          const config = {
+            ...validConfiguration,
+            sortOrder: sortOrder as unknown as 'ASCENDING' | 'DESCENDING',
+          };
+
+          expect(() => configurationService.validateAndSanitize(config)).toThrow(
+            '`sortOrder` must be either "ASCENDING" or "DESCENDING"',
+          );
+        });
+      });
+
+      it('should accept valid sortOrder values', () => {
+        const validSortOrders = ['ASCENDING', 'DESCENDING'];
+
+        validSortOrders.forEach((sortOrder) => {
+          const config = {
+            ...validConfiguration,
+            sortOrder: sortOrder as 'ASCENDING' | 'DESCENDING',
+          };
+
+          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
+        });
+      });
+    });
+
+    describe('sortBy validation', () => {
+      it('should throw error when sortBy is not a string', () => {
+        const config = {
+          ...validConfiguration,
+          sortBy: 123 as unknown as string,
+        };
+
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+          '`sortBy` must be a string',
+        );
+      });
+
+      it('should throw error when sortBy is an empty string', () => {
+        const config = {
+          ...validConfiguration,
+          sortBy: '',
+        };
+
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+          '`sortBy` cannot be an empty string',
+        );
+      });
+
+      it('should throw error when sortBy is only whitespace', () => {
+        const config = {
+          ...validConfiguration,
+          sortBy: '   ',
+        };
+
+        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+          '`sortBy` cannot be an empty string',
+        );
+      });
+    });
+
     describe('edge cases', () => {
       it('should throw error for fields with leading/trailing spaces', () => {
-        const config: WidgetConfiguration = {
+        const config = {
           guid: '  test-guid  ',
           host: '  example.com  ',
           selector: '  #my-widget  ',
-        };
+        } as unknown as WidgetConfiguration;
 
         // Should throw because host validation fails with spaces
         expect(() => configurationService.validateAndSanitize(config)).toThrow(
@@ -378,11 +443,11 @@ describe('ConfigurationService', () => {
       });
 
       it('should validate fields that pass the trim check', () => {
-        const config: WidgetConfiguration = {
+        const config = {
           guid: 'test-guid',
           host: 'example.com',
           selector: '#my-widget',
-        };
+        } as unknown as WidgetConfiguration;
 
         expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
       });
@@ -658,11 +723,11 @@ describe('ConfigurationService', () => {
 
   describe('setDefaults', () => {
     it('should set default playerParameters when they are undefined', () => {
-      const initialConfig: WidgetConfiguration = {
+      const initialConfig = {
         guid: 'test-guid',
         host: 'example.com',
         selector: '#widget',
-      };
+      } as unknown as WidgetConfiguration;
 
       const result = configurationService.setDefaults(initialConfig);
 
@@ -670,11 +735,11 @@ describe('ConfigurationService', () => {
     });
 
     it('should set default widgetOptions when they are undefined', () => {
-      const initialConfig: WidgetConfiguration = {
+      const initialConfig = {
         guid: 'test-guid',
         host: 'example.com',
         selector: '#widget',
-      };
+      } as unknown as WidgetConfiguration;
 
       const result = configurationService.setDefaults(initialConfig);
 
@@ -689,7 +754,7 @@ describe('ConfigurationService', () => {
     });
 
     it('should not override existing widgetOptions', () => {
-      const initialConfig: WidgetConfiguration = {
+      const initialConfig = {
         guid: 'test-guid',
         host: 'example.com',
         selector: '#widget',
@@ -703,7 +768,7 @@ describe('ConfigurationService', () => {
             width: 100,
           },
         },
-      };
+      } as unknown as WidgetConfiguration;
 
       const initialWidgetOptions = JSON.parse(JSON.stringify(initialConfig.widgetOptions)) as unknown as WidgetOptions;
 

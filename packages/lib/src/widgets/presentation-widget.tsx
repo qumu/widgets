@@ -54,7 +54,7 @@ export class PresentationWidget {
 
   async init(): Promise<void> {
     try {
-      this.presentation = await this.presentationService.getPresentation(this.configuration.guid, this.configuration.host);
+      this.presentation = await this.presentationService.getPresentation(this.configuration.guid, this.configuration.host, this.configuration.sortBy, this.configuration.sortOrder);
     } catch (err) {
       console.error(err);
     } finally {
@@ -74,7 +74,7 @@ export class PresentationWidget {
     this.container = container;
     container.innerHTML = '';
 
-    const aspectRatio = this.presentation
+    const aspectRatio = this.presentation?.mediaDisplayWidth && this.presentation?.mediaDisplayHeight
       ? `${this.presentation.mediaDisplayWidth} / ${this.presentation.mediaDisplayHeight}`
       : '16 / 9';
 

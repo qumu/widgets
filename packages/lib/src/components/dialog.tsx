@@ -33,6 +33,10 @@ export function DialogComponent({ presentation, widgetOptions, playerParameters 
     return '';
   }
 
+  const aspectRatio = presentation?.mediaDisplayWidth && presentation?.mediaDisplayHeight
+      ? `${presentation.mediaDisplayWidth} / ${presentation.mediaDisplayHeight}`
+      : '16 / 9';
+
   return (
     <div class="qc-dialog">
       <ThumbnailComponent
@@ -50,7 +54,7 @@ export function DialogComponent({ presentation, widgetOptions, playerParameters 
             }
           }}
           onClose={() => setShowDialog(false)}
-          style={{ 'aspect-ratio': `${presentation?.mediaDisplayWidth} / ${presentation?.mediaDisplayHeight}` }}
+          style={{ 'aspect-ratio': aspectRatio }}
         >
           <button
               type="button"

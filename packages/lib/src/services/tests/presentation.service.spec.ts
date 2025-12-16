@@ -22,7 +22,7 @@ describe('PresentationService', () => {
   describe('getPresentation', () => {
     const mockGuid = 'test-guid-123';
     const mockHost = 'example.com';
-    const expectedUrl = `https://${mockHost}/api/2.2/rest/widgets/${mockGuid}.json?offset=0&limit=1&sortBy=created%2CDESCENDING&useUserAuth=false`;
+    const expectedUrl = `https://${mockHost}/api/2.2/rest/widgets/${mockGuid}.json?offset=0&limit=1&sortBy=title%2CASCENDING&useUserAuth=false`;
 
     const mockPresentation: Presentation = {
       audioOnly: false,
@@ -34,7 +34,7 @@ describe('PresentationService', () => {
       vod: true,
     };
 
-    const mockSuccessResponse: PresentationResponseDto = {
+    const mockSuccessResponse: Partial<PresentationResponseDto> = {
       kulus: [mockPresentation],
       total: 1,
     };
@@ -45,7 +45,7 @@ describe('PresentationService', () => {
         ok: true,
       });
 
-      const result = await presentationService.getPresentation(mockGuid, mockHost);
+      const result = await presentationService.getPresentation(mockGuid, mockHost, 'title', 'ASCENDING');
 
       expect(mockFetch).toHaveBeenCalledTimes(1);
       expect(mockFetch).toHaveBeenCalledWith(expectedUrl, {
@@ -60,7 +60,7 @@ describe('PresentationService', () => {
         ok: true,
       });
 
-      await presentationService.getPresentation(mockGuid, mockHost);
+      await presentationService.getPresentation(mockGuid, mockHost, 'title', 'ASCENDING');
 
       const mockCall = mockFetch.mock.calls[0] as unknown[];
       const url = mockCall[0] as string;
@@ -74,7 +74,7 @@ describe('PresentationService', () => {
       mockFetch.mockRejectedValueOnce(networkError);
 
       await expect(
-        presentationService.getPresentation(mockGuid, mockHost),
+        presentationService.getPresentation(mockGuid, mockHost, 'title', 'ASCENDING'),
       ).rejects.toThrow(`Failed to fetch presentation from host "${mockHost}": Network error`);
     });
 
@@ -85,12 +85,12 @@ describe('PresentationService', () => {
       });
 
       await expect(
-        presentationService.getPresentation(mockGuid, mockHost),
+        presentationService.getPresentation(mockGuid, mockHost, 'title', 'ASCENDING'),
       ).rejects.toThrow(`Failed to fetch presentation with guid "${mockGuid}" from host "${mockHost}"`);
     });
 
     it('should throw error when no presentations are returned', async () => {
-      const emptyResponse: PresentationResponseDto = {
+      const emptyResponse: Partial<PresentationResponseDto> = {
         kulus: [],
         total: 0,
       };
@@ -101,14 +101,14 @@ describe('PresentationService', () => {
       });
 
       await expect(
-        presentationService.getPresentation(mockGuid, mockHost),
+        presentationService.getPresentation(mockGuid, mockHost, 'title', 'ASCENDING'),
       ).rejects.toThrow(`Failed to fetch presentation with guid "${mockGuid}" from host "${mockHost}"`);
     });
 
     it('should handle special characters in guid and host', async () => {
       const specialGuid = 'guid-with-special-chars123';
       const specialHost = 'test-host.example.com';
-      const expectedSpecialUrl = `https://${specialHost}/api/2.2/rest/widgets/${specialGuid}.json?offset=0&limit=1&sortBy=created%2CDESCENDING&useUserAuth=false`;
+      const expectedSpecialUrl = `https://${specialHost}/api/2.2/rest/widgets/${specialGuid}.json?offset=0&limit=1&sortBy=title%2CASCENDING&useUserAuth=false`;
 
       mockFetch.mockResolvedValueOnce({
         json: vi.fn().mockResolvedValue({
@@ -121,7 +121,7 @@ describe('PresentationService', () => {
         ok: true,
       });
 
-      const result = await presentationService.getPresentation(specialGuid, specialHost);
+      const result = await presentationService.getPresentation(specialGuid, specialHost, 'title', 'ASCENDING');
 
       expect(mockFetch).toHaveBeenCalledWith(expectedSpecialUrl, {
         method: 'GET',
@@ -130,7 +130,7 @@ describe('PresentationService', () => {
     });
 
     it('should return the first presentation when multiple are returned', async () => {
-      const multipleResponse: PresentationResponseDto = {
+      const multipleResponse: Partial<PresentationResponseDto> = {
         kulus: [
           mockPresentation,
           {
@@ -184,7 +184,7 @@ describe('PresentationService', () => {
         guid: mockGuid,
       };
 
-      const minimalResponse: PresentationResponseDto = {
+      const minimalResponse: Partial<PresentationResponseDto> = {
         kulus: [minimalPresentation],
         total: 1,
       };
@@ -235,7 +235,7 @@ describe('PresentationService', () => {
         vod: true,
       };
 
-      const completeResponse: PresentationResponseDto = {
+      const completeResponse: Partial<PresentationResponseDto> = {
         kulus: [completePresentation],
         total: 1,
       };

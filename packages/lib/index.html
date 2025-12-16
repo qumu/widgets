@@ -24,14 +24,14 @@
 
       :root {
         /* Theme colors */
-        --qc-theme-background: #00abfa;
+        --qc-theme-background-color: #00abfa;
         --qc-theme-color: #013b55;
 
         /* Dialog style */
         --qc-dialog-backdrop: #013a55c7;
         /* --qc-dialog-background-color: #000; */
         /* --qc-dialog-border-color: #000; */
-        /* --qc-dialog-border-radius: 8px; */
+        --qc-dialog-border-radius: 8px;
         /* --qc-dialog-border-style: solid; */
         /* --qc-dialog-border-width: 3px; */
         /* --qc-dialog-close-button-background-color: var(--qc-theme-background); */
@@ -55,6 +55,7 @@
         /* Presentation widget style */
         /* --qc-presentation-widget-width: 100%; */
         /* --qc-presentation-widget-height: 200px; */
+        --qc-presentation-widget-border-radius: 16px;
       }
     </style>
 
@@ -82,12 +83,15 @@
           // guid: 'sGcfmyj9Az7sogOV9LY8SO', // purple
           // guid: '3OY8MjrokUZjMpK9gO2B8n', // green
           // guid: 'Rsk8lVKAfFzV4RJahp9u7X', // default
-          guid: 'BnEuUskb6EfymnIPm1PAro', // slides and captions
+          // guid: 'BnEuUskb6EfymnIPm1PAro', // slides and captions
+          guid: 'zDDipVTOskm',            // smart search
 
+          sortBy: "title",
+          sortOrder: "ASCENDING",
 
           widgetOptions: {
             // set playback mode for the widget of 'inline' | 'inline-autoload' | 'inline-autoplay' | 'modal'
-            playbackMode: 'inline',
+            playbackMode: 'modal',
 
             // the player configuration GUID to use for playback
             // this should also impact the widget appearance

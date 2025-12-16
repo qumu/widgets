@@ -2,7 +2,7 @@ import { PlayerParameters } from '@/interfaces/player-parameters';
 import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { WidgetOptions } from '@/interfaces/widget-options';
 
-const supportedConfigFields = new Set(['selector', 'host', 'guid', 'widgetOptions', 'playerParameters']);
+const supportedConfigFields = new Set(['selector', 'host', 'guid', 'widgetOptions', 'playerParameters', 'sortBy', 'sortOrder']);
 const supportedWidgetFields = new Set(['playbackMode', 'playerConfigurationGuid', 'playIcon', 'onIframeLoaded', 'onThumbnailClick']);
 const supportedPlayerParameterFields = new Set(['captions', 'debug', 'loop', 'pv', 'quality', 'showControlPanel', 'sidebar', 'speech', 'speechTerm', 'start', 'volume', 'reporting', 'reportingId']);
 
@@ -13,10 +13,16 @@ export class ConfigurationService {
     }
 
     ['selector', 'host', 'guid'].forEach((field) => {
-      const value = initialConfiguration[field as keyof WidgetConfiguration];
-
       if (!Object.hasOwn(initialConfiguration, field)) {
         throw new Error(`\`${field}\` is not defined in the configuration`);
+      }
+    });
+
+    ['selector', 'host', 'guid', 'sortBy'].forEach((field) => {
+      const value = initialConfiguration[field as keyof WidgetConfiguration];
+
+      if (Object.hasOwn(initialConfiguration, field) === false) {
+        return;
       }
 
       if (value === undefined || value === null) {
@@ -35,6 +41,10 @@ export class ConfigurationService {
         throw new Error(`\`${field}\` cannot be an empty string`);
       }
     });
+
+    if (Object.hasOwn(initialConfiguration, 'sortOrder') && !['ASCENDING', 'DESCENDING'].includes(initialConfiguration.sortOrder)) {
+      throw new Error('`sortOrder` must be either "ASCENDING" or "DESCENDING"');
+    }
 
     const configuration = {
       ...initialConfiguration,
