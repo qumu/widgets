@@ -29,14 +29,14 @@ export class PresentationWidgetComponent extends LitElement {
     return this;
   }
 
-  firstUpdated() {
+  async firstUpdated() {
     const container = this.renderRoot.querySelector<HTMLDivElement>('#container');
 
     if (!container) {
       return;
     }
 
-    this.widget = new PresentationWidget({
+    this.widget = await PresentationWidget.create({
       selector: container,
       ...this.configuration,
     });
