@@ -61,7 +61,6 @@ jobs:
       - name: Publish to NPM
         run: |
           VERSION_TAG="${GITHUB_REF#refs/tags/}"
-          VERSION_TAG="${VERSION_TAG#v}"  # strip leading 'v'
           
           if [[ "$VERSION_TAG" == *"-alpha."* ]]; then
             TAG="alpha"
@@ -73,8 +72,5 @@ jobs:
             TAG="latest"
           fi
           
-          npm config set registry https://registry.npmjs.org/
           npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
           npm publish --workspace lib --tag $TAG
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.FE_CI_BOT_TOKEN }}
