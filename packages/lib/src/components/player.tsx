@@ -52,7 +52,7 @@ export function PlayerComponent({ presentation, widgetOptions, playerParameters 
         width="100%"
         height="100%"
         allow="autoplay; fullscreen"
-        title={presentation.title!}
+        title={presentation.title}
         class="qc-player"
     />
   );
