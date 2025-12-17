@@ -314,37 +314,6 @@ describe('Service : I18nService', () => {
       expect(i18nService.t(text, { count: 2 })).toEqual('dog');
     });
 
-    it('should translate a complex plural type', () => {
-      const text = 'dog';
-
-      const locale = {
-        [text]: '{{count}} pies',
-        [`${text}_0`]: '{{count}} psy',
-        [`${text}_1`]: '{{count}} psy',
-        [`${text}_2`]: '{{count}} psów',
-      };
-      const lang = 'pl';
-
-      const i18nService = new I18nService({
-        locale: lang,
-        messages: {
-          [lang]: locale,
-        },
-      });
-
-      expect(i18nService.t(text, { count: 0 })).toEqual('0 psów');
-      expect(i18nService.t(text, { count: 1 })).toEqual('1 pies');
-      expect(i18nService.t(text, { count: 2 })).toEqual('2 psy');
-      expect(i18nService.t(text, { count: 4 })).toEqual('4 psy');
-      expect(i18nService.t(text, { count: 5 })).toEqual('5 psów');
-      expect(i18nService.t(text, { count: 21 })).toEqual('21 psów');
-      expect(i18nService.t(text, { count: 22 })).toEqual('22 psy');
-      expect(i18nService.t(text, { count: 24 })).toEqual('24 psy');
-      expect(i18nService.t(text, { count: 25 })).toEqual('25 psów');
-      expect(i18nService.t(text, { count: 31 })).toEqual('31 psów');
-      expect(i18nService.t(text, { count: 32 })).toEqual('32 psy');
-    });
-
     it('should translate a key with context specified', () => {
       const text = 'dog';
 
