@@ -166,7 +166,9 @@ export class ConfigurationService {
 
     return {
       ...initialConfiguration,
-      host: initialConfiguration.host.replace('https://', '').replace(/\/.*$/, ''),
+      host: initialConfiguration.host
+        .replace('https://', '')
+        .split('/')[0],
       playerParameters,
       widgetOptions,
     };
