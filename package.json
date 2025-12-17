@@ -22,9 +22,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "publishConfig": {
-    "registry": "https://europe-npm.pkg.dev/qumu-cicd/qumu-npm/"
-  },
   "volta": {
     "node": "24.11.0"
   }
