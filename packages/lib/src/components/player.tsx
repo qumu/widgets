@@ -63,7 +63,7 @@ export function PlayerComponent({ presentation, widgetOptions, playerParameters 
         onClick={() => setShowIframe(true)}
         widgetOptions={widgetOptions}
     />
-  )
+  );
 
   return showIframe ? iframe : thumbnail;
 }
