@@ -8,10 +8,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qumu/qc-widget.git"
+    "url": "git+https://github.com/qumu/widgets.git"
   },
   "bugs": {
-    "url": "https://github.com/qumu/qc-widget/issues"
+    "url": "https://github.com/qumu/widgets/issues"
   },
   "scripts": {
     "build": "npm run build --workspaces --if-present",
