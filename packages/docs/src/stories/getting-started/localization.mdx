@@ -1,0 +1,67 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import { Localization } from './localization.stories.ts';
+
+<Meta title="Getting Started/Localization"/>
+
+# Localization
+
+Widgets support localization. Components will use `en` as their default locale. You can override the locale by setting the `lang` attribute.
+
+Widgets support the following languages:
+
+* `en`
+* `fr`
+* `ja`
+
+You can request a new language by opening an issue on [GitHub](https://github.com/qumu/widgets/issues/new).
+
+## Set the lang for the whole page
+
+If you set the `lang` attribute on the `<html>` tag, the whole page will use the defined language. All the widgets from this page will use that language.
+
+```html
+<html lang="fr">
+  <body>
+    <!-- Any widget will use the fr language -->
+    <div id="widget"></div>
+  </body>
+</html>
+```
+
+## Set the language for multiple widgets
+
+You can use the `lang` attribute on a parent of specific widgets to override the language for those widgets.
+
+```html
+<html lang="fr">
+  <body>
+    <!-- This widget will use the fr language -->
+    <div id="widget1"></div>
+
+    <!-- Any UI-Kit component inside the div will use the ja language -->
+    <div lang="ja">
+      <div id="widget2"></div>
+      <div id="widget3"></div>
+    </div>
+  </body>
+</html>
+```
+
+## Set the language for a specific widget
+
+You can use the `lang` attribute on a specific widget to override the language for that widget.
+```html
+<html lang="fr">
+  <body>
+    <!-- This widget will use the fr language -->
+    <div id="widget1"></div>
+
+    <!-- This widget will use the ja language -->
+    <div id="widget2" lang="ja"></div>
+  </body>
+</html>
+```
+
+## Example
+
+<Canvas of={Localization}/>

@@ -1,0 +1,86 @@
+import type { StoryObj } from '@storybook/web-components-vite';
+import { PresentationWidget } from 'lib';
+import 'lib/presentation-widget.css';
+import { version } from '../../../../../package.json';
+
+type Story = StoryObj;
+
+export default {
+  component: 'localization',
+};
+
+export const Localization: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Presentation Widget</title>
+    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widgets@${version}/presentation-widget.css">
+  </head>
+  <body>
+    <p>The widget below uses the lang attribute from the html tag</p>
+    <div id="widget1"></div>
+    
+    <p>The widget below is forced to French thanks to lang="fr"</p>
+    <div id="widget2" lang="fr"></div>
+
+    <script type="module">
+      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@${version}/presentation-widget.js';
+      
+      PresentationWidget.create({
+        host:'demo.qumucloud.com',
+        guid: 'JN6JHrg17xpwF8klXSIfFj',
+        selector: '#widget1',
+      }).catch((err) => console.log(err));
+      
+      PresentationWidget.create({
+        host: 'demo.qumucloud.com',
+        guid: 'JN6JHrg17xpwF8klXSIfFj',
+        selector: '#widget2',
+      }).catch((err) => console.log(err));
+    </script>
+  </body>
+</html>`,
+      },
+    },
+  },
+  render: () => {
+    const container = document.createElement('div');
+
+    const p1 = document.createElement('p');
+
+    p1.innerHTML = 'The widget below uses the lang attribute from the html tag';
+
+    const p2 = document.createElement('p');
+
+    p2.innerHTML = 'The widget below is forced to French thanks to lang="fr"';
+
+    const widget1 = document.createElement('div');
+
+    const widget2 = document.createElement('div');
+
+    widget2.setAttribute('lang', 'fr');
+
+    container.appendChild(p1);
+    container.appendChild(widget1);
+    container.appendChild(p2);
+    container.appendChild(widget2);
+
+    PresentationWidget.create({
+      guid: 'JN6JHrg17xpwF8klXSIfFj',
+      host: 'demo.qumucloud.com',
+      selector: widget1,
+    }).catch(console.error);
+
+    PresentationWidget.create({
+      guid: 'JN6JHrg17xpwF8klXSIfFj',
+      host: 'demo.qumucloud.com',
+      selector: widget2,
+    }).catch(console.error);
+
+    return container;
+  },
+};

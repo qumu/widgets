@@ -1,0 +1,146 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as Stories from './presentation.stories.ts';
+
+<Meta
+  title="Widgets/Presentation"
+/>
+
+
+# Presentation widget
+
+The new presentation widget replaces the old "playback" and "thumbnail" widget.
+
+## Basic Usage
+
+<Canvas of={Stories.Basic}/>
+
+## Recipes
+
+### Inline vs Modal
+
+The `inline` playback mode is equivalent to the old "playback" widget, while the `modal` playback mode is equivalent to the old "thumbnail" widget.
+
+<Canvas of={Stories.PlaybackThumbnail}/>
+
+### Change the Player Icon
+
+<Canvas of={Stories.CustomPlayIcon}/>
+
+### Use the Player SDK with the widget
+
+Qumu Cloud provides a [Player SDK](https://qumu.github.io/player-sdk/) that can be used to control the playback of the presentation.
+
+<Canvas of={Stories.PlayerSdk}/>
+
+
+## API
+
+### PresentationWidget
+
+| Property                                                           | Type                          | Description                              |
+|--------------------------------------------------------------------|-------------------------------|------------------------------------------|
+| create(configuration: [WidgetConfiguration](#widgetconfiguration)) | `Promise<PresentationWidget>` | Create the widget.                       |
+| destroy()                                                          | `void`                        | Destroy the widget and clean up the DOM. |
+
+
+### WidgetConfiguration
+
+| Property         | Type                                                 | Required | Default                             | Description                                                                                                                                                                                                |
+|------------------|------------------------------------------------------|----------|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| guid             | `string`                                             | **Yes**  | `''`                                | <p>Defines the guid of presentation or Smart Search to show.</p><p>In the case of a Smart Search, the first presentation will be used. You can use `sortBy` and `sortOrder` to sort your Smart Search.</p> |
+| host             | `string`                                             | **Yes**  | `''`                                | Defines the Qumu Cloud tenant to get the presentation from (i.e: demo.qumucloud.com)                                                                                                                       |
+| selector         | `string \| HTMLElement`                              | **Yes**  | `''`                                | Defines the HTML element to create the widget into. It can be a HTMLElement or a string used by [document.querySelector()](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector).       |
+| playerParameters | [Partial&lt;PlayerParameters&gt;](#playerparameters) | No       | `undefined`                         | Defines the parameters to add to the Qumu Cloud player.                                                                                                                                                    |
+| sortBy           | `string`                                             | No       | `''`                                | <p>Defines the property to use when sorting the smart search.</p><p>⚠️ This property is only useful when using a smart search guid.</p>                                                                    |
+| sortOrder        | `string`                                             | No       | `'DESCENDING'`                      | <p>Defines the order to sort the smart search. Value must be one of: `ASCENDING`, `DESCENDING`.</p><p>⚠️ This property is only useful when using a smart search guid.</p>                                  |
+| widgetOptions    | [Partial&lt;widgetOptions&gt;](#widgetoptions)       | No       | See [WidgetOptions](#widgetoptions) | Defines the widget options.                                                                                                                                                                                |
+
+
+### PlayerParameters
+
+| Property         | Type               | Description                                                                                                                                                                                                       |
+|------------------|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| captions         | `string`           | Defines the captions language on playback start.                                                                                                                                                                  |
+| debug            | `string`           | <p>Enable the debug mode. This will add logs to the Browser's console and provide a Debug view in the player.</p><p>⚠️ This has an impact on performance so we recommend to keep it turned off in production.</p> |
+| loop             | `string`           | Allows the presentation to loop once playback ends.                                                                                                                                                               |
+| pv               | `string`           | The player view. <ul><li>`pipls`: Picture-in-Picture, large slides.</li><li>`pipss`: Picture-in-Picture small slides.</li><li>`sbs`: Side by Side.</li></ul>                                                      |
+| quality          | `string`           | You can force a playback quality. Value must be one of: `auto` (default), `best`, `1440p`, `1080p`, `720p`, `480p`, `240p`.                                                                                       |
+| showControlPanel | `boolean`          | Defines whether the control panel is visible or not.                                                                                                                                                              |
+| sidebar          | `boolean`          | Defines whether the sidebar is visible or not.                                                                                                                                                                    |
+| speech           | `string`           | Defines the query for the Speech Search.                                                                                                                                                                          |
+| speechTerm       | `string`           | Defines the default active term for the Speech Search. This must be used alongside `speech`.                                                                                                                      |
+| start            | `number \| string` | Defines the playback start. This can be the number of seconds (i.e. `123`) or a string in the `hh:mm:ss` format (i.e. `00:10`).                                                                                   |
+| volume           | `string`           | <p>Defines the volume of the video from `0` to `100`.</p><p>⚠️ The [autoplay policy](https://developer.chrome.com/blog/autoplay) in the browser may bypass your volume preference.</p>                            |
+| reporting        | `boolean`          | Defines whether the playback sends analytics data to Qumu Cloud.                                                                                                                                                  |
+| reportingId      | `string`           | Defines a unique reportingId in the Qumu Cloud Analytics dashboard.                                                                                                                                               |
+
+### WidgetOptions
+
+| Property                | Type                                   | Default                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+|-------------------------|----------------------------------------|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| playbackMode            | `string`                               | `inline`                    | Define the playback mode. <ul><li>`inline`: Show a thumbnail. Replace the thumbnail with the player when the user clicks on the play icon.</li><li>`inline-autoload`: Load the player but requires the user to click play to start the playback.</li><li>`inline-autoplay`: Load the player and starts the playback automatically.</li><li>`modal`: Show a thumbnail. Open the player in a modal when the user clicks the play icon</li></ul> |
+| playerConfigurationGuid | `string`                               | `''`                        | Defines the guid of a player configuration. This will override the player configuration set in the presentation                                                                                                                                                                                                                                                                                                                               |
+| playIcon                | [PlayIcon](#playicon)                  | See   [PlayIcon](#playicon) | Defines the play icon.                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| onIframeLoaded          | `(iframe: HTMLIFrameElement) => void`  | `undefined`                 | Method triggered once the iframe is loaded. Useful to load our Player SDK.                                                                                                                                                                                                                                                                                                                                                                    |
+| onThumbnailClick        | `(presentation: Presentation) => void` | `undefined`                 | Method triggered once the thumbnail is clicked. Useful to bypass the default behaviour of the widget. Only works when playback mode is `inline` or `modal`.                                                                                                                                                                                                                                                                                   |
+
+### PlayIcon
+
+| Property | Type     | Default  | Description                                                                                                                                                 |
+|----------|----------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| height   | `number` | `44`     | Define the play icon's height.                                                                                                                              |
+| position | `string` | `center` | Defines the play icon's position. Value must be one of : `top-left`, `top`, `top-right`, `left`, `center`, `right`, `bottom-left`, `bottom`, `bottom-right` |
+| url      | `string` | `''`     | Defines the URL to a custom play icon image.                                                                                                                |
+| width    | `number` | `44`     | Define the play icon's width.                                                                                                                               |
+
+
+### CSS Variables
+
+The widget provides the following CSS variables for customization:
+
+You can override the default values using CSS variables. For that, add the following code to your application's global CSS file:
+
+```css
+:root {
+  --qc-theme-background-color: #09091a;
+  --qc-theme-color: #f5f8fa;
+}
+```
+| Variable                                              | Default                            | Description                                                                                                                                     |
+|-------------------------------------------------------|------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `--qc-theme-background-color`                         | `#09091a`                          | The background color of the widget.                                                                                                             |
+| `--qc-theme-color`                                    | `#f5f8fa`                          | The default text and icon color inside the widget.                                                                                              |
+| `--qc-presentation-widget-border-radius`              | `0`                                | The border radius of the widget container.                                                                                                      |
+| `--qc-presentation-widget-height`                     | `100%`                             | The height of the widget container.                                                                                                             |
+| `--qc-presentation-widget-width`                      | `100%`                             | The width of the widget container.                                                                                                              |
+| `--qc-thumbnail-image-fit`                            | `cover`                            | How the thumbnail image fits its container. See [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/object-fit). |
+| `--qc-thumbnail-play-button-margin`                   | `16px`                             | The margin around the thumbnail’s play button.                                                                                                  |
+| `--qc-thumbnail-play-button-padding`                  | `8px`                              | The padding between the play icon and the button background.                                                                                    |
+| `--qc-thumbnail-play-button-background-color`         | `var(--qc-theme-background-color)` | The background color of the play button.                                                                                                        |
+| `--qc-thumbnail-play-button-background-opacity`       | `0.8`                              | The opacity of the play button when not hovered.                                                                                                |
+| `--qc-thumbnail-play-button-background-opacity-hover` | `1`                                | The opacity of the play button when hovered.                                                                                                    |
+| `--qc-dialog-backdrop`                                | `rgb(0 0 0 / 0.5)`                 | The color of the modal backdrop overlay.                                                                                                        |
+| `--qc-dialog-background-color`                        | `#000`                             | The background color of the modal container.                                                                                                    |
+| `--qc-dialog-border-color`                            | `#000`                             | The color of the modal border.                                                                                                                  |
+| `--qc-dialog-border-radius`                           | `0`                                | The border radius of the modal container.                                                                                                       |
+| `--qc-dialog-border-style`                            | `solid`                            | The border style of the modal container.                                                                                                        |
+| `--qc-dialog-border-width`                            | `3px`                              | The width of the modal border.                                                                                                                  |
+| `--qc-dialog-close-button-background-color`           | `var(--qc-theme-background-color)` | The background color of the close button.                                                                                                       |
+| `--qc-dialog-close-button-background-opacity`         | `0.8`                              | The opacity of the close button when not hovered.                                                                                               |
+| `--qc-dialog-close-button-background-opacity-hover`   | `1`                                | The opacity of the close button when hovered.                                                                                                   |
+| `--qc-dialog-close-button-color`                      | `var(--qc-theme-color)`            | The color of the close button icon.                                                                                                             |
+| `--qc-dialog-close-button-padding`                    | `6px`                              | The padding between the close icon and the button background.                                                                                   |
+| `--qc-dialog-close-button-shadow`                     | `0 0 1px 1px #000000`              | The box shadow of the close button.                                                                                                             |
+| `--qc-dialog-close-icon-size`                         | `20px`                             | The size of the close button icon.                                                                                                              |
+| `--qc-dialog-padding`                                 | `0`                                | The padding inside the modal container between the border and the content.                                                                      |
+| `--qc-dialog-width-max`                               | `1100px`                           | The maximum width of the modal.                                                                                                                 |
+| `--qc-dialog-width`                                   | `90vw`                             | The default width of the modal.                                                                                                                 |
+| `--qc-not-found-border-width`                         | `1px`                              | The border width of the “Not Found” message container.                                                                                          |
+| `--qc-not-found-border-style`                         | `solid`                            | The border style of the “Not Found” message container.                                                                                          |
+| `--qc-not-found-border-color`                         | `#cbd5dc`                          | The border color of the “Not Found” message container.                                                                                          |
+| `--qc-not-found-color`                                | `#09091a`                          | The text color of the “Not Found” message.                                                                                                      |
+| `--qc-not-found-icon-color`                           | `#cbd5dc`                          | The color of the “Not Found” icon.                                                                                                              |
+
+## Playground
+
+The [playground](/story/stories-widgets-presentation--playground) offers a live editor to try out different configurations. You can find the different properties in the Controls panel.
