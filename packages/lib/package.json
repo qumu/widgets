@@ -18,7 +18,6 @@
   "scripts": {
     "build": "vite build",
     "dev:watch": "vite build --watch",
-    "server": "vite",
     "lint": "eslint",
     "prepublishOnly": "node scripts/prepublishOnly.js",
     "test": "vitest run",
