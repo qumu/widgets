@@ -21,7 +21,7 @@ export class ConfigurationService {
     ['selector', 'host', 'guid', 'sortBy'].forEach((field) => {
       const value = initialConfiguration[field as keyof WidgetConfiguration];
 
-      if (Object.hasOwn(initialConfiguration, field) === false) {
+      if (!Object.hasOwn(initialConfiguration, field)) {
         return;
       }
 
