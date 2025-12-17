@@ -7,7 +7,7 @@ export interface WidgetConfiguration {
   host: string;
   playerParameters?: Partial<PlayerParameters>;
   selector: string | HTMLElement;
-  sortBy: string;
-  sortOrder: SortOrder;
+  sortBy?: string;
+  sortOrder?: SortOrder;
   widgetOptions?: Partial<WidgetOptions>;
 }

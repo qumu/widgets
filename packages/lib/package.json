@@ -16,11 +16,10 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-package-json.js",
     "dev:watch": "vite build --watch",
     "server": "vite",
     "lint": "eslint",
-    "prepublishOnly": "node scripts/prepublishOnly.js",
     "test": "vitest run",
     "test:cov": "vitest run --coverage",
     "test:watch": "vitest watch"

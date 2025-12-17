@@ -42,7 +42,7 @@ export class ConfigurationService {
       }
     });
 
-    if (Object.hasOwn(initialConfiguration, 'sortOrder') && !['ASCENDING', 'DESCENDING'].includes(initialConfiguration.sortOrder)) {
+    if (Object.hasOwn(initialConfiguration, 'sortOrder') && !['ASCENDING', 'DESCENDING'].includes(initialConfiguration.sortOrder!)) {
       throw new Error('`sortOrder` must be either "ASCENDING" or "DESCENDING"');
     }
 
