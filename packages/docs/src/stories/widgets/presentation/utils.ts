@@ -10,6 +10,7 @@ export interface Args {
   playIconHeight: WidgetOptions['playIcon']['height'];
   playIconUrl: WidgetOptions['playIcon']['url'];
   playerCaptions: PlayerParameters['captions'];
+  playerConfigurationGuid: PlayerParameters['playerConfigurationGuid'];
   playerDebug: PlayerParameters['debug'];
   playerLoop: PlayerParameters['loop'];
   playerView: PlayerParameters['pv'];
@@ -57,6 +58,10 @@ export function getPlaygroundConfigurationFromArgs(args: Partial<Args>): Omit<Wi
 
   if (args.playerCaptions) {
     playerParameters.captions = args.playerCaptions;
+  }
+
+  if (args.playerConfigurationGuid) {
+    playerParameters.playerConfigurationGuid = args.playerConfigurationGuid;
   }
 
   if (args.playerDebug !== undefined && args.playerDebug !== null) {
