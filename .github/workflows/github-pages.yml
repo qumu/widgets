@@ -39,7 +39,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.FE_CI_BOT_TOKEN }}
 
       - name: Build documentation website
-        run: npm run build --workspace lib && npm run build --workspace docs
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         # v4.0.0
