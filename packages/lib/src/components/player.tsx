@@ -41,10 +41,6 @@ export function PlayerComponent({ presentation, widgetOptions, playerParameters 
     url.searchParams.set(key, String(value));
   });
 
-  if (widgetOptions.playerConfigurationGuid) {
-    url.searchParams.set('playerConfigurationGuid', widgetOptions.playerConfigurationGuid);
-  }
-
   const iframe = (
     <iframe
         ref={iframeRef}

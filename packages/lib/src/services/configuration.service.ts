@@ -14,7 +14,6 @@ const supportedConfigFields = new Set([
 ]);
 const supportedWidgetFields = new Set([
   'playbackMode',
-  'playerConfigurationGuid',
   'playIcon',
   'onIframeLoad',
   'onThumbnailClick',
@@ -23,6 +22,7 @@ const supportedPlayerParameterFields = new Set([
   'captions',
   'debug',
   'loop',
+  'playerConfigurationGuid',
   'pv',
   'quality',
   'showControlPanel',

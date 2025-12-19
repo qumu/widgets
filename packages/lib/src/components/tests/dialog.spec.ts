@@ -40,7 +40,6 @@ describe('DialogComponent', () => {
 
   const mockOptions: Partial<WidgetOptions> = {
     playbackMode: 'modal' as const,
-    playerConfigurationGuid: 'test-config',
     playIcon: {
       height: 64,
       position: 'center',

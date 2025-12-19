@@ -923,7 +923,6 @@ describe('ConfigurationService', () => {
         selector: '#widget',
         widgetOptions: {
           playbackMode: 'modal',
-          playerConfigurationGuid: 'custom-guid',
           playIcon: {
             height: 100,
             position: 'top-right',

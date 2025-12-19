@@ -192,6 +192,7 @@ describe('PlayerComponent', () => {
         captions: 'en',
         debug: true,
         loop: true,
+        playerConfigurationGuid: 'config-guid-123',
         pv: 'sbs',
         quality: '720p',
         reporting: true,
@@ -214,29 +215,8 @@ describe('PlayerComponent', () => {
 
       expect(iframe).toHaveAttribute(
         'src',
-        'https://example.com/player?autoplay=false&captions=en&debug=true&loop=true&pv=sbs&quality=720p&reporting=true&reportingId=my-reporting-id-12345&showControlPanel=true&sidebar=true&speech=&speechTerm=&start=45&volume=50',
+        'https://example.com/player?autoplay=false&captions=en&debug=true&loop=true&playerConfigurationGuid=config-guid-123&pv=sbs&quality=720p&reporting=true&reportingId=my-reporting-id-12345&showControlPanel=true&sidebar=true&speech=&speechTerm=&start=45&volume=50',
       );
-    });
-  });
-
-  describe('widgetOptions', () => {
-    it('should set playerConfigurationGuid parameter when provided', () => {
-      const widgetOptions = {
-        ...mockConfiguration.widgetOptions as WidgetOptions,
-        playbackMode: 'inline-autoload',
-        playerConfigurationGuid: 'config-guid-123',
-      } as WidgetOptions;
-
-      render(createElement(PlayerComponent, {
-        playerParameters: {} as PlayerParameters,
-        presentation: mockPresentation,
-        widgetOptions,
-      }));
-
-      const iframe = screen.getByTitle('Test Presentation');
-
-      expect(iframe)
-        .toHaveAttribute('src', 'https://example.com/player?autoplay=false&playerConfigurationGuid=config-guid-123');
     });
   });
 });
