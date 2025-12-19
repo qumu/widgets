@@ -32,13 +32,13 @@ export const Basic: Story = {
   <head>
     <meta charset="UTF-8"/>
     <title>Presentation Widget</title>
-    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widgets@${version}/presentation-widget.css">
+    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widgets@${version}/dist/presentation-widget.css">
   </head>
   <body>
     <div id="widget"></div>
 
     <script type="module">
-      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@${version}/presentation-widget.js';
+      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@${version}/dist/presentation-widget.js';
 
       PresentationWidget.create({
         guid: 'JN6JHrg17xpwF8klXSIfFj',
@@ -81,13 +81,13 @@ export const PlaybackThumbnail: Story = {
   <head>
     <meta charset="UTF-8"/>
     <title>Presentation Widget</title>
-    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widgets@${version}/presentation-widget.css">
+    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widgets@${version}/dist/presentation-widget.css">
   </head>
   <body>
     <div id="widget"></div>
 
     <script type="module">
-      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@${version}/presentation-widget.js';
+      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@${version}/dist/presentation-widget.js';
 
       PresentationWidget.create({
         guid: 'JN6JHrg17xpwF8klXSIfFj',
@@ -165,13 +165,13 @@ export const CustomPlayIcon: Story = {
   <head>
     <meta charset="UTF-8"/>
     <title>Presentation Widget</title>
-    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widgets@${version}/presentation-widget.css">
+    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widgets@${version}/dist/presentation-widget.css">
   </head>
   <body>
     <div id="widget"></div>
 
     <script type="module">
-      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@${version}/presentation-widget.js';
+      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@${version}/dist/presentation-widget.js';
 
       PresentationWidget.create({
         guid: 'JN6JHrg17xpwF8klXSIfFj',
@@ -231,13 +231,13 @@ export const PlayerSdk: Story = {
   <head>
     <meta charset="UTF-8"/>
     <title>Presentation Widget</title>
-    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widgets@${version}/presentation-widget.css">
+    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widgets@${version}/dist/presentation-widget.css">
   </head>
   <body>
     <div id="widget"></div>
 
     <script type="module">
-      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@${version}/presentation-widget.js';
+      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@${version}/dist/presentation-widget.js';
       import { PlayerSdk } from "https://unpkg.com/@enghouse-qumu/player-sdk@3.2.1/dist/index.modern.mjs";
 
       PresentationWidget.create({
