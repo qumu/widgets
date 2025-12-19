@@ -19,48 +19,46 @@ html:has(.qc-dialog dialog[open]) {
 
     dialog {
       background-color: var(--qc-dialog-background-color);
-      border-color: var(--qc-dialog-border-color);
+      border: var(--qc-dialog-border);
       border-radius: var(--qc-dialog-border-radius);
-      border-style: var(--qc-dialog-border-style);
-      border-width: var(--qc-dialog-border-width);
-      max-width: var(--qc-dialog-width-max);
+      max-width: var(--qc-dialog-max-width);
       overflow: visible;
       padding: var(--qc-dialog-padding);
       width: var(--qc-dialog-width);
 
       &::backdrop {
-        background-color: var(--qc-dialog-backdrop);
+        background-color: var(--qc-dialog-backdrop-color);
       }
     }
 
     &__close-button {
-      background-color: rgb(from var(--qc-dialog-close-button-background-color) r g b / var(--qc-dialog-close-button-background-opacity));
+      background-color: rgb(from var(--qc-close-button-background-color) r g b / var(--qc-close-button-opacity));
       border-radius: 100%;
       border: none;
-      box-shadow: var(--qc-dialog-close-button-shadow);
-      color: var(--qc-dialog-close-button-color);
+      box-shadow: var(--qc-close-button-shadow);
+      color: var(--qc-close-button-color);
       cursor: pointer;
       display: flex;
-      height: var(--qc-dialog-close-button-height);
-      padding: var(--qc-dialog-close-button-padding);
+      height: var(--qc-close-button-height);
+      padding: var(--qc-close-button-padding);
       place-items: center;
       position: absolute;
       right: 0;
       top: 0;
       transform: translate(75%, -75%);
-      width: var(--qc-dialog-close-button-width);
+      width: var(--qc-close-button-width);
       z-index: 1;
 
       &:active,
       &:focus-visible,
       &:hover {
-        background-color: rgb(from var(--qc-dialog-close-button-background-color) r g b / var(--qc-dialog-close-button-background-opacity-hover));
+        background-color: rgb(from var(--qc-close-button-background-color) r g b / var(--qc-close-button-hover-opacity));
       }
 
       svg {
-        height: var(--qc-dialog-close-icon-size);
+        height: var(--qc-close-button-icon-size);
         position: relative;
-        width: var(--qc-dialog-close-icon-size);
+        width: var(--qc-close-button-icon-size);
       }
     }
   }

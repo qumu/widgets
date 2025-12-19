@@ -332,7 +332,7 @@ export const Playground: Story = {
     guid: 'JN6JHrg17xpwF8klXSIfFj',
     playbackMode: 'inline',
     playIconPosition: 'center',
-    cssVars: DEFAULT_CSS_VARIABLES,
+    cssVars: DEFAULT_CSS_VARIABLES.trim(),
     /* eslint-enable sort-keys */
   },
   argTypes: {
