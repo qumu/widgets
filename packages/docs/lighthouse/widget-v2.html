@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>Qumu Widgets: New Version</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widgets@1.0.0-beta.10/presentation-widget.css">
+    <link rel="stylesheet" href="./dist/presentation-widget.css">
   </head>
   <body>
     <main>
       <div id="widget"></div>
     </main>
     <script type="module">
-      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@1.0.0-beta.10/presentation-widget.js';
+      import { PresentationWidget } from './dist/presentation-widget.js';
 
       PresentationWidget.create({
         selector: '#widget',

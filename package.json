@@ -14,7 +14,8 @@
     "url": "https://github.com/qumu/widgets/issues"
   },
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present && npm run copy-dist",
+    "copy-dist": "node -e \"require('fs').cpSync('./packages/lib/dist', './packages/docs/lighthouse/dist', {recursive: true, force: true})\"",
     "dev:watch": "npm run dev:watch --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "server": "npm run server -w lib"
