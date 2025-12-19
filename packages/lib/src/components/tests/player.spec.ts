@@ -138,11 +138,11 @@ describe('PlayerComponent', () => {
     expect(container.querySelector('iframe')).toBeInTheDocument();
   });
 
-  it('should call onIframeLoaded when iframe loads', () => {
-    const onIframeLoaded = vi.fn();
+  it('should call onIframeLoad when iframe loads', () => {
+    const onIframeLoad = vi.fn();
     const widgetOptions: WidgetOptions = {
       ...mockConfiguration.widgetOptions as WidgetOptions,
-      onIframeLoaded,
+      onIframeLoad,
       playbackMode: 'inline-autoload',
     } as WidgetOptions;
 
@@ -156,7 +156,7 @@ describe('PlayerComponent', () => {
 
     fireEvent.load(iframe);
 
-    expect(onIframeLoaded).toHaveBeenCalledWith(iframe);
+    expect(onIframeLoad).toHaveBeenCalledWith(iframe);
   });
 
   it('should throw an error when no player parameter is provided in the presentation', async () => {

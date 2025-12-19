@@ -5,6 +5,6 @@ export interface WidgetOptions {
   playbackMode: 'inline' | 'inline-autoload' | 'inline-autoplay' | 'modal';
   playerConfigurationGuid: string;
   playIcon: Partial<PlayIcon>;
-  onIframeLoaded(iframe: HTMLIFrameElement): void;
+  onIframeLoad(iframe: HTMLIFrameElement): void;
   onThumbnailClick(presentation: Presentation): void;
 }

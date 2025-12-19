@@ -22,5 +22,6 @@ const config: StorybookConfig = {
     interactions: false,
   },
   framework: getAbsolutePath('@storybook/web-components-vite'),
+  staticDirs: ['../lighthouse'],
 };
 export default config;

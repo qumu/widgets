@@ -22,7 +22,7 @@ export function PlayerComponent({ presentation, widgetOptions, playerParameters 
     const iframe = iframeRef.current;
 
     const handleLoad = () => {
-      widgetOptions.onIframeLoaded?.(iframe);
+      widgetOptions.onIframeLoad?.(iframe);
     };
 
     iframe.addEventListener('load', handleLoad);

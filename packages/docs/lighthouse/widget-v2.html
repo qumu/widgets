@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Qumu Widgets: New Version</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./dist/presentation-widget.css">
+  </head>
+  <body>
+    <main>
+      <div id="widget"></div>
+    </main>
+    <script type="module">
+      import { PresentationWidget } from './dist/presentation-widget.js';
+
+      PresentationWidget.create({
+        selector: '#widget',
+        guid: 'JN6JHrg17xpwF8klXSIfFj',
+        host: 'demo.qumucloud.com',
+      });
+    </script>
+  </body>
+</html>

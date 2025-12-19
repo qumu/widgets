@@ -659,23 +659,23 @@ describe('ConfigurationService', () => {
       });
     });
 
-    describe('onIframeLoaded validation', () => {
-      it('should throw error when onIframeLoaded is not a function', () => {
+    describe('onIframeLoad validation', () => {
+      it('should throw error when onIframeLoad is not a function', () => {
         const invalidValues = ['', 123, true, null, {}];
 
         invalidValues.forEach((value) => {
           expect(() => configurationService.validateWidgetOptions({
-            onIframeLoaded: value as unknown as WidgetOptions['onIframeLoaded'],
+            onIframeLoad: value as unknown as WidgetOptions['onIframeLoad'],
             playbackMode: 'modal',
           } as WidgetOptions)).toThrow(
-            '`widgetOptions.onIframeLoaded` must be a function',
+            '`widgetOptions.onIframeLoad` must be a function',
           );
         });
       });
 
-      it('should allow onIframeLoaded to be a function', () => {
+      it('should allow onIframeLoad to be a function', () => {
         expect(() => configurationService.validateWidgetOptions({
-          onIframeLoaded: () => {},
+          onIframeLoad: () => {},
           playbackMode: 'modal',
         } as Partial<WidgetOptions>)).not.toThrow();
       });
