@@ -7,7 +7,35 @@ const supportedWidgetFields = new Set(['playbackMode', 'playerConfigurationGuid'
 const supportedPlayerParameterFields = new Set(['captions', 'debug', 'loop', 'pv', 'quality', 'showControlPanel', 'sidebar', 'speech', 'speechTerm', 'start', 'volume', 'reporting', 'reportingId']);
 
 export class ConfigurationService {
-  validateAndSanitize(initialConfiguration: WidgetConfiguration): WidgetConfiguration {
+  createConfiguration(initialConfiguration: WidgetConfiguration): WidgetConfiguration {
+    const configuration = this.validateAndSanitize(initialConfiguration);
+
+    const widgetOptions = {
+      playbackMode: 'inline',
+      ...configuration.widgetOptions,
+      playIcon: {
+        height: 44,
+        position: 'center',
+        width: 44,
+        ...configuration.widgetOptions?.playIcon,
+      },
+    } as WidgetOptions;
+
+    const playerParameters = {
+      ...configuration.playerParameters,
+    };
+
+    return {
+      ...configuration,
+      host: configuration.host
+        .replace('https://', '')
+        .split('/')[0],
+      playerParameters,
+      widgetOptions,
+    };
+  }
+
+  private validateAndSanitize(initialConfiguration: WidgetConfiguration): WidgetConfiguration {
     if (!initialConfiguration || typeof initialConfiguration !== 'object') {
       throw new Error('Configuration must be a valid object');
     }
@@ -76,7 +104,7 @@ export class ConfigurationService {
     return configuration;
   }
 
-  validatePlayerParameters(playerParameters: Partial<PlayerParameters> | undefined): void {
+  private validatePlayerParameters(playerParameters: Partial<PlayerParameters> | undefined): void {
     if (!playerParameters) {
       return;
     }
@@ -94,11 +122,11 @@ export class ConfigurationService {
     }
 
     if (playerParameters.quality !== undefined && !['240p', '480p', '720p', '1080p', '1440p', 'auto', 'best'].includes(playerParameters.quality)) {
-      throw new Error('`playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p" or "auto"');
+      throw new Error('`playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p", "auto" or "best"');
     }
   }
 
-  validateWidgetOptions(widgetOptions: Partial<WidgetOptions> | undefined): void {
+  private validateWidgetOptions(widgetOptions: Partial<WidgetOptions> | undefined): void {
     if (!widgetOptions) {
       return;
     }
@@ -146,31 +174,5 @@ export class ConfigurationService {
         throw new TypeError('`widgetOptions.onThumbnailClick` must be a function');
       }
     }
-  }
-
-  setDefaults(initialConfiguration: WidgetConfiguration): WidgetConfiguration {
-    const widgetOptions = {
-      playbackMode: 'inline',
-      ...initialConfiguration.widgetOptions,
-      playIcon: {
-        height: 44,
-        position: 'center',
-        width: 44,
-        ...initialConfiguration.widgetOptions?.playIcon,
-      },
-    } as WidgetOptions;
-
-    const playerParameters = {
-      ...initialConfiguration.playerParameters,
-    };
-
-    return {
-      ...initialConfiguration,
-      host: initialConfiguration.host
-        .replace('https://', '')
-        .split('/')[0],
-      playerParameters,
-      widgetOptions,
-    };
   }
 }

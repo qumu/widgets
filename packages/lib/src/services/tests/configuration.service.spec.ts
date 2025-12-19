@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vitest, Mock, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, Mock, vitest } from 'vitest';
 import { ConfigurationService } from '../configuration.service';
 import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { WidgetOptions } from '@/interfaces/widget-options';
@@ -17,7 +17,7 @@ describe('ConfigurationService', () => {
     consoleWarnSpy.mockRestore();
   });
 
-  describe('validateAndSanitize', () => {
+  describe('createConfiguration', () => {
     const validConfiguration = {
       guid: 'test-guid-123',
       host: 'example.com',
@@ -25,19 +25,19 @@ describe('ConfigurationService', () => {
     } as unknown as WidgetConfiguration;
 
     it('should end silently when no errors occur', () => {
-      expect(() => configurationService.validateAndSanitize(validConfiguration)).not.toThrow();
+      expect(() => configurationService.createConfiguration(validConfiguration)).not.toThrow();
     });
 
     it('should throw error when configuration is not an object', () => {
-      expect(() => configurationService.validateAndSanitize(null as unknown as WidgetConfiguration)).toThrow(
+      expect(() => configurationService.createConfiguration(null as unknown as WidgetConfiguration)).toThrow(
         'Configuration must be a valid object',
       );
 
-      expect(() => configurationService.validateAndSanitize(42 as unknown as WidgetConfiguration)).toThrow(
+      expect(() => configurationService.createConfiguration(42 as unknown as WidgetConfiguration)).toThrow(
         'Configuration must be a valid object',
       );
 
-      expect(() => configurationService.validateAndSanitize('invalid' as unknown as WidgetConfiguration)).toThrow(
+      expect(() => configurationService.createConfiguration('invalid' as unknown as WidgetConfiguration)).toThrow(
         'Configuration must be a valid object',
       );
     });
@@ -48,7 +48,7 @@ describe('ConfigurationService', () => {
         extraField: 'not-supported',
       } as unknown as WidgetConfiguration;
 
-      expect(() => configurationService.validateAndSanitize(configWithExtraField)).not.toThrow();
+      expect(() => configurationService.createConfiguration(configWithExtraField)).not.toThrow();
       expect(consoleWarnSpy).toHaveBeenCalledWith('Unsupported field `extraField` in configuration');
     });
 
@@ -60,7 +60,7 @@ describe('ConfigurationService', () => {
         },
       } as unknown as WidgetConfiguration;
 
-      expect(() => configurationService.validateAndSanitize(configWithExtraField)).not.toThrow();
+      expect(() => configurationService.createConfiguration(configWithExtraField)).not.toThrow();
       expect(consoleWarnSpy).toHaveBeenCalledWith('Unsupported field `widgetOptions.extraField` in configuration');
     });
 
@@ -83,7 +83,7 @@ describe('ConfigurationService', () => {
 
       const inputConfigCopy = JSON.parse(JSON.stringify(inputConfig)) as unknown as WidgetConfiguration;
 
-      configurationService.validateAndSanitize(inputConfig);
+      configurationService.createConfiguration(inputConfig);
 
       expect(inputConfig).toEqual(inputConfigCopy);
     });
@@ -94,7 +94,7 @@ describe('ConfigurationService', () => {
 
         delete (config as Record<string, unknown>).selector;
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`selector` is not defined in the configuration',
         );
       });
@@ -105,7 +105,7 @@ describe('ConfigurationService', () => {
           selector: null as unknown as string,
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`selector` is undefined or null',
         );
       });
@@ -116,7 +116,7 @@ describe('ConfigurationService', () => {
           selector: 123 as unknown as string,
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`selector` must be a string or an instance of HTMLElement',
         );
       });
@@ -127,7 +127,7 @@ describe('ConfigurationService', () => {
           selector: '',
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`selector` cannot be an empty string',
         );
       });
@@ -138,7 +138,7 @@ describe('ConfigurationService', () => {
           selector: '   ',
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`selector` cannot be an empty string',
         );
       });
@@ -150,7 +150,7 @@ describe('ConfigurationService', () => {
 
         delete (config as Record<string, unknown>).host;
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`host` is not defined in the configuration',
         );
       });
@@ -161,7 +161,7 @@ describe('ConfigurationService', () => {
           host: null as unknown as string,
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`host` is undefined or null',
         );
       });
@@ -172,7 +172,7 @@ describe('ConfigurationService', () => {
           host: 42 as unknown as string,
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`host` must be a string',
         );
       });
@@ -183,7 +183,7 @@ describe('ConfigurationService', () => {
           host: '',
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`host` cannot be an empty string',
         );
       });
@@ -194,7 +194,7 @@ describe('ConfigurationService', () => {
           host: '   ',
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`host` cannot be an empty string',
         );
       });
@@ -213,7 +213,7 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
+          expect(() => configurationService.createConfiguration(config)).not.toThrow();
         });
       });
 
@@ -223,7 +223,7 @@ describe('ConfigurationService', () => {
           host: 'https://example.com',
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
+        expect(() => configurationService.createConfiguration(config)).not.toThrow();
       });
 
       it('should throw error for invalid domain names', () => {
@@ -240,7 +240,7 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validateAndSanitize(config)).toThrow(
+          expect(() => configurationService.createConfiguration(config)).toThrow(
             '`host` must be a valid domain name',
           );
         });
@@ -259,7 +259,7 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validateAndSanitize(config)).toThrow(
+          expect(() => configurationService.createConfiguration(config)).toThrow(
             '`host` cannot be an empty string',
           );
         });
@@ -282,7 +282,7 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
+          expect(() => configurationService.createConfiguration(config)).not.toThrow();
         });
       });
     });
@@ -293,7 +293,7 @@ describe('ConfigurationService', () => {
 
         delete (config as Record<string, unknown>).guid;
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`guid` is not defined in the configuration',
         );
       });
@@ -304,7 +304,7 @@ describe('ConfigurationService', () => {
           guid: null as unknown as string,
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`guid` is undefined or null',
         );
       });
@@ -315,7 +315,7 @@ describe('ConfigurationService', () => {
           guid: true as unknown as string,
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`guid` must be a string',
         );
       });
@@ -326,7 +326,7 @@ describe('ConfigurationService', () => {
           guid: '',
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`guid` cannot be an empty string',
         );
       });
@@ -337,7 +337,7 @@ describe('ConfigurationService', () => {
           guid: '   ',
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`guid` cannot be an empty string',
         );
       });
@@ -358,7 +358,7 @@ describe('ConfigurationService', () => {
             guid,
           };
 
-          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
+          expect(() => configurationService.createConfiguration(config)).not.toThrow();
         });
       });
     });
@@ -373,7 +373,7 @@ describe('ConfigurationService', () => {
             sortOrder: sortOrder as unknown as 'ASCENDING' | 'DESCENDING',
           };
 
-          expect(() => configurationService.validateAndSanitize(config)).toThrow(
+          expect(() => configurationService.createConfiguration(config)).toThrow(
             '`sortOrder` must be either "ASCENDING" or "DESCENDING"',
           );
         });
@@ -388,7 +388,7 @@ describe('ConfigurationService', () => {
             sortOrder: sortOrder as 'ASCENDING' | 'DESCENDING',
           };
 
-          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
+          expect(() => configurationService.createConfiguration(config)).not.toThrow();
         });
       });
     });
@@ -400,7 +400,7 @@ describe('ConfigurationService', () => {
           sortBy: 123 as unknown as string,
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`sortBy` must be a string',
         );
       });
@@ -411,7 +411,7 @@ describe('ConfigurationService', () => {
           sortBy: '',
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`sortBy` cannot be an empty string',
         );
       });
@@ -422,7 +422,7 @@ describe('ConfigurationService', () => {
           sortBy: '   ',
         };
 
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`sortBy` cannot be an empty string',
         );
       });
@@ -437,7 +437,7 @@ describe('ConfigurationService', () => {
         } as unknown as WidgetConfiguration;
 
         // Should throw because host validation fails with spaces
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`host` must be a valid domain name',
         );
       });
@@ -449,7 +449,7 @@ describe('ConfigurationService', () => {
           selector: '#my-widget',
         } as unknown as WidgetConfiguration;
 
-        expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
+        expect(() => configurationService.createConfiguration(config)).not.toThrow();
       });
 
       it('should validate all required fields in sequence', () => {
@@ -460,7 +460,7 @@ describe('ConfigurationService', () => {
         } as unknown as WidgetConfiguration;
 
         // Should throw for the first field it encounters (selector)
-        expect(() => configurationService.validateAndSanitize(config)).toThrow(
+        expect(() => configurationService.createConfiguration(config)).toThrow(
           '`selector` is undefined or null',
         );
       });
@@ -480,7 +480,7 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
+          expect(() => configurationService.createConfiguration(config)).not.toThrow();
         });
       });
 
@@ -498,25 +498,45 @@ describe('ConfigurationService', () => {
             host,
           };
 
-          expect(() => configurationService.validateAndSanitize(config)).not.toThrow();
+          expect(() => configurationService.createConfiguration(config)).not.toThrow();
         });
       });
     });
   });
 
-  describe('validatePlayerParameters', () => {
+  describe('createConfiguration', () => {
     it('should end silently when playerParameters is undefined, null or empty', () => {
-      expect(() => configurationService.validatePlayerParameters(undefined)).not.toThrow();
-      expect(() => configurationService.validatePlayerParameters(null as unknown as undefined)).not.toThrow();
-      expect(() => configurationService.validatePlayerParameters({})).not.toThrow();
+      expect(() => configurationService.createConfiguration({
+        guid: 'foo',
+        host: 'example.com',
+        playerParameters: undefined,
+        selector: '#widget',
+      })).not.toThrow();
+      expect(() => configurationService.createConfiguration({
+        guid: 'foo',
+        host: 'example.com',
+        playerParameters: null as unknown as PlayerParameters,
+        selector: '#widget',
+      })).not.toThrow();
+      expect(() => configurationService.createConfiguration({
+        guid: 'foo',
+        host: 'example.com',
+        playerParameters: {},
+        selector: '#widget',
+      })).not.toThrow();
     });
 
     it('should warn for unsupported fields in playerParameters', () => {
-      const playerParametersWithExtraField = {
-        extraField: 'not-supported',
-      } as unknown as Record<string, unknown>;
+      const configuration = {
+        guid: 'foo',
+        host: 'example.com',
+        playerParameters: {
+          extraField: 'not-supported',
+        },
+        selector: '#widget',
+      } as unknown as WidgetConfiguration;
 
-      expect(() => configurationService.validatePlayerParameters(playerParametersWithExtraField)).not.toThrow();
+      expect(() => configurationService.createConfiguration(configuration)).not.toThrow();
       expect(consoleWarnSpy).toHaveBeenCalledWith('Unsupported field `playerParameters.extraField` in configuration');
     });
 
@@ -524,11 +544,16 @@ describe('ConfigurationService', () => {
       const invalidPVs = ['invalid', 'PIPLS', '', 123, true, null, {}];
 
       invalidPVs.forEach((pv) => {
-        const playerParameters = {
-          pv: pv as unknown as string,
-        } as unknown as Record<string, unknown>;
+        const configuration = {
+          guid: 'foo',
+          host: 'example.com',
+          playerParameters: {
+            pv: pv as unknown as PlayerParameters['pv'],
+          },
+          selector: '#widget',
+        };
 
-        expect(() => configurationService.validatePlayerParameters(playerParameters)).toThrow(
+        expect(() => configurationService.createConfiguration(configuration)).toThrow(
           '`playerParameters.pv` must be either "pipls", "pipss" or "sbs"',
         );
       });
@@ -538,81 +563,173 @@ describe('ConfigurationService', () => {
       const validPVs = ['pipls', 'pipss', 'sbs'];
 
       validPVs.forEach((pv) => {
-        const playerParameters = {
-          pv,
-        } as unknown as Record<string, unknown>;
+        const configuration = {
+          guid: 'foo',
+          host: 'example.com',
+          playerParameters: {
+            pv: pv as PlayerParameters['pv'],
+          },
+          selector: '#widget',
+        };
 
-        expect(() => configurationService.validatePlayerParameters(playerParameters)).not.toThrow();
+        expect(() => configurationService.createConfiguration(configuration)).not.toThrow();
       });
     });
 
-    it('should throw no error when quality has invalid value', () => {
-      const playerParameters = {
-        quality: 'high',
-      };
-
-      expect(() => configurationService.validatePlayerParameters(playerParameters as unknown as PlayerParameters)).toThrow(
-        '`playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p" or "auto"',
+    it('should throw an error when quality has invalid value', () => {
+      expect(() => configurationService.createConfiguration({
+        guid: 'foo',
+        host: 'example.com',
+        playerParameters: {
+          quality: 'high' as PlayerParameters['quality'],
+        },
+        selector: '#widget',
+      })).toThrow(
+        '`playerParameters.quality` must be either "240p", "480p", "720p", "1080p", "1440p", "auto" or "best"',
       );
     });
 
     it('should accept valid quality values', () => {
-      const validQualities = ['240p', '480p', '720p', '1080p', '1440p', 'auto'];
+      const validQualities = ['240p', '480p', '720p', '1080p', '1440p', 'auto', 'best'];
 
       validQualities.forEach((quality) => {
-        const playerParameters = {
-          quality,
-        } as unknown as Record<string, unknown>;
+        const configuration = {
+          guid: 'foo',
+          host: 'example.com',
+          playerParameters: {
+            quality: quality as PlayerParameters['quality'],
+          },
+          selector: '#widget',
+        };
 
-        expect(() => configurationService.validatePlayerParameters(playerParameters)).not.toThrow();
+        expect(() => configurationService.createConfiguration(configuration)).not.toThrow();
       });
     });
   });
 
-  describe('validateWidgetOptions', () => {
+  describe('createConfiguration', () => {
     it('should end silently when widgetOptions is undefined, null or empty', () => {
-      expect(() => configurationService.validateWidgetOptions(undefined)).not.toThrow();
-      expect(() => configurationService.validateWidgetOptions(null as unknown as undefined)).not.toThrow();
-      expect(() => configurationService.validateWidgetOptions({})).not.toThrow();
+      expect(() => configurationService.createConfiguration({
+        guid: 'foo',
+        host: 'example.com',
+        selector: '#widget',
+        widgetOptions: undefined,
+      })).not.toThrow();
+      expect(() => configurationService.createConfiguration({
+        guid: 'foo',
+        host: 'example.com',
+        selector: '#widget',
+        widgetOptions: null as unknown as WidgetOptions,
+      })).not.toThrow();
+      expect(() => configurationService.createConfiguration({
+        guid: 'foo',
+        host: 'example.com',
+        selector: '#widget',
+        widgetOptions: {},
+      })).not.toThrow();
     });
 
     describe('playbackMode validation', () => {
       it('should accept valid playbackMode values', () => {
-        expect(() => configurationService.validateWidgetOptions({ playbackMode: 'inline' })).not.toThrow();
-        expect(() => configurationService.validateWidgetOptions({ playbackMode: 'inline-autoload' })).not.toThrow();
-        expect(() => configurationService.validateWidgetOptions({ playbackMode: 'inline-autoplay' })).not.toThrow();
-        expect(() => configurationService.validateWidgetOptions({ playbackMode: 'modal' })).not.toThrow();
+        expect(() => configurationService.createConfiguration({
+          guid: 'foo',
+          host: 'example.com',
+          selector: '#widget',
+          widgetOptions: {
+            playbackMode: 'inline',
+          },
+        })).not.toThrow();
+        expect(() => configurationService.createConfiguration({
+          guid: 'foo',
+          host: 'example.com',
+          selector: '#widget',
+          widgetOptions: {
+            playbackMode: 'inline-autoload',
+          },
+        })).not.toThrow();
+        expect(() => configurationService.createConfiguration({
+          guid: 'foo',
+          host: 'example.com',
+          selector: '#widget',
+          widgetOptions: {
+            playbackMode: 'inline-autoplay',
+          },
+        })).not.toThrow();
+        expect(() => configurationService.createConfiguration({
+          guid: 'foo',
+          host: 'example.com',
+          selector: '#widget',
+          widgetOptions: {
+            playbackMode: 'modal',
+          },
+        })).not.toThrow();
       });
 
       it('should throw error when playbackMode is invalid', () => {
         const invalidValues = ['fullscreen', 'popup', '', 123, true, null, {}];
 
         invalidValues.forEach((value) => {
-          expect(() => configurationService.validateWidgetOptions({ playbackMode: value as unknown as WidgetOptions['playbackMode'] })).toThrow(
+          expect(() => configurationService.createConfiguration({
+            guid: 'foo',
+            host: 'example.com',
+            selector: '#widget',
+            widgetOptions: {
+              playbackMode: value as unknown as WidgetOptions['playbackMode'],
+            },
+          })).toThrow(
             '`widgetOptions.playbackMode` must be either "inline", "inline-autoload", "inline-autoplay" or "modal"',
           );
         });
       });
 
       it('should allow undefined playbackMode', () => {
-        expect(() => configurationService.validateWidgetOptions({ playbackMode: undefined })).not.toThrow();
+        expect(() => configurationService.createConfiguration({
+          guid: 'foo',
+          host: 'example.com',
+          selector: '#widget',
+          widgetOptions: {
+            playbackMode: undefined,
+          },
+        })).not.toThrow();
       });
     });
 
     describe('position validation', () => {
       it('should accept valid playIcon.position values', () => {
-        const validPositions = ['center', 'top', 'top-right', 'right', 'bottom-right', 'bottom', 'bottom-left', 'left', 'top-left'];
+        const validPositions = [
+          'center',
+          'top',
+          'top-right',
+          'right',
+          'bottom-right',
+          'bottom',
+          'bottom-left',
+          'left',
+          'top-left',
+        ];
 
         validPositions.forEach((position) => {
-          expect(() => configurationService.validateWidgetOptions({
-            playIcon: { position: position as WidgetOptions['playIcon']['position'] },
-          } as WidgetOptions)).not.toThrow();
+          expect(() => configurationService.createConfiguration({
+            guid: 'foo',
+            host: 'example.com',
+            selector: '#widget',
+            widgetOptions: {
+              playIcon: {
+                position: position as WidgetOptions['playIcon']['position'],
+              },
+            },
+          })).not.toThrow();
         });
       });
 
       it('should allow undefined playIcon.position', () => {
-        expect(() => configurationService.validateWidgetOptions({
-          playIcon: {} as WidgetOptions['playIcon'],
+        expect(() => configurationService.createConfiguration({
+          guid: 'foo',
+          host: 'example.com',
+          selector: '#widget',
+          widgetOptions: {
+            playIcon: {},
+          },
         })).not.toThrow();
       });
 
@@ -620,9 +737,16 @@ describe('ConfigurationService', () => {
         const invalidPositions = ['middle', 'upper-left', 'bottom-center', '', 123, true, null, {}];
 
         invalidPositions.forEach((position) => {
-          expect(() => configurationService.validateWidgetOptions({
-            playIcon: { position: position as unknown as WidgetOptions['playIcon']['position'] },
-          } as WidgetOptions)).toThrow(
+          expect(() => configurationService.createConfiguration({
+            guid: 'foo',
+            host: 'example.com',
+            selector: '#widget',
+            widgetOptions: {
+              playIcon: {
+                position: position as WidgetOptions['playIcon']['position'],
+              },
+            },
+          })).toThrow(
             '`widgetOptions.playIcon.position` must be a valid position value',
           );
         });
@@ -634,12 +758,20 @@ describe('ConfigurationService', () => {
         const unsupportedModes = ['inline-autoload', 'inline-autoplay', undefined];
 
         unsupportedModes.forEach((mode) => {
-          expect(() => configurationService.validateWidgetOptions({
-            playbackMode: mode,
-            playIcon: { url: 'https://example.com/play-icon.png' },
-          } as WidgetOptions)).not.toThrow();
+          expect(() => configurationService.createConfiguration({
+            guid: 'foo',
+            host: 'example.com',
+            selector: '#widget',
+            widgetOptions: {
+              playbackMode: mode as WidgetOptions['playbackMode'],
+              playIcon: {
+                url: 'https://example.com/play-icon.png',
+              },
+            },
+          })).not.toThrow();
 
-          expect(consoleWarnSpy).toHaveBeenCalledWith('`widgetOptions.playIcon` is only applicable when `widgetOptions.playbackMode` is either "modal" or "inline"');
+          expect(consoleWarnSpy)
+            .toHaveBeenCalledWith('`widgetOptions.playIcon` is only applicable when `widgetOptions.playbackMode` is either "modal" or "inline"');
         });
       });
 
@@ -649,10 +781,15 @@ describe('ConfigurationService', () => {
         supportedModes.forEach((mode) => {
           consoleWarnSpy.mockClear();
 
-          expect(() => configurationService.validateWidgetOptions({
-            playbackMode: mode as WidgetOptions['playbackMode'],
-            playIcon: { url: 'https://example.com/play-icon.png' },
-          } as WidgetOptions)).not.toThrow();
+          expect(() => configurationService.createConfiguration({
+            guid: 'foo',
+            host: 'example.com',
+            selector: '#widget',
+            widgetOptions: {
+              playbackMode: mode as WidgetOptions['playbackMode'],
+              playIcon: { url: 'https://example.com/play-icon.png' },
+            },
+          })).not.toThrow();
 
           expect(consoleWarnSpy).not.toHaveBeenCalled();
         });
@@ -664,20 +801,30 @@ describe('ConfigurationService', () => {
         const invalidValues = ['', 123, true, null, {}];
 
         invalidValues.forEach((value) => {
-          expect(() => configurationService.validateWidgetOptions({
-            onIframeLoad: value as unknown as WidgetOptions['onIframeLoad'],
-            playbackMode: 'modal',
-          } as WidgetOptions)).toThrow(
+          expect(() => configurationService.createConfiguration({
+            guid: 'foo',
+            host: 'example.com',
+            selector: '#widget',
+            widgetOptions: {
+              onIframeLoad: value as unknown as WidgetOptions['onIframeLoad'],
+              playbackMode: 'modal',
+            },
+          })).toThrow(
             '`widgetOptions.onIframeLoad` must be a function',
           );
         });
       });
 
       it('should allow onIframeLoad to be a function', () => {
-        expect(() => configurationService.validateWidgetOptions({
-          onIframeLoad: () => {},
-          playbackMode: 'modal',
-        } as Partial<WidgetOptions>)).not.toThrow();
+        expect(() => configurationService.createConfiguration({
+          guid: 'foo',
+          host: 'example.com',
+          selector: '#widget',
+          widgetOptions: {
+            onIframeLoad: () => {},
+            playbackMode: 'modal',
+          },
+        })).not.toThrow();
       });
     });
 
@@ -686,10 +833,15 @@ describe('ConfigurationService', () => {
         const invalidValues = ['', 123, true, null, {}];
 
         invalidValues.forEach((value) => {
-          expect(() => configurationService.validateWidgetOptions({
-            onThumbnailClick: value as unknown as WidgetOptions['onThumbnailClick'],
-            playbackMode: 'inline',
-          } as WidgetOptions)).toThrow(
+          expect(() => configurationService.createConfiguration({
+            guid: 'foo',
+            host: 'example.com',
+            selector: '#widget',
+            widgetOptions: {
+              onThumbnailClick: value as WidgetOptions['onThumbnailClick'],
+              playbackMode: 'inline',
+            },
+          })).toThrow(
             '`widgetOptions.onThumbnailClick` must be a function',
           );
         });
@@ -699,49 +851,60 @@ describe('ConfigurationService', () => {
         const unsupportedModes = ['inline-autoload', 'inline-autoplay', 'modal', undefined];
 
         unsupportedModes.forEach((mode) => {
-          expect(() => configurationService.validateWidgetOptions({
-            onThumbnailClick: () => {},
-            playbackMode: mode,
-          } as unknown as WidgetOptions)).not.toThrow();
+          expect(() => configurationService.createConfiguration({
+            guid: 'foo',
+            host: 'example.com',
+            selector: '#widget',
+            widgetOptions: {
+              onThumbnailClick: () => {},
+              playbackMode: mode as WidgetOptions['playbackMode'],
+            },
+          })).not.toThrow();
 
-          expect(consoleWarnSpy).toHaveBeenCalledWith('`widgetOptions.onThumbnailClick` is only applicable when `widgetOptions.playbackMode` is "inline"');
+          expect(consoleWarnSpy)
+            .toHaveBeenCalledWith('`widgetOptions.onThumbnailClick` is only applicable when `widgetOptions.playbackMode` is "inline"');
         });
       });
 
       it('should not warn when onThumbnailClick is used with supported playbackMode', () => {
         consoleWarnSpy.mockClear();
 
-        expect(() => configurationService.validateWidgetOptions({
-          onThumbnailClick: () => {},
-          playbackMode: 'inline',
-        } as unknown as WidgetOptions)).not.toThrow();
+        expect(() => configurationService.createConfiguration({
+          guid: 'foo',
+          host: 'example.com',
+          selector: '#widget',
+          widgetOptions: {
+            onThumbnailClick: () => {},
+            playbackMode: 'inline',
+          },
+        })).not.toThrow();
 
         expect(consoleWarnSpy).not.toHaveBeenCalled();
       });
     });
   });
 
-  describe('setDefaults', () => {
+  describe('createConfiguration', () => {
     it('should set default playerParameters when they are undefined', () => {
-      const initialConfig = {
+      const initialConfig: WidgetConfiguration = {
         guid: 'test-guid',
         host: 'example.com',
         selector: '#widget',
-      } as unknown as WidgetConfiguration;
+      };
 
-      const result = configurationService.setDefaults(initialConfig);
+      const result = configurationService.createConfiguration(initialConfig);
 
       expect(result.playerParameters).toEqual({});
     });
 
     it('should set default widgetOptions when they are undefined', () => {
-      const initialConfig = {
+      const initialConfig: WidgetConfiguration = {
         guid: 'test-guid',
         host: 'example.com',
         selector: '#widget',
-      } as unknown as WidgetConfiguration;
+      };
 
-      const result = configurationService.setDefaults(initialConfig);
+      const result = configurationService.createConfiguration(initialConfig);
 
       expect(result.widgetOptions).toEqual({
         playbackMode: 'inline',
@@ -754,7 +917,7 @@ describe('ConfigurationService', () => {
     });
 
     it('should not override existing widgetOptions', () => {
-      const initialConfig = {
+      const initialConfig: WidgetConfiguration = {
         guid: 'test-guid',
         host: 'example.com',
         selector: '#widget',
@@ -768,11 +931,11 @@ describe('ConfigurationService', () => {
             width: 100,
           },
         },
-      } as unknown as WidgetConfiguration;
+      };
 
       const initialWidgetOptions = JSON.parse(JSON.stringify(initialConfig.widgetOptions)) as unknown as WidgetOptions;
 
-      const result = configurationService.setDefaults(initialConfig);
+      const result = configurationService.createConfiguration(initialConfig);
 
       expect(result.widgetOptions).toEqual(initialWidgetOptions);
     });

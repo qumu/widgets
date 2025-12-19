@@ -28,7 +28,7 @@ describe('ThumbnailComponent', () => {
   };
 
   const configurationService = new ConfigurationService();
-  const mockConfiguration = configurationService.setDefaults({
+  const mockConfiguration = configurationService.createConfiguration({
     guid: 'test-guid',
     host: 'https://example.com',
     selector: '#widget-container',

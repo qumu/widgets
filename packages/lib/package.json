@@ -44,8 +44,5 @@
   },
   "volta": {
     "node": "24.11.0"
-  },
-  "dependencies": {
-    "@enghouse-qumu/player-sdk": "3.2.1"
   }
 }

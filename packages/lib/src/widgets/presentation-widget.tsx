@@ -31,8 +31,7 @@ export class PresentationWidget {
   constructor(
     initialConfiguration: WidgetConfiguration,
   ) {
-    this.configuration = this.configurationService.validateAndSanitize(initialConfiguration);
-    this.configuration = this.configurationService.setDefaults(this.configuration);
+    this.configuration = this.configurationService.createConfiguration(initialConfiguration);
   }
 
   destroy() {
