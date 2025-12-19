@@ -3,6 +3,7 @@ import path from 'path';
 import { preact } from '@preact/preset-vite';
 import svgr from 'vite-plugin-svgr';
 import dts from 'vite-plugin-dts';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
   build: {
@@ -30,6 +31,14 @@ export default defineConfig({
     preact(),
     dts({
       rollupTypes: true,
+    }),
+    viteStaticCopy({
+      targets: [
+        {
+          dest: '', // copy directly to dist root
+          src: path.resolve(__dirname, 'src/locales'),
+        },
+      ],
     }),
   ],
   resolve: {

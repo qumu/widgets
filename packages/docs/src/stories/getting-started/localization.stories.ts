@@ -1,5 +1,11 @@
 import type { StoryObj } from '@storybook/web-components-vite';
 import { PresentationWidget } from 'lib';
+import de from 'lib/locales/de.json';
+import es from 'lib/locales/es.json';
+import fr from 'lib/locales/fr.json';
+import it from 'lib/locales/it.json';
+import ja from 'lib/locales/ja.json';
+import pt from 'lib/locales/pt.json';
 import 'lib/presentation-widget.css';
 import { version } from '../../../../../package.json';
 
@@ -29,6 +35,7 @@ export const Localization: Story = {
 
     <script type="module">
       import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@${version}/presentation-widget.js';
+      import fr from 'https://unpkg.com/@enghouse-qumu/widgets@${version}/locales/fr.json';
       
       PresentationWidget.create({
         host:'demo.qumucloud.com',
@@ -39,6 +46,9 @@ export const Localization: Story = {
       PresentationWidget.create({
         host: 'demo.qumucloud.com',
         guid: 'JN6JHrg17xpwF8klXSIfFj',
+        locales: {
+          fr,
+        },
         selector: '#widget2',
       }).catch((err) => console.log(err));
     </script>
@@ -72,12 +82,28 @@ export const Localization: Story = {
     PresentationWidget.create({
       guid: 'JN6JHrg17xpwF8klXSIfFj',
       host: 'demo.qumucloud.com',
+      locales: {
+        de,
+        es,
+        fr,
+        it,
+        ja,
+        pt,
+      },
       selector: widget1,
     }).catch(console.error);
 
     PresentationWidget.create({
       guid: 'JN6JHrg17xpwF8klXSIfFj',
       host: 'demo.qumucloud.com',
+      locales: {
+        de,
+        es,
+        fr,
+        it,
+        ja,
+        pt,
+      },
       selector: widget2,
     }).catch(console.error);
 

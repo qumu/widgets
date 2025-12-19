@@ -1,0 +1,6 @@
+{
+    "common": {
+        "PLAY_PRESENTATION": "Presentación de la obra: {{title}}",
+        "Presentation not found": "Presentación no encontrada"
+    }
+}

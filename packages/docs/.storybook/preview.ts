@@ -10,9 +10,13 @@ export const globalTypes = {
     toolbar: {
       icon: 'globe',
       items: [
+        { value: 'de', title: '🇩🇪 Deutsch', right: 'de' },
         { value: 'en', title: '🇺🇸 English', right: 'en' },
+        { value: 'es', title: '🇪🇸 Español', right: 'es' },
         { value: 'fr', title: '🇫🇷 Français', right: 'fr' },
+        { value: 'it', title: '🇮🇹 Italiano', right: 'it' },
         { value: 'ja', title: '🇯🇵 日本語', right: 'ja' },
+        { value: 'pt', title: '🇵🇹 Português', right: 'pt' },
       ],
       showName: true,
     },

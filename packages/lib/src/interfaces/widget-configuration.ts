@@ -1,9 +1,14 @@
 import { WidgetOptions } from './widget-options';
 import { PlayerParameters } from './player-parameters';
 
+type RecursiveRecord = {
+  [key: string]: string | RecursiveRecord;
+};
+
 export interface WidgetConfiguration {
   guid: string;
   host: string;
+  locales?: RecursiveRecord;
   playerParameters?: Partial<PlayerParameters>;
   selector: string | HTMLElement;
   sortBy?: string;

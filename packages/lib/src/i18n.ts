@@ -1,7 +1,6 @@
 import { I18nService } from '@/services/i18n.service';
 import en from './locales/en.json';
-import fr from './locales/fr.json';
-import ja from './locales/ja.json';
+import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 
 /**
  * Get the language from the closest `lang` attribute for the given element
@@ -20,13 +19,12 @@ function getLanguage(element: HTMLElement): string {
 
 let i18nService: I18nService;
 
-export function createI18n(element: HTMLElement) {
+export function createI18n(element: HTMLElement, locales?: WidgetConfiguration['locales']) {
   i18nService = new I18nService({
     locale: getLanguage(element),
     messages: {
       en,
-      fr,
-      ja,
+      ...locales,
     },
   });
 }

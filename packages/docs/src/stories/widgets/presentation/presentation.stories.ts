@@ -2,6 +2,12 @@ import type { StoryObj } from '@storybook/web-components-vite';
 import type { StoryContext } from 'storybook/internal/types';
 import { PlayerSdk as QumuPlayerSdk } from '@enghouse-qumu/player-sdk';
 import { PresentationWidget } from 'lib';
+import de from 'lib/locales/de.json';
+import es from 'lib/locales/es.json';
+import fr from 'lib/locales/fr.json';
+import it from 'lib/locales/it.json';
+import ja from 'lib/locales/ja.json';
+import pt from 'lib/locales/pt.json';
 import 'lib/presentation-widget.css';
 import {
   type Args,
@@ -51,6 +57,14 @@ export const Basic: Story = {
     PresentationWidget.create({
       guid: 'JN6JHrg17xpwF8klXSIfFj',
       host: 'demo.qumucloud.com',
+      locales: {
+        de,
+        es,
+        fr,
+        it,
+        ja,
+        pt,
+      },
       selector: container,
     }).catch(console.error);
 
@@ -107,6 +121,14 @@ export const PlaybackThumbnail: Story = {
     PresentationWidget.create({
       guid: 'JN6JHrg17xpwF8klXSIfFj',
       host: 'demo.qumucloud.com',
+      locales: {
+        de,
+        es,
+        fr,
+        it,
+        ja,
+        pt,
+      },
       selector: playbackWidget,
       widgetOptions: {
         playbackMode: 'inline',
@@ -116,6 +138,14 @@ export const PlaybackThumbnail: Story = {
     PresentationWidget.create({
       guid: 'JN6JHrg17xpwF8klXSIfFj',
       host: 'demo.qumucloud.com',
+      locales: {
+        de,
+        es,
+        fr,
+        it,
+        ja,
+        pt,
+      },
       selector: thumbnailWidget,
       widgetOptions: {
         playbackMode: 'modal',
@@ -168,6 +198,14 @@ export const CustomPlayIcon: Story = {
     PresentationWidget.create({
       guid: 'JN6JHrg17xpwF8klXSIfFj',
       host: 'demo.qumucloud.com',
+      locales: {
+        de,
+        es,
+        fr,
+        it,
+        ja,
+        pt,
+      },
       selector: container,
       widgetOptions: {
         playIcon: {
@@ -256,6 +294,14 @@ export const PlayerSdk: Story = {
     PresentationWidget.create({
       guid: 'JN6JHrg17xpwF8klXSIfFj',
       host: 'demo.qumucloud.com',
+      locales: {
+        de,
+        es,
+        fr,
+        it,
+        ja,
+        pt,
+      },
       selector: widget,
       widgetOptions: {
         onIframeLoad(iframe) {
@@ -520,8 +566,15 @@ export const Playground: Story = {
       }
     });
 
-    // Import JS modules and initialize
     PresentationWidget.create({
+      locales: {
+        de,
+        es,
+        fr,
+        it,
+        ja,
+        pt,
+      },
       selector: container,
       ...getPlaygroundConfigurationFromArgs(args),
     }).catch(console.error);

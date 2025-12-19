@@ -71,7 +71,7 @@ export class PresentationWidget {
       throw new Error(`Element for selector "${this.configuration.selector}" not found`);
     }
 
-    createI18n(container);
+    createI18n(container, this.configuration.locales);
 
     this.container = container;
     container.innerHTML = '';

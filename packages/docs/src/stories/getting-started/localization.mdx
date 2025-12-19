@@ -1,23 +1,32 @@
 import { Canvas, Meta } from '@storybook/addon-docs/blocks';
 import { Localization } from './localization.stories.ts';
+import { Tip } from '../../components/Tip.jsx';
 
 <Meta title="Getting Started/Localization"/>
 
 # Localization
 
-Widgets support localization. Components will use `en` as their default locale. You can override the locale by setting the `lang` attribute.
-
 Widgets support the following languages:
 
-* `en`
+* `de`
+* `en` (default - automatically loaded)
+* `es`
 * `fr`
+* `it`
 * `ja`
+* `pt`
 
 You can request a new language by opening an issue on [GitHub](https://github.com/qumu/widgets/issues/new).
 
+You can override the locale by setting the `lang` attribute on the widget's parent element or on the widget itself.
+
+<Tip color="warning" title="Performance">
+  For performance reasons, only the `en` language is loaded by default. To support additional languages, you will need to load them manually.
+</Tip>
+
 ## Set the lang for the whole page
 
-If you set the `lang` attribute on the `<html>` tag, the whole page will use the defined language. All the widgets from this page will use that language.
+By setting the lang attribute on the `<html>` tag, the entire page will use the specified language, and all widgets on the page will automatically adopt it.
 
 ```html
 <html lang="fr">
@@ -30,7 +39,7 @@ If you set the `lang` attribute on the `<html>` tag, the whole page will use the
 
 ## Set the language for multiple widgets
 
-You can use the `lang` attribute on a parent of specific widgets to override the language for those widgets.
+You can set the `lang` attribute on a parent element of specific widgets to override their language.
 
 ```html
 <html lang="fr">
@@ -49,7 +58,8 @@ You can use the `lang` attribute on a parent of specific widgets to override the
 
 ## Set the language for a specific widget
 
-You can use the `lang` attribute on a specific widget to override the language for that widget.
+You can set the `lang` attribute on a specific widget to override their language.
+
 ```html
 <html lang="fr">
   <body>

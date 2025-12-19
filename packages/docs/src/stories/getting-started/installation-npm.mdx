@@ -22,12 +22,17 @@ import '@enghouse-qumu/widgets/presentation-widget.css';
 
 // import the widget
 import { PresentationWidget } from '@enghouse-qumu/widgets';
+// import extra locales (if needed)
+import fr from '@enghouse-qumu/widgets/locales/fr.json'
 
 // configure the widget
 const widget = await PresentationWidget.create({
   host: '',
   guid: '',
   selector: '',
+  locales: {
+    fr,
+  },
 });
 ```
 

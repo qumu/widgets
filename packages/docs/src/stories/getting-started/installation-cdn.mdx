@@ -33,11 +33,16 @@ Use this method if you do not use a bundler.
 
     <script type="module">
       import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@1.0.0/presentation-widget.js';
+      import fr from 'https://unpkg.com/@enghouse-qumu/widgets@1.0.0/locales/fr.json';
 
       PresentationWidget.create({
         selector: '#widget',
         guid: 'JN6JHrg17xpwF8klXSIfFj',
         host: 'demo.qumucloud.com',
+        // import extra locales (if needed)
+        locales: {
+          fr,
+        },
       });
     </script>
   </body>

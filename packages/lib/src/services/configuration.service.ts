@@ -2,9 +2,38 @@ import { PlayerParameters } from '@/interfaces/player-parameters';
 import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { WidgetOptions } from '@/interfaces/widget-options';
 
-const supportedConfigFields = new Set(['selector', 'host', 'guid', 'widgetOptions', 'playerParameters', 'sortBy', 'sortOrder']);
-const supportedWidgetFields = new Set(['playbackMode', 'playerConfigurationGuid', 'playIcon', 'onIframeLoad', 'onThumbnailClick']);
-const supportedPlayerParameterFields = new Set(['captions', 'debug', 'loop', 'pv', 'quality', 'showControlPanel', 'sidebar', 'speech', 'speechTerm', 'start', 'volume', 'reporting', 'reportingId']);
+const supportedConfigFields = new Set([
+  'selector',
+  'host',
+  'guid',
+  'locales',
+  'widgetOptions',
+  'playerParameters',
+  'sortBy',
+  'sortOrder',
+]);
+const supportedWidgetFields = new Set([
+  'playbackMode',
+  'playerConfigurationGuid',
+  'playIcon',
+  'onIframeLoad',
+  'onThumbnailClick',
+]);
+const supportedPlayerParameterFields = new Set([
+  'captions',
+  'debug',
+  'loop',
+  'pv',
+  'quality',
+  'showControlPanel',
+  'sidebar',
+  'speech',
+  'speechTerm',
+  'start',
+  'volume',
+  'reporting',
+  'reportingId',
+]);
 
 export class ConfigurationService {
   createConfiguration(initialConfiguration: WidgetConfiguration): WidgetConfiguration {
