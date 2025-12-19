@@ -400,6 +400,13 @@ export const Playground: Story = {
         category: 'Player Parameters',
       },
     },
+    playerConfigurationGuid: {
+      control: 'text',
+      name: 'playerConfigurationGuid',
+      table: {
+        category: 'Player Parameters',
+      },
+    },
     playerDebug: {
       control: 'boolean',
       name: 'Enable Debug Mode',

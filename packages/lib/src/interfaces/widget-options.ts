@@ -3,7 +3,6 @@ import { Presentation } from './presentation';
 
 export interface WidgetOptions {
   playbackMode: 'inline' | 'inline-autoload' | 'inline-autoplay' | 'modal';
-  playerConfigurationGuid: string;
   playIcon: Partial<PlayIcon>;
   onIframeLoad(iframe: HTMLIFrameElement): void;
   onThumbnailClick(presentation: Presentation): void;
