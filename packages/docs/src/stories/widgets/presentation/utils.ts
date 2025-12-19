@@ -122,14 +122,18 @@ export const DEFAULT_CSS_VARIABLES = `
 
 --qc-thumbnail-image-fit: cover;
 
---qc-play-button-background-color: #000;
+--qc-play-button-background-color: rgb(0 0 0 / .8);
 --qc-play-button-color: #fff;
---qc-play-button-opacity: 0.8;
---qc-play-button-hover-opacity: 1;
 --qc-play-button-margin: 16px;
 --qc-play-button-padding: 8px;
 
---qc-dialog-backdrop-color: rgb(0 0 0 / 0.5);
+--qc-play-button-hover-background-color: #000;
+--qc-play-button-hover-color: #fff;
+
+--qc-play-button-active-background-color: rgb(0 0 0 / .9);
+--qc-play-button-active-color: #fff;
+
+--qc-dialog-backdrop-color: rgb(0 0 0 / .5);
 --qc-dialog-background-color: #000;
 --qc-dialog-border: 3px solid #000;
 --qc-dialog-border-radius: 0;
@@ -137,18 +141,21 @@ export const DEFAULT_CSS_VARIABLES = `
 --qc-dialog-max-width: 1100px;
 --qc-dialog-width: 90vw;
 
---qc-close-button-background-color: #000;
---qc-close-button-color: #fff;
---qc-close-button-opacity: 0.8;
---qc-close-button-hover-opacity: 1;
+--qc-close-button-background-color: rgb(0 0 0 / .75);
 --qc-close-button-padding: 6px;
---qc-close-button-shadow: 0 0 1px 1px #000000;
---qc-close-button-icon-size: 20px;
+--qc-close-button-shadow: 0 0 1px 1px #000;
+--qc-close-button-icon-size: 14px;
+
+--qc-close-button-hover-background-color: rgb(0 0 0 / .9);
+--qc-close-button-hover-color: #fff;
+
+--qc-close-button-active-background-color: #000;
+--qc-close-button-active-color: #fff;
 
 --qc-not-found-border: 1px solid rgb(0 0 0 / .15);
 --qc-not-found-background-color: transparent;
 --qc-not-found-color: #000;
---qc-not-found-icon-color: rgb(0 0 0 / .25)
+--qc-not-found-icon-color: rgb(0 0 0 / .25);
 `;
 
 const defaultVariablesMap = DEFAULT_CSS_VARIABLES

@@ -27,7 +27,7 @@
       position: relative;
 
       &--default {
-        background-color: rgb(from var(--qc-play-button-background-color) r g b / var(--qc-play-button-opacity));
+        background-color: var(--qc-play-button-background-color);
         border-radius: 100%;
         box-sizing: border-box;
         color: var(--qc-play-button-color);
@@ -35,11 +35,18 @@
       }
     }
 
-    &:active,
-    &:focus-visible,
     &:hover {
       .qc-thumbnail__play-button--default {
-        background-color: rgb(from var(--qc-play-button-background-color) r g b / var(--qc-play-button-hover-opacity));
+        background-color: var(--qc-play-button-hover-background-color);
+        color: var(--qc-play-button-hover-color);
+      }
+    }
+
+    &:active,
+    &:focus-visible {
+      .qc-thumbnail__play-button--default {
+        background-color: var(--qc-play-button-active-background-color);
+        color: var(--qc-play-button-active-color);
       }
     }
   }

@@ -32,7 +32,7 @@ html:has(.qc-dialog dialog[open]) {
     }
 
     &__close-button {
-      background-color: rgb(from var(--qc-close-button-background-color) r g b / var(--qc-close-button-opacity));
+      background-color: var(--qc-close-button-background-color);
       border-radius: 100%;
       border: none;
       box-shadow: var(--qc-close-button-shadow);
@@ -49,10 +49,15 @@ html:has(.qc-dialog dialog[open]) {
       width: var(--qc-close-button-width);
       z-index: 1;
 
-      &:active,
-      &:focus-visible,
       &:hover {
-        background-color: rgb(from var(--qc-close-button-background-color) r g b / var(--qc-close-button-hover-opacity));
+        background-color: var(--qc-close-button-hover-background-color);
+        color: var(--qc-close-button-hover-color);
+      }
+
+      &:active,
+      &:focus-visible {
+        background-color: var(--qc-close-button-active-background-color);
+        color: var(--qc-close-button-active-color);
       }
 
       svg {
