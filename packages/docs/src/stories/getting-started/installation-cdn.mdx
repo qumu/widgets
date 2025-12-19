@@ -1,0 +1,53 @@
+import { Meta,  } from '@storybook/addon-docs/blocks';
+import { Tip } from '../../components/Tip.jsx';
+
+<Meta title="Getting Started/Installation/Via CDN"/>
+
+# Installation via CDN
+
+Use this method if you do not use a bundler.
+
+<Tip color="warning" title="Performance">Using the library via a CDN may impact performance. For optimal performance, we recommend bundling the widget with your application and serving the files directly from your own infrastructure.</Tip>
+
+## Usage
+
+<Tip title="Versioning">
+  For stability, we recommend specifying a fixed version of the widget in your project. This ensures that updates to the widget won’t accidentally break your implementation.
+
+  You can find the available versions here: [@enghouse-qumu/widgets on npm](https://www.npmjs.com/package/@enghouse-qumu/widgets).
+</Tip>
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widgets@1.0.0/presentation-widget.css">
+  </head>
+  <body>
+    <main>
+      <div id="widget"></div>
+    </main>
+
+    <script type="module">
+      import { PresentationWidget } from 'https://unpkg.com/@enghouse-qumu/widgets@1.0.0/presentation-widget.js';
+
+      PresentationWidget.create({
+        selector: '#widget',
+        guid: 'JN6JHrg17xpwF8klXSIfFj',
+        host: 'demo.qumucloud.com',
+      });
+    </script>
+  </body>
+</html>
+```
+
+## Example
+
+<iframe
+  src="https://codesandbox.io/embed/vnt6z8?view=split&module=%2Findex.html&fontsize=12"
+  style={{ width: '100%', height: '500px', border: '0', borderRadius: '4px', overflow: 'hidden' }}
+  title="presentation-widget-html"
+></iframe>

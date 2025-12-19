@@ -1,6 +1,8 @@
 import type { StorybookConfig } from '@storybook/web-components-vite';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import remarkGfm from 'remark-gfm';
+
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -16,7 +18,16 @@ const config: StorybookConfig = {
     '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'
   ],
   addons: [
-    getAbsolutePath('@storybook/addon-docs')
+    {
+      name: getAbsolutePath("@storybook/addon-docs"),
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        },
+      },
+    },
   ],
   features: {
     interactions: false,

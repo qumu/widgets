@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/web-components-vite';
+import './preview.css';
 
 // Adds a locale switcher in the toolbar
 export const globalTypes = {
@@ -31,8 +32,31 @@ export const decorators = [
 const preview: Preview = {
   parameters: {
     docs: {
+      toc: {
+        headingSelector: 'h2, h3',
+      },
       codePanel: true,
     },
+    options: {
+      storySort: {
+        order: [
+          'Getting Started',
+          [
+            'Installation',
+            [
+              'Via NPM',
+              'Via CDN'
+            ],
+            'Localization'
+          ],
+          'Widgets',
+          [
+            'Presentation'
+          ]
+        ],
+      },
+    }
+
   },
 };
 

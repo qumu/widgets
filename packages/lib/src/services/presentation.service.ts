@@ -1,4 +1,5 @@
 import { Presentation } from '@/interfaces/presentation';
+import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 
 export interface PresentationResponseDto {
   kulus: Presentation[];
@@ -10,10 +11,8 @@ export interface PresentationResponseDto {
   };
 }
 
-export type SortOrder = 'ASCENDING' | 'DESCENDING';
-
 export class PresentationService {
-  async getPresentation(guid: string, host: string, sortBy = 'created', sortOrder: SortOrder = 'DESCENDING'): Promise<Presentation> {
+  async getPresentation(guid: string, host: string, sortBy = 'created', sortOrder: WidgetConfiguration['sortOrder'] = 'DESCENDING'): Promise<Presentation> {
     const url = new URL(`/api/2.2/rest/widgets/${guid}.json`, `https://${host}`);
 
     url.searchParams.set('offset', '0');
