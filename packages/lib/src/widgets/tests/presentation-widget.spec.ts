@@ -114,6 +114,112 @@ describe('PresentationWidget', () => {
     });
   });
 
+  describe('sendTelemetry', () => {
+    it('should send the widget configuration to our telemetry service', async () => {
+      const fetchSpy = vi.spyOn(window, 'fetch');
+
+      const config: WidgetConfiguration = {
+        guid: 'test-guid',
+        host: 'example.com',
+        selector: '.widget-container',
+        sortBy: 'created',
+        sortOrder: 'DESCENDING',
+        widgetOptions: {
+          onIframeLoad() {
+            console.log('iframe is loaded');
+          },
+          playbackMode: 'inline',
+        },
+      };
+
+      await PresentationWidget.create(config);
+
+      await flushPromises();
+
+      expect(fetchSpy).toHaveBeenCalledWith('https://example.com/widgets-telemetry', {
+        body: JSON.stringify({
+          guid: 'test-guid',
+          host: 'example.com',
+          sortBy: 'created',
+          sortOrder: 'DESCENDING',
+          type: 'presentation',
+          version: '1.0.0',
+          widgetOptions: {
+            playbackMode: 'inline',
+            // eslint-disable-next-line sort-keys
+            onIframeLoad: true,
+            playIcon: {
+              height: 44,
+              position: 'center',
+              width: 44,
+            },
+          },
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      });
+    });
+
+    it('should send the widget configuration to our telemetry service #2', async () => {
+      const fetchSpy = vi.spyOn(window, 'fetch');
+
+      const config: WidgetConfiguration = {
+        guid: 'test-guid',
+        host: 'example.com',
+        playerParameters: {
+          captions: 'en',
+          loop: true,
+          reporting: false,
+        },
+        selector: '.widget-container',
+        sortBy: 'created',
+        sortOrder: 'DESCENDING',
+        widgetOptions: {
+          onIframeLoad() {
+            console.log('iframe is loaded');
+          },
+          playbackMode: 'inline',
+        },
+      };
+
+      await PresentationWidget.create(config);
+
+      await flushPromises();
+
+      expect(fetchSpy).toHaveBeenCalledWith('https://example.com/widgets-telemetry', {
+        body: JSON.stringify({
+          guid: 'test-guid',
+          host: 'example.com',
+          playerParameters: {
+            captions: 'en',
+            loop: true,
+            reporting: false,
+          },
+          sortBy: 'created',
+          sortOrder: 'DESCENDING',
+          type: 'presentation',
+          version: '1.0.0',
+          widgetOptions: {
+            playbackMode: 'inline',
+            // eslint-disable-next-line sort-keys
+            onIframeLoad: true,
+            playIcon: {
+              height: 44,
+              position: 'center',
+              width: 44,
+            },
+          },
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      });
+    });
+  });
+
   describe('mount', () => {
     it('renders widget with presentation title and player component', async () => {
       await PresentationWidget.create(mockConfiguration);
