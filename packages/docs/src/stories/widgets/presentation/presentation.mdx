@@ -37,10 +37,11 @@ Qumu Cloud provides a [Player SDK](https://qumu.github.io/player-sdk/) that can 
 
 ### PresentationWidget
 
-| Property                                                           | Type                          | Description                              |
-|--------------------------------------------------------------------|-------------------------------|------------------------------------------|
-| create(configuration: [WidgetConfiguration](#widgetconfiguration)) | `Promise<PresentationWidget>` | Create the widget.                       |
-| destroy()                                                          | `void`                        | Destroy the widget and clean up the DOM. |
+| Property/Method                                                           | Type                          | Description                              |
+|---------------------------------------------------------------------------|-------------------------------|------------------------------------------|
+| version                                                                   | `string`                      | The widget's version.                    |
+| static create(configuration: [WidgetConfiguration](#widgetconfiguration)) | `Promise<PresentationWidget>` | Create the widget.                       |
+| destroy()                                                                 | `void`                        | Destroy the widget and clean up the DOM. |
 
 
 ### WidgetConfiguration
