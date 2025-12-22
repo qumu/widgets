@@ -26,7 +26,11 @@ export class PresentationWidget {
   ): Promise<PresentationWidget> {
     const widget = new PresentationWidget(configuration);
 
-    widget.sendTelemetry()
+    // send telemetry if not disabled by the end user
+    if (globalThis.window.__QUMU_WIDGET_TELEMETRY__ ?? true) {
+      widget.sendTelemetry()
+    }
+
     await widget.init();
 
     return widget;
@@ -118,7 +122,7 @@ export class PresentationWidget {
     );
   }
 
-  private async sendTelemetry() {
+  private sendTelemetry() {
     const telemetryConfig: any = {
       guid: this.configuration.guid,
       host: this.configuration.host,
@@ -134,13 +138,7 @@ export class PresentationWidget {
       }
     };
 
-    await fetch(`https://${this.configuration.host}/widgets-telemetry`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(telemetryConfig)
-    });
+    navigator.sendBeacon(`https://${this.configuration.host}/widgets-telemetry`, JSON.stringify(telemetryConfig));
   }
 }
 
