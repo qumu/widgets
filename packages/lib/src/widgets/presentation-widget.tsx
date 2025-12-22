@@ -9,8 +9,11 @@ import { PlayerComponent } from '@/components/player';
 import './presentation-widget.scss';
 import { NotFoundComponent } from '@/components/not-found';
 import { createI18n } from '@/i18n';
+import { version } from '../../../../package.json' with { type: 'json' };
 
 export class PresentationWidget {
+  version: string = version;
+
   private readonly configurationService = new ConfigurationService();
   private readonly configuration: WidgetConfiguration;
   private readonly presentationService = new PresentationService();
