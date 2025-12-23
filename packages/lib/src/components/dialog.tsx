@@ -4,7 +4,7 @@ import { Presentation } from '@/interfaces/presentation';
 import { ThumbnailComponent } from './thumbnail';
 import { PlayerComponent } from './player';
 import { PlayerParameters } from '@/interfaces/player-parameters';
-import CloseIcon from '@/icons/close.svg?react';
+import Icon from '@/components/icon';
 
 interface Props {
   presentation: Presentation;
@@ -58,7 +58,7 @@ export function DialogComponent({ presentation, widgetOptions, playerParameters,
               class="qc-dialog__close-button"
               onClick={closeDialog}
           >
-            <CloseIcon className="qc-icon"/>
+            <Icon name="close"/>
           </button>
           <PlayerComponent
               presentation={presentation}
