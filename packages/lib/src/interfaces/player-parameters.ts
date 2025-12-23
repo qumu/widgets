@@ -5,12 +5,12 @@ export interface PlayerParameters {
   playerConfigurationGuid: string;
   pv: 'pipls' | 'pipss' | 'sbs';
   quality: 'auto' | 'best' | '1440p' | '1080p' | '720p' | '480p' | '240p';
+  reporting: boolean;
+  reportingId: string;
   showControlPanel: boolean;
   sidebar: boolean;
   speech: string;
   speechTerm: string;
   start: number;
   volume: number;
-  reporting: boolean;
-  reportingId: string;
 }
