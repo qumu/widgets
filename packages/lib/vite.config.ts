@@ -30,11 +30,7 @@ export default defineConfig({
         {
           dest: '', // copy directly to dist root
           src: path.resolve(__dirname, 'src/locales'),
-        },
-        {
-          dest: '', // copy directly to dist root
-          src: path.resolve(__dirname, '../../README.md'),
-        },
+        }
       ],
     }),
   ],
