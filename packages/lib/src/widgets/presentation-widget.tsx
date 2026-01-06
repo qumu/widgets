@@ -17,7 +17,7 @@ export class PresentationWidget {
   private readonly configuration: WidgetConfiguration;
   private readonly presentationService = new PresentationService();
   private presentation: Presentation | null = null;
-  private container: Element | null = null;
+  private container: HTMLElement | null = null;
   private destroyed = false;
 
   get version(): string {
@@ -86,30 +86,28 @@ export class PresentationWidget {
       ? `${this.presentation.mediaDisplayWidth} / ${this.presentation.mediaDisplayHeight}`
       : '16 / 9';
 
+    this.container.classList.add('qc-widget', 'qc-presentation-widget');
+    this.container.style.setProperty('aspect-ratio', aspectRatio);
+
     render(
-      <div
-        class="qc-widget qc-presentation-widget"
-        style={{ 'aspect-ratio': aspectRatio }}
-      >
-        {this.presentation ? (
-          this.configuration.widgetOptions?.playbackMode === 'modal' ? (
-            <DialogComponent
-              aspectRatio={aspectRatio}
-              presentation={this.presentation}
-              playerParameters={this.configuration.playerParameters!}
-              widgetOptions={this.configuration.widgetOptions as WidgetOptions}
-            />
-          ) : (
-            <PlayerComponent
-              presentation={this.presentation}
-              playerParameters={this.configuration.playerParameters!}
-              widgetOptions={this.configuration.widgetOptions as WidgetOptions}
-            />
-          )
+      this.presentation ? (
+        this.configuration.widgetOptions?.playbackMode === 'modal' ? (
+          <DialogComponent
+            aspectRatio={aspectRatio}
+            presentation={this.presentation}
+            playerParameters={this.configuration.playerParameters!}
+            widgetOptions={this.configuration.widgetOptions as WidgetOptions}
+          />
         ) : (
-          <NotFoundComponent/>
-        )}
-      </div>,
+          <PlayerComponent
+            presentation={this.presentation}
+            playerParameters={this.configuration.playerParameters!}
+            widgetOptions={this.configuration.widgetOptions as WidgetOptions}
+          />
+        )
+      ) : (
+        <NotFoundComponent/>
+      ),
       container
     );
   }
