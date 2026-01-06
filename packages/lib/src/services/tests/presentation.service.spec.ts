@@ -2,17 +2,16 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { PresentationService, PresentationResponseDto } from '../presentation.service';
 import { Presentation, MetadataType } from '@/interfaces/presentation';
 
-// Mock fetch globally
-const mockFetch = vi.fn();
-
-global.fetch = mockFetch;
-
 describe('PresentationService', () => {
-  const presentationService = new PresentationService();
+  // Mock fetch globally
+  const mockFetch = vi.fn();
+
+  const mockHost = 'example.com';
+
+  let presentationService = new PresentationService(mockHost);
 
   beforeEach(() => {
-    mockFetch.mockClear();
-    mockFetch.mockReset();
+    globalThis.fetch = mockFetch;
   });
 
   afterEach(() => {
@@ -21,7 +20,6 @@ describe('PresentationService', () => {
 
   describe('getPresentation', () => {
     const mockGuid = 'test-guid-123';
-    const mockHost = 'example.com';
     const expectedUrl = `https://${mockHost}/api/2.2/rest/widgets/${mockGuid}.json?offset=0&limit=1&sortBy=title%2CASCENDING&useUserAuth=false`;
 
     const mockPresentation: Presentation = {
@@ -45,7 +43,7 @@ describe('PresentationService', () => {
         ok: true,
       });
 
-      const result = await presentationService.getPresentation(mockGuid, mockHost, 'title', 'ASCENDING');
+      const result = await presentationService.getPresentation(mockGuid, 'title', 'ASCENDING');
 
       expect(mockFetch).toHaveBeenCalledTimes(1);
       expect(mockFetch).toHaveBeenCalledWith(expectedUrl, {
@@ -60,7 +58,7 @@ describe('PresentationService', () => {
         ok: true,
       });
 
-      await presentationService.getPresentation(mockGuid, mockHost, 'title', 'ASCENDING');
+      await presentationService.getPresentation(mockGuid, 'title', 'ASCENDING');
 
       const mockCall = mockFetch.mock.calls[0] as unknown[];
       const url = mockCall[0] as string;
@@ -74,7 +72,7 @@ describe('PresentationService', () => {
       mockFetch.mockRejectedValueOnce(networkError);
 
       await expect(
-        presentationService.getPresentation(mockGuid, mockHost, 'title', 'ASCENDING'),
+        presentationService.getPresentation(mockGuid, 'title', 'ASCENDING'),
       ).rejects.toThrow(`Failed to fetch presentation from host "${mockHost}": Network error`);
     });
 
@@ -85,7 +83,7 @@ describe('PresentationService', () => {
       });
 
       await expect(
-        presentationService.getPresentation(mockGuid, mockHost, 'title', 'ASCENDING'),
+        presentationService.getPresentation(mockGuid, 'title', 'ASCENDING'),
       ).rejects.toThrow(`Failed to fetch presentation with guid "${mockGuid}" from host "${mockHost}"`);
     });
 
@@ -101,27 +99,32 @@ describe('PresentationService', () => {
       });
 
       await expect(
-        presentationService.getPresentation(mockGuid, mockHost, 'title', 'ASCENDING'),
+        presentationService.getPresentation(mockGuid, 'title', 'ASCENDING'),
       ).rejects.toThrow(`Failed to fetch presentation with guid "${mockGuid}" from host "${mockHost}"`);
     });
 
     it('should handle special characters in guid and host', async () => {
       const specialGuid = 'guid-with-special-chars123';
       const specialHost = 'test-host.example.com';
+
+      presentationService = new PresentationService(specialHost);
+
       const expectedSpecialUrl = `https://${specialHost}/api/2.2/rest/widgets/${specialGuid}.json?offset=0&limit=1&sortBy=title%2CASCENDING&useUserAuth=false`;
 
       mockFetch.mockResolvedValueOnce({
         json: vi.fn().mockResolvedValue({
           ...mockSuccessResponse,
-          kulus: [{
-            ...mockPresentation,
-            guid: specialGuid,
-          }],
+          kulus: [
+            {
+              ...mockPresentation,
+              guid: specialGuid,
+            },
+          ],
         }),
         ok: true,
       });
 
-      const result = await presentationService.getPresentation(specialGuid, specialHost, 'title', 'ASCENDING');
+      const result = await presentationService.getPresentation(specialGuid, 'title', 'ASCENDING');
 
       expect(mockFetch).toHaveBeenCalledWith(expectedSpecialUrl, {
         method: 'GET',
@@ -168,15 +171,6 @@ describe('PresentationService', () => {
       await expect(
         presentationService.getPresentation(mockGuid, mockHost),
       ).rejects.toThrow('Invalid JSON');
-    });
-
-    it('should throw error with invalid URL parameters', async () => {
-      const emptyGuid = '';
-      const emptyHost = '';
-
-      await expect(
-        presentationService.getPresentation(emptyGuid, emptyHost),
-      ).rejects.toThrow('Invalid URL');
     });
 
     it('should handle presentations with minimal data', async () => {

@@ -96,7 +96,6 @@ describe('PresentationWidget', () => {
 
       expect(getPresentationMock).toHaveBeenCalledWith(
         'test-guid',
-        'example.com',
         'created',
         'DESCENDING',
       );

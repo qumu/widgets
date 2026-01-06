@@ -6,16 +6,16 @@ import { Presentation } from '@/interfaces/presentation';
 import { WidgetOptions } from '@/interfaces/widget-options';
 import { DialogComponent } from '@/components/dialog';
 import { PlayerComponent } from '@/components/player';
-import './presentation-widget.scss';
 import { NotFoundComponent } from '@/components/not-found';
 import { createI18n } from '@/i18n';
 import 'virtual:svg-icons-register';
 import { version } from '../../../../package.json' with { type: 'json' };
+import './presentation-widget.scss';
 
 export class PresentationWidget {
   private readonly configurationService = new ConfigurationService();
   private readonly configuration: WidgetConfiguration;
-  private readonly presentationService = new PresentationService();
+  private readonly presentationService;
   private presentation: Presentation | null = null;
   private container: HTMLElement | null = null;
   private destroyed = false;
@@ -38,6 +38,7 @@ export class PresentationWidget {
     initialConfiguration: WidgetConfiguration,
   ) {
     this.configuration = this.configurationService.createConfiguration(initialConfiguration);
+    this.presentationService = new PresentationService(this.configuration.host);
   }
 
   destroy() {
@@ -60,7 +61,11 @@ export class PresentationWidget {
 
   async init(): Promise<void> {
     try {
-      this.presentation = await this.presentationService.getPresentation(this.configuration.guid, this.configuration.host, this.configuration.sortBy, this.configuration.sortOrder);
+      this.presentation = await this.presentationService.getPresentation(
+        this.configuration.guid,
+        this.configuration.sortBy,
+        this.configuration.sortOrder
+      );
     } catch (err) {
       console.error(err);
     } finally {
