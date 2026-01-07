@@ -175,7 +175,7 @@ export class PresentationWidget {
       }
     };
 
-    navigator.sendBeacon(`https://${this.configuration.host}/widgets-telemetry`, JSON.stringify(telemetryConfig));
+    navigator.sendBeacon(`https://${this.configuration.host}/telemetry/widgets`, JSON.stringify(telemetryConfig));
   }
 }
 
