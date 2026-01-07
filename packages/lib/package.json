@@ -33,7 +33,7 @@
     "@types/node": "24.0.7",
     "@vitest/coverage-istanbul": "4.0.7",
     "jsdom": "27.1.0",
-    "preact": "10.27.2",
+    "preact": "10.27.3",
     "sass": "1.94.2",
     "terser": "5.44.1",
     "typescript": "5.8.3",
