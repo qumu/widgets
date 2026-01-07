@@ -1,23 +1,16 @@
 import { defineConfig } from 'vitest/config';
-import { resolve } from 'path';
-import { preact } from '@preact/preset-vite';
-import svgr from 'vite-plugin-svgr';
+import path from 'node:path';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 
 export default defineConfig({
   plugins: [
-    svgr({
-      svgrOptions: {
-        svgProps: {
-          'aria-hidden': 'true',
-          class: 'qc-icon',
-        },
-      },
+    createSvgIconsPlugin({
+      iconDirs: [path.resolve(process.cwd(), 'src/icons')],
     }),
-    preact(),
   ],
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   test: {

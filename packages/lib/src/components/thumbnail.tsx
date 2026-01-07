@@ -1,7 +1,7 @@
 import { Presentation } from '@/interfaces/presentation';
 import { WidgetOptions } from '@/interfaces/widget-options';
-import PlayIcon from '@/icons/play.svg?react';
 import { useI18n } from '@/i18n';
+import Icon from '@/components/icon';
 
 interface Props {
   onClick: () => void;
@@ -38,8 +38,9 @@ export function ThumbnailComponent({ presentation, onClick, widgetOptions }: Rea
           }}
         />
       ) : (
-        <PlayIcon
-          className="qc-icon qc-thumbnail__play-button qc-thumbnail__play-button--default"
+        <Icon
+          name="play"
+          class="qc-thumbnail__play-button qc-thumbnail__play-button--default"
           width={widgetOptions.playIcon!.width}
           height={widgetOptions.playIcon!.height}
         />

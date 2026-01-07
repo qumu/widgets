@@ -9,6 +9,7 @@ import { PlayerComponent } from '@/components/player';
 import './presentation-widget.scss';
 import { NotFoundComponent } from '@/components/not-found';
 import { createI18n } from '@/i18n';
+import 'virtual:svg-icons-register';
 import { version } from '../../../../package.json' with { type: 'json' };
 
 export class PresentationWidget {

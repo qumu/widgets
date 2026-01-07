@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
-import path from 'path';
-import { preact } from '@preact/preset-vite';
-import svgr from 'vite-plugin-svgr';
+import path from 'node:path';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import dts from 'vite-plugin-dts';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
@@ -20,15 +19,9 @@ export default defineConfig({
     minify: 'terser',
   },
   plugins: [
-    svgr({
-      svgrOptions: {
-        svgProps: {
-          'aria-hidden': 'true',
-          class: 'qc-icon',
-        },
-      },
+    createSvgIconsPlugin({
+      iconDirs: [path.resolve(process.cwd(), 'src/icons')],
     }),
-    preact(),
     dts({
       rollupTypes: true,
     }),
