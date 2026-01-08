@@ -13,7 +13,9 @@ import 'virtual:svg-icons-register';
 import { version } from '../../../../package.json' with { type: 'json' };
 
 export class PresentationWidget {
-  version: string = version;
+  get version(): string {
+    return version;
+  }
 
   private readonly configurationService = new ConfigurationService();
   private readonly configuration: WidgetConfiguration;
