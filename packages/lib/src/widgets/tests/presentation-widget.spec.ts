@@ -102,7 +102,7 @@ describe('PresentationWidget', () => {
 
       expect(querySelectorSpy).toHaveBeenCalledWith('.widget-container');
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget" style="aspect-ratio: 16 / 9;"><button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button></div>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
     });
 
     it('throws error when container element is not found', async () => {
@@ -119,7 +119,7 @@ describe('PresentationWidget', () => {
       await flushPromises();
 
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget" style="aspect-ratio: 16 / 9;"><button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button></div>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
     });
 
     it('renders widget with not found message', async () => {
@@ -130,7 +130,7 @@ describe('PresentationWidget', () => {
       await flushPromises();
 
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget" style="aspect-ratio: 16 / 9;"><div class="qc-not-found"><svg class="qc-icon" width="48" height="48" aria-hidden="true"><use href="#icon-image-broken"></use></svg><div>Presentation not found</div></div></div>"`);
+        .toMatchInlineSnapshot(`"<div class="qc-not-found"><svg class="qc-icon" width="48" height="48" aria-hidden="true"><use href="#icon-image-broken"></use></svg><div>Presentation not found</div></div>"`);
     });
 
     it('uses HTMLElement from selector if provided', async () => {
@@ -150,7 +150,7 @@ describe('PresentationWidget', () => {
 
       expect(querySelectorSpy).not.toHaveBeenCalled();
       expect(element.innerHTML)
-        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget" style="aspect-ratio: 16 / 9;"><button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button></div>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
     });
 
     it('clears container innerHTML before mounting', async () => {
@@ -167,7 +167,7 @@ describe('PresentationWidget', () => {
       await flushPromises();
 
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget" style="aspect-ratio: 16 / 9;"><button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button></div>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
     });
 
     it('should render DialogComponent when playbackMode is modal', async () => {
@@ -228,7 +228,7 @@ describe('PresentationWidget', () => {
       await flushPromises();
 
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget" style="aspect-ratio: 16 / 9;"><button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button></div>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
 
       widget.destroy();
 
@@ -243,7 +243,7 @@ describe('PresentationWidget', () => {
       await flushPromises();
 
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<div class="qc-widget qc-presentation-widget" style="aspect-ratio: 16 / 9;"><button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button></div>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
 
       widget.destroy();
 
