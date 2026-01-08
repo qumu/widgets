@@ -9,16 +9,16 @@
   },
   "dependencies": {
     "@enghouse-qumu/player-sdk": "3.2.1",
-    "lit": "3.3.1"
+    "lit": "3.3.2"
   },
   "devDependencies": {
     "@enghouse-qumu/eslint-config": "1.0.2",
-    "@storybook/addon-docs": "10.1.7",
-    "@storybook/web-components-vite": "10.1.7",
+    "@storybook/addon-docs": "10.1.11",
+    "@storybook/web-components-vite": "10.1.11",
     "remark-gfm": "4.0.1",
-    "storybook": "10.1.10",
+    "storybook": "10.1.11",
     "typescript": "5.9.3",
-    "vite": "7.2.7"
+    "vite": "7.3.1"
   },
   "volta": {
     "node": "24.11.0"
