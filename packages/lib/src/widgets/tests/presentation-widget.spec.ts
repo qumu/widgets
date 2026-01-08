@@ -142,7 +142,7 @@ describe('PresentationWidget', () => {
 
       await flushPromises();
 
-      expect(sendBeaconSpy).toHaveBeenCalledWith('https://example.com/widgets-telemetry', JSON.stringify({
+      expect(sendBeaconSpy).toHaveBeenCalledWith('https://example.com/telemetry/widgets', JSON.stringify({
         guid: 'test-guid',
         host: 'example.com',
         sortBy: 'created',
@@ -188,7 +188,7 @@ describe('PresentationWidget', () => {
 
       await flushPromises();
 
-      expect(sendBeaconSpy).toHaveBeenCalledWith('https://example.com/widgets-telemetry', JSON.stringify({
+      expect(sendBeaconSpy).toHaveBeenCalledWith('https://example.com/telemetry/widgets', JSON.stringify({
         guid: 'test-guid',
         host: 'example.com',
         playerParameters: {
