@@ -12,8 +12,14 @@ export interface PresentationResponseDto {
 }
 
 export class PresentationService {
-  async getPresentation(guid: string, host: string, sortBy = 'created', sortOrder: WidgetConfiguration['sortOrder'] = 'DESCENDING'): Promise<Presentation> {
-    const url = new URL(`/api/2.2/rest/widgets/${guid}.json`, `https://${host}`);
+  constructor(private readonly host: string) {}
+
+  async getPresentation(
+    guid: string,
+    sortBy = 'created',
+    sortOrder: WidgetConfiguration['sortOrder'] = 'DESCENDING',
+  ): Promise<Presentation> {
+    const url = new URL(`/api/2.2/rest/widgets/${guid}.json`, `https://${this.host}`);
 
     url.searchParams.set('offset', '0');
     url.searchParams.set('limit', '1');
@@ -27,13 +33,13 @@ export class PresentationService {
         method: 'GET',
       });
     } catch (err) {
-      throw new Error(`Failed to fetch presentation from host "${host}": ${(err as Error).message}`, { cause: err });
+      throw new Error(`Failed to fetch presentation from host "${this.host}": ${(err as Error).message}`, { cause: err });
     }
 
     const { kulus, error } = await response.json() as Partial<PresentationResponseDto>;
 
     if (!response.ok || !kulus?.length) {
-      throw new Error(error?.message ?? `Failed to fetch presentation with guid "${guid}" from host "${host}"`);
+      throw new Error(error?.message ?? `Failed to fetch presentation with guid "${guid}" from host "${this.host}"`);
     }
 
     return kulus[0];
