@@ -11,13 +11,14 @@ html:has(.qc-dialog dialog[open]) {
 
     iframe.qc-player {
       border: none;
-      border-radius: calc(var(--qc-pw-dialog-border-radius) - var(--qc-pw-dialog-border-width));
+      border-radius: calc(var(--qc-pw-dialog-border-radius) - var(--_qc-pw-dialog-border-width));
       display: block;
       height: 100%;
       width: 100%;
     }
 
     dialog {
+      aspect-ratio: var(--qc-pw-aspect-ratio);
       background-color: var(--qc-pw-dialog-background-color);
       border: var(--qc-pw-dialog-border);
       border-radius: var(--qc-pw-dialog-border-radius);
@@ -35,7 +36,7 @@ html:has(.qc-dialog dialog[open]) {
       background-color: var(--qc-pw-close-button-background-color);
       border-radius: 100%;
       border: none;
-      box-shadow: var(--qc-pw-close-button-shadow);
+      box-shadow: var(--qc-pw-close-button-box-shadow);
       color: var(--qc-pw-close-button-color);
       cursor: pointer;
       display: flex;

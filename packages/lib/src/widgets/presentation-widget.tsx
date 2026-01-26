@@ -3,7 +3,6 @@ import { PresentationService } from '@/services/presentation.service';
 import { ConfigurationService } from '@/services/configuration.service';
 import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { Presentation } from '@/interfaces/presentation';
-import { WidgetOptions } from '@/interfaces/widget-options';
 import { DialogComponent } from '@/components/dialog';
 import { PlayerComponent } from '@/components/player';
 import { NotFoundComponent } from '@/components/not-found';
@@ -92,7 +91,7 @@ export class PresentationWidget {
       : '16 / 9';
 
     this.container.classList.add('qc-widget', 'qc-presentation-widget');
-    this.container.style.setProperty('aspect-ratio', aspectRatio);
+    this.container.style.setProperty('--qc-pw-aspect-ratio', aspectRatio);
 
     this.setStyles(this.container);
 
@@ -100,16 +99,15 @@ export class PresentationWidget {
       this.presentation ? (
         this.configuration.widgetOptions?.playbackMode === 'modal' ? (
           <DialogComponent
-            aspectRatio={aspectRatio}
             presentation={this.presentation}
             playerParameters={this.configuration.playerParameters!}
-            widgetOptions={this.configuration.widgetOptions as WidgetOptions}
+            widgetOptions={this.configuration.widgetOptions!}
           />
         ) : (
           <PlayerComponent
             presentation={this.presentation}
             playerParameters={this.configuration.playerParameters!}
-            widgetOptions={this.configuration.widgetOptions as WidgetOptions}
+            widgetOptions={this.configuration.widgetOptions!}
           />
         )
       ) : (
@@ -117,6 +115,17 @@ export class PresentationWidget {
       ),
       container
     );
+  }
+
+  private mapCssValue(key: string, value: string) {
+    if (key === '--qc-pw-play-button-position') {
+      const placeX = value.includes('left') ? 'start' : (value.includes('right') ? 'end' : 'center');
+      const placeY = value.includes('top') ? 'start' : (value.includes('bottom') ? 'end' : 'center');
+
+      return `${placeY} ${placeX}`;
+    }
+
+    return value;
   }
 
   private setStyles(container: HTMLElement) {
@@ -135,13 +144,13 @@ export class PresentationWidget {
         } else {
           const cssVarName = `${prefix}-${nextPath.join('-')}`;
 
-          container.style.setProperty(cssVarName, String(value));
+          container.style.setProperty(cssVarName, this.mapCssValue(cssVarName, value));
         }
       }
     };
 
-    if (this.configuration.style !== undefined) {
-      walk(this.configuration.style);
+    if (Object.keys(this.configuration.widgetOptions?.style || {}).length > 0) {
+      walk(this.configuration.widgetOptions!.style!);
     }
   }
 }
