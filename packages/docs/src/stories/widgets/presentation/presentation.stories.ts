@@ -582,7 +582,7 @@ export const Playground: Story = {
         'right',
         'bottom-left',
         'bottom',
-        'bottom-right'
+        'bottom-right',
       ],
       table: {
         category: 'Style',
