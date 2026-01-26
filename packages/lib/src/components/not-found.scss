@@ -1,8 +1,8 @@
 .qc-not-found {
-  background-color: var(--qc-not-found-background-color);
-  border: var(--qc-not-found-border);
+  background-color: var(--qc-pw-not-found-background-color);
+  border: var(--qc-pw-not-found-border);
   border-radius: inherit;
-  color: var(--qc-not-found-color);
+  color: var(--qc-pw-not-found-color);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -11,6 +11,6 @@
   place-items: center;
 
   .qc-icon {
-    color: var(--qc-not-found-icon-color)
+    color: var(--qc-pw-not-found-icon-color)
   }
 }
