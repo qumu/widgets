@@ -8,7 +8,7 @@ import { DialogComponent } from '@/components/dialog';
 import { PlayerComponent } from '@/components/player';
 import { NotFoundComponent } from '@/components/not-found';
 import { createI18n } from '@/i18n';
-import 'virtual:svg-icons-register';
+import 'virtual:svg-icons/register';
 import { version } from '../../../../package.json' with { type: 'json' };
 import './presentation-widget.scss';
 
