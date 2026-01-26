@@ -25,6 +25,10 @@
     "test:cov": "vitest run --coverage",
     "test:watch": "vitest watch"
   },
+  "dependencies": {
+    "es-toolkit": "1.44.0",
+    "valibot": "1.2.0"
+  },
   "devDependencies": {
     "@enghouse-qumu/eslint-config": "1.0.2",
     "@testing-library/jest-dom": "6.9.1",

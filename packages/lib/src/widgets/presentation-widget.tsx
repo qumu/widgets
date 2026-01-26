@@ -1,6 +1,6 @@
 import { render } from 'preact';
 import { PresentationService } from '@/services/presentation.service';
-import { ConfigurationService } from '@/services/configuration.service';
+import { ConfigurationService } from '@/services/configuration-v2.service';
 import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { Presentation } from '@/interfaces/presentation';
 import { WidgetOptions } from '@/interfaces/widget-options';
@@ -11,6 +11,8 @@ import { createI18n } from '@/i18n';
 import 'virtual:svg-icons/register';
 import { version } from '../../../../package.json' with { type: 'json' };
 import './presentation-widget.scss';
+import { widgetConfigurationSchema } from '@/widgets/presentation-widget.schema';
+import { toMerged } from 'es-toolkit';
 
 export class PresentationWidget {
   private readonly configurationService = new ConfigurationService();
@@ -37,7 +39,20 @@ export class PresentationWidget {
   constructor(
     initialConfiguration: WidgetConfiguration,
   ) {
-    this.configuration = this.configurationService.createConfiguration(initialConfiguration);
+    // const mergedConfiguration = toMerged({
+    //   playerParameters: {},
+    //   widgetOptions: {
+    //     playIcon: {
+    //       height: 44,
+    //       position: 'center',
+    //       width: 44,
+    //     },
+    //   },
+    // }, initialConfiguration);
+
+    this.configuration = this.configurationService.createConfiguration(widgetConfigurationSchema, initialConfiguration);
+
+    console.log('Presentation widget', this.configuration);
     this.presentationService = new PresentationService(this.configuration.host);
   }
 
