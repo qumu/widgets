@@ -562,7 +562,7 @@ export const Playground: Story = {
     const container = document.createElement('div');
 
     args.cssVars?.split('\n').forEach((line: string) => {
-      if (!line.startsWith('--qc-')) {
+      if (!line.startsWith('--qc-pw-')) {
         return;
       }
 

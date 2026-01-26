@@ -15,7 +15,7 @@
       display: block;
       height: 100%;
       left: 0;
-      object-fit: var(--qc-thumbnail-image-fit);
+      object-fit: var(--qc-pw-thumbnail-image-fit);
       position: absolute;
       top: 0;
       width: 100%;
@@ -23,30 +23,30 @@
     }
 
     &__play-button {
-      margin: var(--qc-play-button-margin);
+      margin: var(--qc-pw-play-button-margin);
       position: relative;
 
       &--default {
-        background-color: var(--qc-play-button-background-color);
+        background-color: var(--qc-pw-play-button-background-color);
         border-radius: 100%;
         box-sizing: border-box;
-        color: var(--qc-play-button-color);
-        padding: var(--qc-play-button-padding);
+        color: var(--qc-pw-play-button-color);
+        padding: var(--qc-pw-play-button-padding);
       }
     }
 
     &:hover {
       .qc-thumbnail__play-button--default {
-        background-color: var(--qc-play-button-hover-background-color);
-        color: var(--qc-play-button-hover-color);
+        background-color: var(--qc-pw-play-button-hover-background-color);
+        color: var(--qc-pw-play-button-hover-color);
       }
     }
 
     &:active,
     &:focus-visible {
       .qc-thumbnail__play-button--default {
-        background-color: var(--qc-play-button-active-background-color);
-        color: var(--qc-play-button-active-color);
+        background-color: var(--qc-pw-play-button-active-background-color);
+        color: var(--qc-pw-play-button-active-color);
       }
     }
   }

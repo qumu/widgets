@@ -60,6 +60,7 @@ export class ConfigurationService {
         .replace('https://', '')
         .split('/')[0],
       playerParameters,
+      style: initialConfiguration.style || {},
       widgetOptions,
     };
   }

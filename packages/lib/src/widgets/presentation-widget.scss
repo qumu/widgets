@@ -7,7 +7,7 @@
 @use '../components/not-found.scss';
 
 .qc-presentation-widget {
-  border-radius: var(--qc-presentation-widget-border-radius);
-  height: var(--qc-presentation-widget-height);
-  width: var(--qc-presentation-widget-width);
+  border-radius: var(--qc-pw-border-radius);
+  height: var(--qc-pw-height);
+  width: var(--qc-pw-width);
 }

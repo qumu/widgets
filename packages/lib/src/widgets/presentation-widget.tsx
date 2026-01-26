@@ -94,6 +94,8 @@ export class PresentationWidget {
     this.container.classList.add('qc-widget', 'qc-presentation-widget');
     this.container.style.setProperty('aspect-ratio', aspectRatio);
 
+    this.setStyles(this.container);
+
     render(
       this.presentation ? (
         this.configuration.widgetOptions?.playbackMode === 'modal' ? (
@@ -115,6 +117,32 @@ export class PresentationWidget {
       ),
       container
     );
+  }
+
+  private setStyles(container: HTMLElement) {
+    const prefix = '--qc-pw';
+
+    const toKebabCase = (str: string) => str
+      .replaceAll(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .toLowerCase();
+
+    const walk = (obj: Record<string, any>, path: string[] = []) => {
+      for (const [key, value] of Object.entries(obj)) {
+        const nextPath = [...path, toKebabCase(key)];
+
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          walk(value, nextPath);
+        } else {
+          const cssVarName = `${prefix}-${nextPath.join('-')}`;
+
+          container.style.setProperty(cssVarName, String(value));
+        }
+      }
+    };
+
+    if (this.configuration.style !== undefined) {
+      walk(this.configuration.style);
+    }
   }
 }
 
