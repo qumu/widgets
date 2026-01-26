@@ -5,7 +5,6 @@ import { ThumbnailComponent } from '../thumbnail';
 import { WidgetOptions } from '@/interfaces/widget-options';
 import { Presentation } from '@/interfaces/presentation';
 import { ConfigurationService } from '@/services/configuration.service';
-import type { PlayIcon, PlayIconPosition } from '@/interfaces/play-icon';
 
 vi.mock('@/i18n', () => ({
   useI18n: vi.fn().mockReturnValue({
@@ -90,10 +89,7 @@ describe('ThumbnailComponent', () => {
         presentation: mockPresentation,
         widgetOptions: {
           ...mockConfiguration.widgetOptions as WidgetOptions,
-          playIcon: {
-            ...mockConfiguration.widgetOptions!.playIcon,
-            url: undefined as unknown as string,
-          } as PlayIcon,
+          playIconUrl: undefined,
         },
       }));
 
@@ -105,11 +101,7 @@ describe('ThumbnailComponent', () => {
     it('should render custom play icon image when provided in options', () => {
       const widgetOptions = {
         ...mockConfiguration.widgetOptions as WidgetOptions,
-        playIcon: {
-          height: 50,
-          url: 'https://example.com/custom-play-icon.png',
-          width: 50,
-        },
+        playIconUrl: 'https://example.com/custom-play-icon.png',
       } as WidgetOptions;
 
       const { container } = render(createElement(ThumbnailComponent, {
@@ -121,72 +113,6 @@ describe('ThumbnailComponent', () => {
       const playIconImage = container.querySelector('.qc-thumbnail__play-button');
 
       expect(playIconImage).toHaveAttribute('src', 'https://example.com/custom-play-icon.png');
-      expect(playIconImage).toHaveStyle({
-        height: '50px',
-        width: '50px',
-      });
-    });
-
-    it('should apply width and height provided in play icon options', () => {
-      const widgetOptions = {
-        ...mockConfiguration.widgetOptions as WidgetOptions,
-        playIcon: {
-          height: 40,
-          url: '',
-          width: 60,
-        },
-      } as WidgetOptions;
-
-      const { container } = render(createElement(ThumbnailComponent, {
-        onClick: mockOnClick,
-        presentation: mockPresentation,
-        widgetOptions,
-      }));
-
-      const playIcon = container.querySelector('.qc-thumbnail__play-button');
-
-      expect(playIcon!.getAttribute('width')).toBe('60');
-      expect(playIcon!.getAttribute('height')).toBe('40');
-    });
-
-    it('should position play icon based on options', () => {
-      const positionMap = {
-        'bottom-center': ['end', 'center'],
-        'bottom-left': ['end', 'start'],
-        'bottom-right': ['end', 'end'],
-        center: ['center', 'center'],
-        left: ['center', 'start'],
-        right: ['center', 'end'],
-        'top-center': ['start', 'center'],
-        'top-left': ['start', 'start'],
-        'top-right': ['start', 'end'],
-      };
-
-      const widgetOptions = {
-        ...mockConfiguration.widgetOptions as WidgetOptions,
-        playIcon: {
-          height: 50,
-          url: 'https://example.com/custom-play-icon.png',
-          width: 50,
-        },
-      } as WidgetOptions;
-
-      Object.entries(positionMap).forEach(([position, [placeY, placeX]]) => {
-        document.body.innerHTML = '';
-        widgetOptions.playIcon.position = position as PlayIconPosition;
-
-        render(createElement(ThumbnailComponent, {
-          onClick: mockOnClick,
-          presentation: mockPresentation,
-          widgetOptions,
-        }));
-
-        const button = screen.getByRole('button');
-
-        expect(button).toHaveStyle({
-          'place-items': `${placeY} ${placeX}`,
-        });
-      });
     });
   });
 
@@ -305,11 +231,7 @@ describe('ThumbnailComponent', () => {
     it('should have alt text for custom play icon', () => {
       const widgetOptions = {
         ...mockConfiguration.widgetOptions as WidgetOptions,
-        playIcon: {
-          height: 50,
-          url: 'https://example.com/custom-play-icon.png',
-          width: 50,
-        },
+        playIconUrl: 'https://example.com/custom-play-icon.png',
       } as WidgetOptions;
 
       render(createElement(ThumbnailComponent, {

@@ -102,13 +102,15 @@ describe('PresentationWidget', () => {
 
       expect(querySelectorSpy).toHaveBeenCalledWith('.widget-container');
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
     });
 
     it('throws error when container element is not found', async () => {
       vi.spyOn(document, 'querySelector').mockReturnValue(null);
 
-      await expect(async () => await PresentationWidget.create(mockConfiguration)).rejects.toThrow('Element for selector ".widget-container" not found');
+      await expect(async () => await PresentationWidget.create(mockConfiguration))
+        .rejects
+        .toThrow('Element for selector ".widget-container" not found');
     });
   });
 
@@ -119,7 +121,7 @@ describe('PresentationWidget', () => {
       await flushPromises();
 
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
     });
 
     it('renders widget with not found message', async () => {
@@ -150,7 +152,7 @@ describe('PresentationWidget', () => {
 
       expect(querySelectorSpy).not.toHaveBeenCalled();
       expect(element.innerHTML)
-        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
     });
 
     it('clears container innerHTML before mounting', async () => {
@@ -167,7 +169,7 @@ describe('PresentationWidget', () => {
       await flushPromises();
 
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
     });
 
     it('should render DialogComponent when playbackMode is modal', async () => {
@@ -219,6 +221,244 @@ describe('PresentationWidget', () => {
       expect(container.querySelector('.qc-dialog')).toBeNull();
       expect(container.querySelector('.qc-thumbnail')).not.toBeNull();
     });
+
+    it('should render the CSS variables', async () => {
+      const modalConfiguration: WidgetConfiguration = {
+        ...mockConfiguration,
+        widgetOptions: {
+          style: {
+            borderRadius: '24px',
+            closeButton: {
+              activeBackgroundColor: '#000',
+              activeColor: '#111',
+              backgroundColor: '#222',
+              boxShadow: '1px solid #000',
+              color: '#333',
+              hoverBackgroundColor: '#444',
+              hoverColor: '#555',
+              iconSize: '24px',
+              padding: '16px',
+            },
+            dialog: {
+              backdropColor: '#000',
+              backgroundColor: '#111',
+              border: '1px solid #000',
+              borderRadius: '16px',
+              maxWidth: '1140px',
+              padding: '8px',
+              width: '50%',
+            },
+            height: '240px',
+            notFound: {
+              backgroundColor: '#000',
+              border: '1px solid #000',
+              color: '#111',
+              iconColor: '#222',
+            },
+            playButton: {
+              activeBackgroundColor: '#000',
+              activeColor: '#111',
+              backgroundColor: '#222',
+              color: '#333',
+              height: '24px',
+              hoverBackgroundColor: '#444',
+              hoverColor: '#555',
+              margin: '4px',
+              padding: '48px',
+              position: 'bottom-right',
+              width: '48px',
+            },
+            thumbnail: {
+              imageFit: 'none',
+            },
+            width: '800px',
+          },
+        },
+      };
+
+      const spy = vi.spyOn(container.style, 'setProperty');
+
+      await PresentationWidget.create(modalConfiguration);
+      await flushPromises();
+
+      // General widget
+      expect(spy).toHaveBeenCalledWith('--qc-pw-aspect-ratio', '16 / 9');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-border-radius', '24px');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-height', '240px');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-width', '800px');
+
+      // Thumbnail
+      expect(spy).toHaveBeenCalledWith('--qc-pw-thumbnail-image-fit', 'none');
+
+      // Play button
+      expect(spy).toHaveBeenCalledWith('--qc-pw-play-button-background-color', '#222');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-play-button-color', '#333');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-play-button-height', '24px');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-play-button-width', '48px');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-play-button-margin', '4px');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-play-button-padding', '48px');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-play-button-hover-background-color', '#444');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-play-button-hover-color', '#555');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-play-button-active-background-color', '#000');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-play-button-active-color', '#111');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-play-button-position', 'end end');
+
+      // Dialog
+      expect(spy).toHaveBeenCalledWith('--qc-pw-dialog-backdrop-color', '#000');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-dialog-background-color', '#111');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-dialog-border', '1px solid #000');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-dialog-border-radius', '16px');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-dialog-padding', '8px');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-dialog-max-width', '1140px');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-dialog-width', '50%');
+
+      // Close button
+      expect(spy).toHaveBeenCalledWith('--qc-pw-close-button-background-color', '#222');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-close-button-box-shadow', '1px solid #000');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-close-button-color', '#333');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-close-button-padding', '16px');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-close-button-icon-size', '24px');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-close-button-hover-background-color', '#444');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-close-button-hover-color', '#555');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-close-button-active-background-color', '#000');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-close-button-active-color', '#111');
+
+      // Not Found
+      expect(spy).toHaveBeenCalledWith('--qc-pw-not-found-background-color', '#000');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-not-found-border', '1px solid #000');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-not-found-color', '#111');
+      expect(spy).toHaveBeenCalledWith('--qc-pw-not-found-icon-color', '#222');
+    });
+
+    it('should map the position to the proper CSS value', async () => {
+      const spy = vi.spyOn(container.style, 'setProperty');
+
+      await PresentationWidget.create({
+        ...mockConfiguration,
+        widgetOptions: {
+          style: {
+            playButton: {
+              position: 'top-left',
+            },
+          },
+        },
+      });
+      await flushPromises();
+
+      expect(spy).toHaveBeenLastCalledWith('--qc-pw-play-button-position', 'start start');
+
+      await PresentationWidget.create({
+        ...mockConfiguration,
+        widgetOptions: {
+          style: {
+            playButton: {
+              position: 'top',
+            },
+          },
+        },
+      });
+      await flushPromises();
+
+      expect(spy).toHaveBeenLastCalledWith('--qc-pw-play-button-position', 'start center');
+
+      await PresentationWidget.create({
+        ...mockConfiguration,
+        widgetOptions: {
+          style: {
+            playButton: {
+              position: 'top-right',
+            },
+          },
+        },
+      });
+      await flushPromises();
+
+      expect(spy).toHaveBeenLastCalledWith('--qc-pw-play-button-position', 'start end');
+
+      await PresentationWidget.create({
+        ...mockConfiguration,
+        widgetOptions: {
+          style: {
+            playButton: {
+              position: 'left',
+            },
+          },
+        },
+      });
+      await flushPromises();
+
+      expect(spy).toHaveBeenLastCalledWith('--qc-pw-play-button-position', 'center start');
+
+      await PresentationWidget.create({
+        ...mockConfiguration,
+        widgetOptions: {
+          style: {
+            playButton: {
+              position: 'center',
+            },
+          },
+        },
+      });
+      await flushPromises();
+
+      expect(spy).toHaveBeenLastCalledWith('--qc-pw-play-button-position', 'center center');
+
+      await PresentationWidget.create({
+        ...mockConfiguration,
+        widgetOptions: {
+          style: {
+            playButton: {
+              position: 'right',
+            },
+          },
+        },
+      });
+      await flushPromises();
+
+      expect(spy).toHaveBeenLastCalledWith('--qc-pw-play-button-position', 'center end');
+
+      await PresentationWidget.create({
+        ...mockConfiguration,
+        widgetOptions: {
+          style: {
+            playButton: {
+              position: 'bottom-left',
+            },
+          },
+        },
+      });
+      await flushPromises();
+
+      expect(spy).toHaveBeenLastCalledWith('--qc-pw-play-button-position', 'end start');
+
+      await PresentationWidget.create({
+        ...mockConfiguration,
+        widgetOptions: {
+          style: {
+            playButton: {
+              position: 'bottom',
+            },
+          },
+        },
+      });
+      await flushPromises();
+
+      expect(spy).toHaveBeenLastCalledWith('--qc-pw-play-button-position', 'end center');
+
+      await PresentationWidget.create({
+        ...mockConfiguration,
+        widgetOptions: {
+          style: {
+            playButton: {
+              position: 'bottom-right',
+            },
+          },
+        },
+      });
+      await flushPromises();
+
+      expect(spy).toHaveBeenLastCalledWith('--qc-pw-play-button-position', 'end end');
+    });
   });
 
   describe('destroy', () => {
@@ -228,7 +468,7 @@ describe('PresentationWidget', () => {
       await flushPromises();
 
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
 
       widget.destroy();
 
@@ -243,7 +483,7 @@ describe('PresentationWidget', () => {
       await flushPromises();
 
       expect(container.innerHTML)
-        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail" style="place-items: center center;"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" width="44" height="44" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
+        .toMatchInlineSnapshot(`"<button type="button" class="qc-thumbnail"><span class="qc-sr-only">Play Presentation: Test Presentation</span><img class="qc-thumbnail__image" src="https://example.com/thumbnail.jpg" alt=""><svg class="qc-thumbnail__play-button qc-thumbnail__play-button--default" aria-hidden="true"><use href="#icon-play"></use></svg></button>"`);
 
       widget.destroy();
 

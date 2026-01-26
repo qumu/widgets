@@ -34,12 +34,12 @@ export interface WidgetStyle {
     activeColor: string;
     backgroundColor: string;
     color: string;
+    height: string;
     hoverBackgroundColor: string;
     hoverColor: string;
     margin: string;
     padding: string;
     position: Position;
-    height: string;
     width: string;
   }>;
   thumbnail: Partial<{

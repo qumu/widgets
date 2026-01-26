@@ -72,11 +72,7 @@ describe('ConfigurationService', () => {
         unsupportedField: 'not-supported',
         widgetOptions: {
           playbackMode: 'inline',
-          playIcon: {
-            position: 'center',
-            unsupportedField: 'not-supported',
-            url: 'https://example.com/play-icon.png',
-          },
+          playIconUrl: 'https://example.com/play-icon.png',
           unsupportedField: 'not-supported',
         },
       } as unknown as WidgetConfiguration;
@@ -694,108 +690,6 @@ describe('ConfigurationService', () => {
       });
     });
 
-    describe('position validation', () => {
-      it('should accept valid playIcon.position values', () => {
-        const validPositions = [
-          'center',
-          'top',
-          'top-right',
-          'right',
-          'bottom-right',
-          'bottom',
-          'bottom-left',
-          'left',
-          'top-left',
-        ];
-
-        validPositions.forEach((position) => {
-          expect(() => configurationService.createConfiguration({
-            guid: 'foo',
-            host: 'example.com',
-            selector: '#widget',
-            widgetOptions: {
-              playIcon: {
-                position: position as WidgetOptions['playIcon']['position'],
-              },
-            },
-          })).not.toThrow();
-        });
-      });
-
-      it('should allow undefined playIcon.position', () => {
-        expect(() => configurationService.createConfiguration({
-          guid: 'foo',
-          host: 'example.com',
-          selector: '#widget',
-          widgetOptions: {
-            playIcon: {},
-          },
-        })).not.toThrow();
-      });
-
-      it('should throw error when playIcon.position is invalid', () => {
-        const invalidPositions = ['middle', 'upper-left', 'bottom-center', '', 123, true, null, {}];
-
-        invalidPositions.forEach((position) => {
-          expect(() => configurationService.createConfiguration({
-            guid: 'foo',
-            host: 'example.com',
-            selector: '#widget',
-            widgetOptions: {
-              playIcon: {
-                position: position as WidgetOptions['playIcon']['position'],
-              },
-            },
-          })).toThrow(
-            '`widgetOptions.playIcon.position` must be a valid position value',
-          );
-        });
-      });
-    });
-
-    describe('playIcon validation', () => {
-      it('should warn when playIcon is used with unsupported playbackMode', () => {
-        const unsupportedModes = ['inline-autoload', 'inline-autoplay', undefined];
-
-        unsupportedModes.forEach((mode) => {
-          expect(() => configurationService.createConfiguration({
-            guid: 'foo',
-            host: 'example.com',
-            selector: '#widget',
-            widgetOptions: {
-              playbackMode: mode as WidgetOptions['playbackMode'],
-              playIcon: {
-                url: 'https://example.com/play-icon.png',
-              },
-            },
-          })).not.toThrow();
-
-          expect(consoleWarnSpy)
-            .toHaveBeenCalledWith('`widgetOptions.playIcon` is only applicable when `widgetOptions.playbackMode` is either "modal" or "inline"');
-        });
-      });
-
-      it('should not warn when playIcon is used with supported playbackMode', () => {
-        const supportedModes = ['modal', 'inline'];
-
-        supportedModes.forEach((mode) => {
-          consoleWarnSpy.mockClear();
-
-          expect(() => configurationService.createConfiguration({
-            guid: 'foo',
-            host: 'example.com',
-            selector: '#widget',
-            widgetOptions: {
-              playbackMode: mode as WidgetOptions['playbackMode'],
-              playIcon: { url: 'https://example.com/play-icon.png' },
-            },
-          })).not.toThrow();
-
-          expect(consoleWarnSpy).not.toHaveBeenCalled();
-        });
-      });
-    });
-
     describe('onIframeLoad validation', () => {
       it('should throw error when onIframeLoad is not a function', () => {
         const invalidValues = ['', 123, true, null, {}];
@@ -908,11 +802,6 @@ describe('ConfigurationService', () => {
 
       expect(result.widgetOptions).toEqual({
         playbackMode: 'inline',
-        playIcon: {
-          height: 44,
-          position: 'center',
-          width: 44,
-        },
       });
     });
 
@@ -923,12 +812,7 @@ describe('ConfigurationService', () => {
         selector: '#widget',
         widgetOptions: {
           playbackMode: 'modal',
-          playIcon: {
-            height: 100,
-            position: 'top-right',
-            url: 'https://qumu.com/play-button.png',
-            width: 100,
-          },
+          playIconUrl: 'https://qumu.com/play-button.png',
         },
       };
 
