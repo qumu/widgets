@@ -135,6 +135,13 @@ describe('PresentationWidget', () => {
             console.log('iframe is loaded');
           },
           playbackMode: 'inline',
+          style: {
+            borderRadius: '24px',
+            playButton: {
+              backgroundColor: '#fff',
+              color: '#000',
+            },
+          },
         },
       };
 
@@ -153,10 +160,12 @@ describe('PresentationWidget', () => {
           playbackMode: 'inline',
           // eslint-disable-next-line sort-keys
           onIframeLoad: true,
-          playIcon: {
-            height: 44,
-            position: 'center',
-            width: 44,
+          style: {
+            borderRadius: '24px',
+            playButton: {
+              backgroundColor: '#fff',
+              color: '#000',
+            },
           },
         },
       }));
@@ -204,11 +213,6 @@ describe('PresentationWidget', () => {
           playbackMode: 'inline',
           // eslint-disable-next-line sort-keys
           onIframeLoad: true,
-          playIcon: {
-            height: 44,
-            position: 'center',
-            width: 44,
-          },
         },
       }));
     });
