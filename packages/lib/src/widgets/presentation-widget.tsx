@@ -28,6 +28,11 @@ export class PresentationWidget {
   ): Promise<PresentationWidget> {
     const widget = new PresentationWidget(configuration);
 
+    // send telemetry if not disabled by the end user
+    if (globalThis.window.__QUMU_WIDGET_TELEMETRY__ ?? true) {
+      widget.sendTelemetry()
+    }
+
     await widget.init();
 
     return widget;
@@ -58,7 +63,7 @@ export class PresentationWidget {
     this.destroyed = true;
   }
 
-  async init(): Promise<void> {
+  private async init(): Promise<void> {
     try {
       this.presentation = await this.presentationService.getPresentation(
         this.configuration.guid,
@@ -152,6 +157,25 @@ export class PresentationWidget {
     if (Object.keys(this.configuration.widgetOptions?.style || {}).length > 0) {
       walk(this.configuration.widgetOptions!.style!);
     }
+  }
+
+  private async sendTelemetry() {
+    const telemetryConfig: any = {
+      guid: this.configuration.guid,
+      host: this.configuration.host,
+      ...(this.configuration.playerParameters && Object.keys(this.configuration.playerParameters).length && { playerParameters: this.configuration.playerParameters }),
+      sortBy: this.configuration.sortBy,
+      sortOrder: this.configuration.sortOrder,
+      type: 'presentation',
+      version,
+      widgetOptions: {
+        ...this.configuration.widgetOptions,
+        onIframeLoad: this.configuration.widgetOptions?.onIframeLoad ? true : undefined,
+        onThumbnailClick: this.configuration.widgetOptions?.onThumbnailClick ? true : undefined,
+      }
+    };
+
+    navigator.sendBeacon(`https://${this.configuration.host}/telemetry/widgets`, JSON.stringify(telemetryConfig));
   }
 }
 

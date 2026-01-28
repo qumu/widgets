@@ -38,6 +38,12 @@ describe('PresentationWidget', () => {
   let getPresentationMock: MockInstance;
 
   beforeEach(() => {
+    // dummy implementation of navigator.sendBeacon as it does not exist in jsdom
+    Object.defineProperty(navigator, 'sendBeacon', {
+      value: vi.fn(),
+      writable: true,
+    });
+
     const div = document.createElement('div');
 
     div.classList.add('widget-container');
@@ -111,6 +117,132 @@ describe('PresentationWidget', () => {
       await expect(async () => await PresentationWidget.create(mockConfiguration))
         .rejects
         .toThrow('Element for selector ".widget-container" not found');
+    });
+  });
+
+  describe('sendTelemetry', () => {
+    it('should send the widget configuration to our telemetry service', async () => {
+      const sendBeaconSpy = vi.spyOn(navigator, 'sendBeacon');
+
+      const config: WidgetConfiguration = {
+        guid: 'test-guid',
+        host: 'example.com',
+        selector: '.widget-container',
+        sortBy: 'created',
+        sortOrder: 'DESCENDING',
+        widgetOptions: {
+          onIframeLoad() {
+            console.log('iframe is loaded');
+          },
+          playbackMode: 'inline',
+          style: {
+            borderRadius: '24px',
+            playButton: {
+              backgroundColor: '#fff',
+              color: '#000',
+            },
+          },
+        },
+      };
+
+      await PresentationWidget.create(config);
+
+      await flushPromises();
+
+      expect(sendBeaconSpy).toHaveBeenCalledWith('https://example.com/telemetry/widgets', JSON.stringify({
+        guid: 'test-guid',
+        host: 'example.com',
+        sortBy: 'created',
+        sortOrder: 'DESCENDING',
+        type: 'presentation',
+        version: '1.0.0',
+        widgetOptions: {
+          playbackMode: 'inline',
+          // eslint-disable-next-line sort-keys
+          onIframeLoad: true,
+          style: {
+            borderRadius: '24px',
+            playButton: {
+              backgroundColor: '#fff',
+              color: '#000',
+            },
+          },
+        },
+      }));
+    });
+
+    it('should send the widget configuration to our telemetry service #2', async () => {
+      const sendBeaconSpy = vi.spyOn(navigator, 'sendBeacon');
+
+      const config: WidgetConfiguration = {
+        guid: 'test-guid',
+        host: 'example.com',
+        playerParameters: {
+          captions: 'en',
+          loop: true,
+          reporting: false,
+        },
+        selector: '.widget-container',
+        sortBy: 'created',
+        sortOrder: 'DESCENDING',
+        widgetOptions: {
+          onIframeLoad() {
+            console.log('iframe is loaded');
+          },
+          playbackMode: 'inline',
+        },
+      };
+
+      await PresentationWidget.create(config);
+
+      await flushPromises();
+
+      expect(sendBeaconSpy).toHaveBeenCalledWith('https://example.com/telemetry/widgets', JSON.stringify({
+        guid: 'test-guid',
+        host: 'example.com',
+        playerParameters: {
+          captions: 'en',
+          loop: true,
+          reporting: false,
+        },
+        sortBy: 'created',
+        sortOrder: 'DESCENDING',
+        type: 'presentation',
+        version: '1.0.0',
+        widgetOptions: {
+          playbackMode: 'inline',
+          // eslint-disable-next-line sort-keys
+          onIframeLoad: true,
+        },
+      }));
+    });
+
+    it('should not send the widget configuration to our telemetry service', async () => {
+      const sendBeaconSpy = vi.spyOn(navigator, 'sendBeacon');
+
+      // disable telemetry
+      // eslint-disable-next-line no-underscore-dangle
+      window.__QUMU_WIDGET_TELEMETRY__ = false;
+
+      const config: WidgetConfiguration = {
+        guid: 'test-guid',
+        host: 'example.com',
+        selector: '.widget-container',
+        sortBy: 'created',
+        sortOrder: 'DESCENDING',
+        widgetOptions: {
+          onIframeLoad() {
+            console.log('iframe is loaded');
+          },
+          playbackMode: 'inline',
+        },
+      };
+
+      await PresentationWidget.create(config);
+
+      await flushPromises();
+
+      expect(sendBeaconSpy).not.toHaveBeenCalled();
     });
   });
 

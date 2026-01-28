@@ -32,6 +32,10 @@ export const decorators = [
     // Sets the whole document's color scheme
     document.documentElement.style.colorScheme = globals.backgrounds.value === 'dark' ? 'dark' : 'light';
 
+    // Disable telemetry for the widgets
+    // eslint-disable-next-line no-underscore-dangle
+    (globalThis as any).__QUMU_WIDGET_TELEMETRY__ = false;
+
     return storyFn();
   },
 ];
