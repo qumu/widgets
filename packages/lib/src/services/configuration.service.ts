@@ -14,7 +14,8 @@ const supportedConfigFields = new Set([
 ]);
 const supportedWidgetFields = new Set([
   'playbackMode',
-  'playIcon',
+  'playIconUrl',
+  'style',
   'onIframeLoad',
   'onThumbnailClick',
 ]);
@@ -42,12 +43,6 @@ export class ConfigurationService {
     const widgetOptions = {
       playbackMode: 'inline',
       ...configuration.widgetOptions,
-      playIcon: {
-        height: 44,
-        position: 'center',
-        width: 44,
-        ...configuration.widgetOptions?.playIcon,
-      },
     } as WidgetOptions;
 
     const playerParameters = {
@@ -109,10 +104,6 @@ export class ConfigurationService {
       widgetOptions: { ...initialConfiguration.widgetOptions },
     };
 
-    if (initialConfiguration.widgetOptions?.playIcon) {
-      configuration.widgetOptions.playIcon = { ...initialConfiguration.widgetOptions.playIcon };
-    }
-
     Object.keys(configuration).forEach((field) => {
       if (!supportedConfigFields.has(field)) {
         console.warn(`Unsupported field \`${field}\` in configuration`);
@@ -172,20 +163,6 @@ export class ConfigurationService {
 
       if (!['inline', 'inline-autoload', 'inline-autoplay', 'modal'].includes(value)) {
         throw new Error('`widgetOptions.playbackMode` must be either "inline", "inline-autoload", "inline-autoplay" or "modal"');
-      }
-    }
-
-    if (widgetOptions.playIcon !== undefined) {
-      if (widgetOptions.playIcon.position !== undefined) {
-        const validPositions = ['top-left', 'top', 'top-right', 'left', 'center', 'right', 'bottom-left', 'bottom', 'bottom-right'];
-
-        if (!validPositions.includes(widgetOptions.playIcon.position)) {
-          throw new Error('`widgetOptions.playIcon.position` must be a valid position value');
-        }
-      }
-
-      if (![undefined, 'inline', 'modal'].includes(widgetOptions.playbackMode)) {
-        console.warn('`widgetOptions.playIcon` is only applicable when `widgetOptions.playbackMode` is either "modal" or "inline"');
       }
     }
 

@@ -9,12 +9,7 @@ import it from 'lib/locales/it.json';
 import ja from 'lib/locales/ja.json';
 import pt from 'lib/locales/pt.json';
 import 'lib/presentation-widget.css';
-import {
-  type Args,
-  DEFAULT_CSS_VARIABLES,
-  getPlaygroundConfigurationFromArgs,
-  getOverridenCssVariables,
-} from './utils.ts';
+import { type Args, getPlaygroundConfigurationFromArgs } from './utils.ts';
 import { version } from '../../../../../../package.json';
 
 type Story = StoryObj;
@@ -178,11 +173,13 @@ export const CustomPlayIcon: Story = {
         host: 'demo.qumucloud.com',
         selector: '#widget',
         widgetOptions: {
-          playIcon: {
-            height: 48,
-            position: 'bottom-left',
-            url: 'https://demo.qumucloud.com/widgets/resources/custom-play-icon.png',
-            width: 102,
+          playIconUrl: 'https://demo.qumucloud.com/widgets/resources/custom-play-icon.png',
+          style: {
+            playButton: {
+              height: '48px',
+              position: 'end start',
+              width: '102px'
+            },
           },
         },
       }).catch((err) => console.log(err));
@@ -208,11 +205,13 @@ export const CustomPlayIcon: Story = {
       },
       selector: container,
       widgetOptions: {
-        playIcon: {
-          height: 48,
-          position: 'bottom-left',
-          url: 'https://demo.qumucloud.com/widgets/resources/custom-play-icon.png',
-          width: 102,
+        playIconUrl: 'https://demo.qumucloud.com/widgets/resources/custom-play-icon.png',
+        style: {
+          playButton: {
+            height: '48px',
+            position: 'end start',
+            width: '102px',
+          },
         },
       },
     })
@@ -304,7 +303,7 @@ export const PlayerSdk: Story = {
       },
       selector: widget,
       widgetOptions: {
-        onIframeLoad(iframe) {
+        onIframeLoad(iframe: HTMLIFrameElement) {
           const sdk = new QumuPlayerSdk(iframe);
 
           sdk.addEventListener('timeupdate', (newTime: number) => {
@@ -331,14 +330,22 @@ export const Playground: Story = {
     host: 'demo.qumucloud.com',
     guid: 'JN6JHrg17xpwF8klXSIfFj',
     playbackMode: 'inline',
-    playIconPosition: 'center',
-    cssVars: DEFAULT_CSS_VARIABLES.trim(),
     /* eslint-enable sort-keys */
   },
+  /* eslint-disable sort-keys */
   argTypes: {
-    host: { control: 'text' },
-    // eslint-disable-next-line sort-keys
-    guid: { control: 'text' },
+    host: {
+      control: 'text',
+      table: {
+        category: 'Configuration',
+      },
+    },
+    guid: {
+      control: 'text',
+      table: {
+        category: 'Configuration',
+      },
+    },
     playbackMode: {
       control: 'select',
       name: 'Playback Mode',
@@ -350,9 +357,220 @@ export const Playground: Story = {
       ],
       table: {
         defaultValue: { summary: 'inline' },
+        category: 'Configuration',
       },
     },
-    playIconPosition: {
+    playIconUrl: {
+      control: 'text',
+      name: 'Custom Play Icon URL',
+      table: {
+        category: 'Configuration',
+      },
+    },
+    playerCaptions: {
+      control: 'text',
+      name: 'Captions',
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+    playerConfigurationGuid: {
+      control: 'text',
+      name: 'Player Configuration Guid',
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+    playerDebug: {
+      control: 'boolean',
+      name: 'Enable Debug Mode',
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+    playerLoop: {
+      control: 'boolean',
+      name: 'Loop',
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+    playerQuality: {
+      control: 'select',
+      name: 'Quality',
+      options: [
+        'auto',
+        'best',
+        '1440p',
+        '1080p',
+        '720p',
+        '360p',
+        '240p',
+      ],
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+    playerReporting: {
+      control: 'boolean',
+      name: 'Enable Playback Analytics',
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+    playerReportingId: {
+      control: 'text',
+      name: 'Reporting ID',
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+    playerShowControlPanel: {
+      control: 'boolean',
+      name: 'Show the Control Panel',
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+    playerSidebar: {
+      control: 'boolean',
+      name: 'Show the Sidebar',
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+    playerStart: {
+      control: 'text',
+      name: 'Start at',
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+    playerView: {
+      control: 'select',
+      name: 'View',
+      options: [
+        'pipls',
+        'pipss',
+        'sbs',
+      ],
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+    playerVolume: {
+      control: 'range',
+      max: 100,
+      min: 0,
+      name: 'Volume',
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
+
+    // Style
+    styleWidth: {
+      control: 'text',
+      name: 'Width',
+      table: {
+        category: 'Style',
+        subcategory: 'Widget',
+      },
+    },
+    styleHeight: {
+      control: 'text',
+      name: 'Height',
+      table: {
+        category: 'Style',
+        subcategory: 'Widget',
+      },
+    },
+    styleBorderRadius: {
+      control: 'text',
+      name: 'Border Radius',
+      table: {
+        category: 'Style',
+        subcategory: 'Widget',
+      },
+    },
+
+    stylePlayButtonBackgroundColor: {
+      control: 'color',
+      name: 'Background Color (default state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Play Button',
+      },
+    },
+    stylePlayButtonColor: {
+      control: 'color',
+      name: 'Color (default state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Play Button',
+      },
+    },
+    stylePlayButtonHoverBackgroundColor: {
+      control: 'color',
+      name: 'Background Color (hover state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Play Button',
+      },
+    },
+    stylePlayButtonHoverColor: {
+      control: 'color',
+      name: 'Color (hover state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Play Button',
+      },
+    },
+    stylePlayButtonActiveBackgroundColor: {
+      control: 'color',
+      name: 'Background Color (active state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Play Button',
+      },
+    },
+    stylePlayButtonActiveColor: {
+      control: 'color',
+      name: 'Color (active state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Play Button',
+      },
+    },
+    stylePlayButtonMargin: {
+      control: 'text',
+      name: 'Margin',
+      table: {
+        category: 'Style',
+        subcategory: 'Play Button',
+      },
+    },
+    stylePlayButtonPadding: {
+      control: 'text',
+      name: 'Padding',
+      table: {
+        category: 'Style',
+        subcategory: 'Play Button',
+      },
+    },
+    stylePlayButtonPosition: {
       control: 'select',
       name: 'Position',
       options: [
@@ -367,167 +585,233 @@ export const Playground: Story = {
         'bottom-right',
       ],
       table: {
-        category: 'Play Icon',
+        category: 'Style',
+        subcategory: 'Play Button',
       },
     },
-    playIconWidth: {
-      control: 'number',
-      name: 'Width',
-      table: {
-        category: 'Play Icon',
-      },
-    },
-    // eslint-disable-next-line sort-keys
-    playIconHeight: {
-      control: 'number',
+    stylePlayButtonHeight: {
+      control: 'text',
       name: 'Height',
       table: {
-        category: 'Play Icon',
+        category: 'Style',
+        subcategory: 'Play Button',
       },
     },
-    playIconUrl: {
+    stylePlayButtonWidth: {
       control: 'text',
-      name: 'Custom Play Icon URL',
+      name: 'Width',
       table: {
-        category: 'Play Icon',
+        category: 'Style',
+        subcategory: 'Play Button',
       },
     },
-    // eslint-disable-next-line sort-keys
-    playerCaptions: {
+
+    styleThumbnailImageFit: {
       control: 'text',
-      name: 'Captions',
+      name: 'Image Fit',
       table: {
-        category: 'Player Parameters',
+        category: 'Style',
+        subcategory: 'Thumbnail',
       },
     },
-    playerConfigurationGuid: {
+
+    styleDialogBackdropColor: {
+      control: 'color',
+      name: 'Backdrop Color',
+      if: {
+        arg: 'playbackMode',
+        eq: 'modal',
+      },
+      table: {
+        category: 'Style',
+        subcategory: 'Dialog',
+      },
+    },
+    styleDialogBackgroundColor: {
+      control: 'color',
+      name: 'Background Color',
+      if: {
+        arg: 'playbackMode',
+        eq: 'modal',
+      },
+      table: {
+        category: 'Style',
+        subcategory: 'Dialog',
+      },
+    },
+    styleDialogBorder: {
       control: 'text',
-      name: 'playerConfigurationGuid',
+      name: 'Border',
+      if: {
+        arg: 'playbackMode',
+        eq: 'modal',
+      },
       table: {
-        category: 'Player Parameters',
+        category: 'Style',
+        subcategory: 'Dialog',
       },
     },
-    playerDebug: {
-      control: 'boolean',
-      name: 'Enable Debug Mode',
-      table: {
-        category: 'Player Parameters',
-      },
-    },
-    playerLoop: {
-      control: 'boolean',
-      name: 'Loop',
-      table: {
-        category: 'Player Parameters',
-      },
-    },
-    playerView: {
-      control: 'select',
-      name: 'View',
-      options: [
-        'pipls',
-        'pipss',
-        'sbs',
-      ],
-      table: {
-        category: 'Player Parameters',
-      },
-    },
-    // eslint-disable-next-line sort-keys
-    playerQuality: {
-      control: 'select',
-      name: 'Quality',
-      options: [
-        'auto',
-        'best',
-        '1440p',
-        '1080p',
-        '720p',
-        '360p',
-        '240p',
-      ],
-      table: {
-        category: 'Player Parameters',
-      },
-    },
-    playerShowControlPanel: {
-      control: 'boolean',
-      name: 'Show the Control Panel',
-      table: {
-        category: 'Player Parameters',
-      },
-    },
-    playerSidebar: {
-      control: 'boolean',
-      name: 'Show the Sidebar',
-      table: {
-        category: 'Player Parameters',
-      },
-    },
-    playerStart: {
+    styleDialogBorderRadius: {
       control: 'text',
-      name: 'Start at',
+      name: 'Border Radius',
+      if: {
+        arg: 'playbackMode',
+        eq: 'modal',
+      },
       table: {
-        category: 'Player Parameters',
+        category: 'Style',
+        subcategory: 'Dialog',
       },
     },
-    playerVolume: {
-      control: 'range',
-      max: 100,
-      min: 0,
-      name: 'Volume',
-      table: {
-        category: 'Player Parameters',
-      },
-    },
-    // eslint-disable-next-line sort-keys
-    playerReporting: {
-      control: 'boolean',
-      name: 'Enable Playback Analytics',
-      table: {
-        category: 'Player Parameters',
-      },
-    },
-    playerReportingId: {
+    styleDialogMaxWidth: {
       control: 'text',
-      name: 'Reporting ID',
+      name: 'Max Width',
+      if: {
+        arg: 'playbackMode',
+        eq: 'modal',
+      },
       table: {
-        category: 'Player Parameters',
+        category: 'Style',
+        subcategory: 'Dialog',
       },
     },
-    // eslint-disable-next-line sort-keys
-    cssVars: {
-      control: {
-        multiline: true,
-        type: 'text',
+    styleDialogPadding: {
+      control: 'text',
+      name: 'Padding',
+      if: {
+        arg: 'playbackMode',
+        eq: 'modal',
       },
-      name: 'CSS Variables',
       table: {
-        category: 'CSS Variables',
+        category: 'Style',
+        subcategory: 'Dialog',
+      },
+    },
+    styleDialogWidth: {
+      control: 'text',
+      name: 'Width',
+      if: {
+        arg: 'playbackMode',
+        eq: 'modal',
+      },
+      table: {
+        category: 'Style',
+        subcategory: 'Dialog',
+      },
+    },
+
+    styleCloseButtonBackgroundColor: {
+      control: 'color',
+      name: 'Background Color (default state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Close Button',
+      },
+    },
+    styleCloseButtonColor: {
+      control: 'color',
+      name: 'Color (default state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Close Button',
+      },
+    },
+    styleCloseButtonHoverBackgroundColor: {
+      control: 'color',
+      name: 'Background Color (hover state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Close Button',
+      },
+    },
+    styleCloseButtonHoverColor: {
+      control: 'color',
+      name: 'Color (hover state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Close Button',
+      },
+    },
+    styleCloseButtonActiveBackgroundColor: {
+      control: 'color',
+      name: 'Background Color (active state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Close Button',
+      },
+    },
+    styleCloseButtonActiveColor: {
+      control: 'color',
+      name: 'Color (active state)',
+      table: {
+        category: 'Style',
+        subcategory: 'Close Button',
+      },
+    },
+    styleCloseButtonBoxShadow: {
+      control: 'text',
+      name: 'Box Shadow',
+      table: {
+        category: 'Style',
+        subcategory: 'Close Button',
+      },
+    },
+    styleCloseButtonIconSize: {
+      control: 'text',
+      name: 'Icon Size',
+      table: {
+        category: 'Style',
+        subcategory: 'Close Button',
+      },
+    },
+    styleCloseButtonPadding: {
+      control: 'text',
+      name: 'Padding',
+      table: {
+        category: 'Style',
+        subcategory: 'Close Button',
+      },
+    },
+
+    styleNotFoundBackgroundColor: {
+      control: 'color',
+      name: 'Background Color',
+      table: {
+        category: 'Style',
+        subcategory: 'Not Found',
+      },
+    },
+    styleNotFoundBorder: {
+      control: 'text',
+      name: 'Border',
+      table: {
+        category: 'Style',
+        subcategory: 'Not Found',
+      },
+    },
+    styleNotFoundColor: {
+      control: 'color',
+      name: 'Color',
+      table: {
+        category: 'Style',
+        subcategory: 'Not Found',
+      },
+    },
+    styleNotFoundIconColor: {
+      control: 'color',
+      name: 'Icon Color',
+      table: {
+        category: 'Style',
+        subcategory: 'Not Found',
       },
     },
   },
+  /* eslint-enable sort-keys */
   parameters: {
     docs: {
       source: {
         transform: (_: string, storyContext: StoryContext) => {
           const configuration = getPlaygroundConfigurationFromArgs(storyContext.args);
-
-          const overridenCssVariables = getOverridenCssVariables(storyContext.args.cssVars as string);
-
-          // the weird spacing here is on purpose, it's to make the HTML code look better in the docs panel
-          const cssVariables = overridenCssVariables.length > 0
-            ? `
-    <style>
-      :root {
-        ${overridenCssVariables
-          .split('\n')
-          // add 8 spaces (indent level inside <style>)
-          .map((line, i) => (i === 0 ? line : `        ${line}`))
-          .join('\n')}
-      }
-    </style>`
-            : '';
 
           return `
 <!DOCTYPE html>
@@ -535,7 +819,7 @@ export const Playground: Story = {
   <head>
     <meta charset="UTF-8"/>
     <title>Presentation Widget</title>
-    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widget@${version}/presentation-widget.css">${cssVariables}
+    <link rel="stylesheet" href="https://unpkg.com/@enghouse-qumu/widget@${version}/presentation-widget.css">
   </head>
   <body>
     <div id="widget"></div>
@@ -560,18 +844,6 @@ export const Playground: Story = {
   },
   render: (args: Partial<Args>) => {
     const container = document.createElement('div');
-
-    args.cssVars?.split('\n').forEach((line: string) => {
-      if (!line.startsWith('--qc-')) {
-        return;
-      }
-
-      const [key, value] = line.split(':').map((s) => s?.trim());
-
-      if (key && value) {
-        container.style.setProperty(key, value.replace(';', ''));
-      }
-    });
 
     PresentationWidget.create({
       locales: {

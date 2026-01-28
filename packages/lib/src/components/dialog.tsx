@@ -10,10 +10,9 @@ interface Props {
   presentation: Presentation;
   playerParameters: Partial<PlayerParameters>;
   widgetOptions: Partial<WidgetOptions>;
-  aspectRatio?: string;
 }
 
-export function DialogComponent({ presentation, widgetOptions, playerParameters, aspectRatio }: Readonly<Props>) {
+export function DialogComponent({ presentation, widgetOptions, playerParameters }: Readonly<Props>) {
   const [showDialog, setShowDialog] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -23,6 +22,12 @@ export function DialogComponent({ presentation, widgetOptions, playerParameters,
     }
 
     dialogRef.current?.showModal();
+
+    // Set the private property for the modal
+    dialogRef.current!.style.setProperty(
+      '--_qc-pw-dialog-border-width',
+      getComputedStyle(dialogRef.current!).borderWidth,
+    );
   }, [showDialog]);
 
   const closeDialog = () => {
@@ -51,7 +56,6 @@ export function DialogComponent({ presentation, widgetOptions, playerParameters,
             }
           }}
           onClose={() => setShowDialog(false)}
-          style={{ 'aspect-ratio': aspectRatio || '16 / 9' }}
         >
           <button
               type="button"

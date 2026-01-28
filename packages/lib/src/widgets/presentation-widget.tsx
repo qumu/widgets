@@ -3,7 +3,6 @@ import { PresentationService } from '@/services/presentation.service';
 import { ConfigurationService } from '@/services/configuration.service';
 import { WidgetConfiguration } from '@/interfaces/widget-configuration';
 import { Presentation } from '@/interfaces/presentation';
-import { WidgetOptions } from '@/interfaces/widget-options';
 import { DialogComponent } from '@/components/dialog';
 import { PlayerComponent } from '@/components/player';
 import { NotFoundComponent } from '@/components/not-found';
@@ -92,22 +91,23 @@ export class PresentationWidget {
       : '16 / 9';
 
     this.container.classList.add('qc-widget', 'qc-presentation-widget');
-    this.container.style.setProperty('aspect-ratio', aspectRatio);
+    this.container.style.setProperty('--qc-pw-aspect-ratio', aspectRatio);
+
+    this.setStyles(this.container);
 
     render(
       this.presentation ? (
         this.configuration.widgetOptions?.playbackMode === 'modal' ? (
           <DialogComponent
-            aspectRatio={aspectRatio}
             presentation={this.presentation}
             playerParameters={this.configuration.playerParameters!}
-            widgetOptions={this.configuration.widgetOptions as WidgetOptions}
+            widgetOptions={this.configuration.widgetOptions!}
           />
         ) : (
           <PlayerComponent
             presentation={this.presentation}
             playerParameters={this.configuration.playerParameters!}
-            widgetOptions={this.configuration.widgetOptions as WidgetOptions}
+            widgetOptions={this.configuration.widgetOptions!}
           />
         )
       ) : (
@@ -115,6 +115,43 @@ export class PresentationWidget {
       ),
       container
     );
+  }
+
+  private mapCssValue(key: string, value: string) {
+    if (key === '--qc-pw-play-button-position') {
+      const placeX = value.includes('left') ? 'start' : (value.includes('right') ? 'end' : 'center');
+      const placeY = value.includes('top') ? 'start' : (value.includes('bottom') ? 'end' : 'center');
+
+      return `${placeY} ${placeX}`;
+    }
+
+    return value;
+  }
+
+  private setStyles(container: HTMLElement) {
+    const prefix = '--qc-pw';
+
+    const toKebabCase = (str: string) => str
+      .replaceAll(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .toLowerCase();
+
+    const walk = (obj: Record<string, any>, path: string[] = []) => {
+      for (const [key, value] of Object.entries(obj)) {
+        const nextPath = [...path, toKebabCase(key)];
+
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          walk(value, nextPath);
+        } else if (value !== undefined && value !== null) {
+          const cssVarName = `${prefix}-${nextPath.join('-')}`;
+
+          container.style.setProperty(cssVarName, this.mapCssValue(cssVarName, value));
+        }
+      }
+    };
+
+    if (Object.keys(this.configuration.widgetOptions?.style || {}).length > 0) {
+      walk(this.configuration.widgetOptions!.style!);
+    }
   }
 }
 

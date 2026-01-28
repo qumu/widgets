@@ -11,59 +11,60 @@ html:has(.qc-dialog dialog[open]) {
 
     iframe.qc-player {
       border: none;
-      border-radius: calc(var(--qc-dialog-border-radius) - var(--qc-dialog-border-width));
+      border-radius: calc(var(--qc-pw-dialog-border-radius) - var(--_qc-pw-dialog-border-width));
       display: block;
       height: 100%;
       width: 100%;
     }
 
     dialog {
-      background-color: var(--qc-dialog-background-color);
-      border: var(--qc-dialog-border);
-      border-radius: var(--qc-dialog-border-radius);
-      max-width: var(--qc-dialog-max-width);
+      aspect-ratio: var(--qc-pw-aspect-ratio);
+      background-color: var(--qc-pw-dialog-background-color);
+      border: var(--qc-pw-dialog-border);
+      border-radius: var(--qc-pw-dialog-border-radius);
+      max-width: var(--qc-pw-dialog-max-width);
       overflow: visible;
-      padding: var(--qc-dialog-padding);
-      width: var(--qc-dialog-width);
+      padding: var(--qc-pw-dialog-padding);
+      width: var(--qc-pw-dialog-width);
 
       &::backdrop {
-        background-color: var(--qc-dialog-backdrop-color);
+        background-color: var(--qc-pw-dialog-backdrop-color);
       }
     }
 
     &__close-button {
-      background-color: var(--qc-close-button-background-color);
+      background-color: var(--qc-pw-close-button-background-color);
       border-radius: 100%;
       border: none;
-      box-shadow: var(--qc-close-button-shadow);
-      color: var(--qc-close-button-color);
+      box-shadow: var(--qc-pw-close-button-box-shadow);
+      color: var(--qc-pw-close-button-color);
       cursor: pointer;
       display: flex;
-      height: var(--qc-close-button-height);
-      padding: var(--qc-close-button-padding);
+      height: var(--qc-pw-close-button-height);
+      padding: var(--qc-pw-close-button-padding);
       place-items: center;
       position: absolute;
       right: 0;
       top: 0;
       transform: translate(75%, -75%);
-      width: var(--qc-close-button-width);
+      width: var(--qc-pw-close-button-width);
       z-index: 1;
 
       &:hover {
-        background-color: var(--qc-close-button-hover-background-color);
-        color: var(--qc-close-button-hover-color);
+        background-color: var(--qc-pw-close-button-hover-background-color);
+        color: var(--qc-pw-close-button-hover-color);
       }
 
       &:active,
       &:focus-visible {
-        background-color: var(--qc-close-button-active-background-color);
-        color: var(--qc-close-button-active-color);
+        background-color: var(--qc-pw-close-button-active-background-color);
+        color: var(--qc-pw-close-button-active-color);
       }
 
       svg {
-        height: var(--qc-close-button-icon-size);
+        height: var(--qc-pw-close-button-icon-size);
         position: relative;
-        width: var(--qc-close-button-icon-size);
+        width: var(--qc-pw-close-button-icon-size);
       }
     }
   }
