@@ -141,7 +141,7 @@ export class PresentationWidget {
 
         if (value && typeof value === 'object' && !Array.isArray(value)) {
           walk(value, nextPath);
-        } else {
+        } else if (value !== undefined && value !== null) {
           const cssVarName = `${prefix}-${nextPath.join('-')}`;
 
           container.style.setProperty(cssVarName, this.mapCssValue(cssVarName, value));
