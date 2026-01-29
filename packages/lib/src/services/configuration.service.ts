@@ -20,6 +20,7 @@ const supportedWidgetFields = new Set([
   'onThumbnailClick',
 ]);
 const supportedPlayerParameterFields = new Set([
+  'audio',
   'captions',
   'debug',
   'loop',
