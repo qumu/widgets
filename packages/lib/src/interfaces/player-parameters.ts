@@ -1,4 +1,5 @@
 export interface PlayerParameters {
+  audio: string;
   captions: string;
   debug: boolean;
   loop: boolean;

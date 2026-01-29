@@ -209,7 +209,7 @@ export const CustomPlayIcon: Story = {
         style: {
           playButton: {
             height: '48px',
-            position: 'end start',
+            position: 'bottom-left',
             width: '102px',
           },
         },
@@ -367,9 +367,17 @@ export const Playground: Story = {
         category: 'Configuration',
       },
     },
+    playerAudio: {
+      control: 'text',
+      name: 'Audio Language',
+      table: {
+        category: 'Configuration',
+        subcategory: 'Player Parameters',
+      },
+    },
     playerCaptions: {
       control: 'text',
-      name: 'Captions',
+      name: 'Captions Language',
       table: {
         category: 'Configuration',
         subcategory: 'Player Parameters',

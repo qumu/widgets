@@ -6,6 +6,7 @@ export interface Args {
   selector: WidgetConfiguration['selector'];
   playbackMode: WidgetOptions['playbackMode'];
   playIconUrl: WidgetOptions['playIconUrl'];
+  playerAudio: PlayerParameters['audio'];
   playerCaptions: PlayerParameters['captions'];
   playerConfigurationGuid: PlayerParameters['playerConfigurationGuid'];
   playerDebug: PlayerParameters['debug'];
@@ -234,6 +235,10 @@ export function getPlaygroundConfigurationFromArgs(args: Partial<Args>): Omit<Wi
   }
 
   const playerParameters: Partial<PlayerParameters> = {};
+
+  if (args.playerAudio !== undefined) {
+    playerParameters.audio = args.playerAudio;
+  }
 
   if (args.playerCaptions !== undefined) {
     playerParameters.captions = args.playerCaptions;
